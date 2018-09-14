@@ -32,9 +32,18 @@ use AuthenticatesUsers;
      * @return void
      */
     public function __construct() {
+        
         $this->middleware('guest')->except('logout');
-//        $this->middleware('auth');
-//        $this->middleware('admin');
+        //$this->middleware('auth');
+        //$this->middleware('admin');
+        //Auth::logout();
     }
+    
+    
+    /*public function logout()
+    {
+        Auth::logout();
+        return Redirect::to('/');
+    }*/
 
 }
