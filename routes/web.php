@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::resource('admin/picture', 'Picture\\PictureController',
         ['as' => 'picture']
     );
-    Route::get('/admin/get-picture/{search}', 'Picture\\PictureController@getPicture')->name('picture.get-picture');
+    Route::get('/admin/get-picture/{type}/{search}', 'Picture\\PictureController@getPicture')->name('picture.get-picture');
 
     Route::resource('admin/equipment', 'Equipment\\EquipmentController', ['as' => 'equipment']);
 

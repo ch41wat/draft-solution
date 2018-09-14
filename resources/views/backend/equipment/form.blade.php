@@ -10,7 +10,11 @@
 </div>
 <div class="form-group {{ $errors->has('picture') ? 'has-error' : ''}}">
     <label for="picture" class="control-label">{{ 'Picture' }}</label>
-    <input class="form-control" name="picture" type="file" id="picture" accept="image/*" value="{{ $equipment->picture or ''}}" >
+    <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modal-media">
+        <i class="fa fa-plus"></i>
+    </button>
+    <input class="form-control" name="picture" type="hidden" id="picture" value="{{ $equipment->picture or ''}}" readonly >
+    <div id="img-thumbnail" style="min-height: 150px; margin-top: 5px; background-color: #ddd; padding: 20px 0px;"></div>
     {!! $errors->first('picture', '<p class="help-block">:message</p>') !!}
 </div>
 

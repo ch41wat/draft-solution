@@ -11,9 +11,20 @@
         <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modal-media">
             <i class="fa fa-plus"></i>
         </button>
-        <input class="form-control" name="picture" type="text" id="picture" value="{{ $technology->picture or ''}}" readonly >
+        <input class="form-control" name="picture" type="hidden" id="picture" value="{{ $technology->picture or ''}}" >
+        <div id="img-thumbnail" style="min-height: 390px; margin: 5px auto; background-color: #ddd; padding: 0px; border: 1px solid #202020;"></div>
         {!! $errors->first('picture', '<p class="help-block">:message</p>') !!}
     </div>
+
+    {{-- <div class="form-group {{ $errors->has('equipment') ? 'has-error' : ''}}" id="form-group-equipment">
+        <label for="equipment" class="control-label">{{ 'Equipment' }}</label>
+        <select name="equipment[]" id="equipment" class="form-control">
+            @foreach ($equipment as $item)
+                <option value="{{ $item->id }}">{{ $item->name }}</option>
+            @endforeach
+        </select>
+        {!! $errors->first('equipment', '<p class="help-block">:message</p>') !!}
+    </div> --}}
 </div>
 
 <div class="addel-video">

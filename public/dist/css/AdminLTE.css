@@ -5096,3 +5096,7 @@ table.text-center th {
       width: 1170px;
   }
 }
+
+.text-middle {
+  vertical-align: middle !important;
+}

@@ -11,7 +11,7 @@ class EquipmentAssignment extends Model
      *
      * @var string
      */
-    protected $table = 'equipment-assignments';
+    protected $table = 'equipment_assignments';
 
     /**
      * The database primary key value.
@@ -25,6 +25,6 @@ class EquipmentAssignment extends Model
      *
      * @var array
      */
-    protected $fillable = ['technology_name', 'equipment_name', 'equipment_picture', 'layer'];
+    protected $fillable = ['technology_id', 'equipment_id', 'picture_id', 'layer'];
 
 }

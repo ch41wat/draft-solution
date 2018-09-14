@@ -112,7 +112,7 @@ class PictureController extends Controller
         //
     }
 
-    public function getPicture($search)
+    public function getPicture($type, $search)
     {
         $data = '';
         $pictures = Picture::where('name', 'LIKE', "%$search%")
@@ -129,7 +129,7 @@ class PictureController extends Controller
                     </table>
                 </div>
                     <div class="name">
-                        <input type="checkbox" value="' . $item->id . '" class="select-item">
+                        <input type="' . $type . '" name="select-item" value="' . $item->id . '|/' . $search . '/picture/' . $item->name . '" class="select-item">
                     </div>
                 </div>';
 

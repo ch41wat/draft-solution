@@ -50,23 +50,17 @@ class EquipmentController extends Controller
     public function store(Request $request)
     {
 
-        $equipment = new Equipment();
+        $this->validate($request, [
+            'name' => 'required',
+            'detail' => 'required',
+            'picture' => 'required',
+        ]);
 
-        if ($request->hasFile('picture')) {
-            $this->validate($request, [
-                'picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);
-            $picture = $request->file('picture');
-            $name = str_slug($request->name) . '.' . $picture->getClientOriginalExtension();
-            $equipment->picture = $name;
-            $request->picture->storeAs('public/uploads/equipment/picture/', $name);
-        }
+        $requestData = $request->all();
 
-        $equipment->name = $request->get('name');
-        $equipment->detail = $request->get('detail');
+        Equipment::create($requestData);
 
-        $equipment->save();
-        return redirect('/admin/equipment');
+        return redirect('admin/equipment')->with('flash_message', 'Equipment added!');
     }
 
     /**

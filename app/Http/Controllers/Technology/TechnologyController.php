@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Technology;
 
+use App\Equipment;
 use App\Http\Controllers\Controller;
 use App\Picture;
 use App\Service;
@@ -44,8 +45,9 @@ class TechnologyController extends Controller
     {
         $service = Service::all();
         $picture = Picture::where('path', 'LIKE', 'technology')->get();
+        $equipment = Equipment::all();
         $video = Video::all();
-        return view('backend.technology.create', compact('service', 'video', 'picture'));
+        return view('backend.technology.create', compact('service', 'video', 'picture', 'equipment'));
     }
 
     /**
@@ -62,6 +64,7 @@ class TechnologyController extends Controller
             'picture' => 'required',
             'video' => 'required|array',
             'video.*' => 'required',
+            'service' => 'required',
         ]);
 
         $technology = new technology();
@@ -148,7 +151,16 @@ class TechnologyController extends Controller
         $data = [];
         if ($request->has('q')) {
             $search = $request->q;
-            $data = Technology::where('service', '=', "$search")->get();
+            $data = Technology::where($request->column, '=', "$search")->get();
+            foreach ($data as $key => $value) {
+                $picture_array = [];
+                $picture_id = explode(",", $value->picture);
+                foreach ($picture_id as $pic) {
+                    $picture_data = Picture::where('id', '=', $pic)->first();
+                    $picture_array[] = $picture_data->name;
+                }
+                $data[$key]->picture_name = implode(",", $picture_array);
+            }
         }
 
         return response()->json($data);

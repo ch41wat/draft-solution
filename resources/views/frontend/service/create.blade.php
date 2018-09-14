@@ -57,7 +57,7 @@
             $.ajax({
                 url: "{{ route('ajax-technology') }}",
                 type: 'get',
-                data: { q: $(this).val() },
+                data: { column: 'service', q: $(this).val() },
                 dataType: 'json',
                 success: function (data) {
                     var content = '';

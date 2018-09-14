@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EquipmentAssignment;
 
 use App\EquipmentAssignment;
 use App\Http\Controllers\Controller;
+use App\Service;
 use Illuminate\Http\Request;
 
 class EquipmentAssignmentController extends Controller
@@ -19,9 +20,9 @@ class EquipmentAssignmentController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $equipment_assignment = EquipmentAssignment::where('technology_name', 'LIKE', "%$keyword%")
-                ->orWhere('equipment_name', 'LIKE', "%$keyword%")
-                ->orWhere('equipment_picture', 'LIKE', "%$keyword%")
+            $equipment_assignment = EquipmentAssignment::where('technology_id', 'LIKE', "%$keyword%")
+                ->orWhere('equipment_id', 'LIKE', "%$keyword%")
+                ->orWhere('picture_id', 'LIKE', "%$keyword%")
                 ->orWhere('layer', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
@@ -38,7 +39,8 @@ class EquipmentAssignmentController extends Controller
      */
     public function create()
     {
-        return view('backend.equipment-assignment.create');
+        $services = Service::all();
+        return view('backend.equipment-assignment.create', compact('services'));
     }
 
     /**

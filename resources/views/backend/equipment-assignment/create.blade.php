@@ -33,4 +33,42 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#technology_id").change(function () {
+                $.ajax({
+                    url: "{{ route('ajax-technology') }}",
+                    type: 'get',
+                    data: { column: 'id', q: $(this).val() },
+                    dataType: 'json',
+                    success: function (data) {
+                        var content = '';
+                        data.forEach(item => {
+                            content += '<img src="{{ asset('storage/uploads/technology') }}/' + item['picture_name'] + '">';
+                        });
+                        $('#img-content').html(content);
+                    },
+                    cache: true
+                });
+            });
+
+            $("#service").change(function () {
+                $.ajax({
+                    url: "{{ route('ajax-technology') }}",
+                    type: 'get',
+                    data: { column: 'service', q: $(this).val() },
+                    dataType: 'json',
+                    success: function (data) {
+                        var content = '<option value="">---Choose technology---</option>';
+                        data.forEach(item => {
+                            content += '<option value="' + item['id'] + '">' + item['name'] + '</option>'
+                        });
+                        $('#technology_id').html(content);
+                    },
+                    cache: true
+                });
+            });
+        });
+
+    </script>
 @endsection
