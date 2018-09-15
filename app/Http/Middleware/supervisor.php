@@ -21,12 +21,12 @@ class supervisor
             return redirect()->route('login');
         } else if (Auth::check() && Auth::user()->role == 'supervisor') {
             return $next($request);
-        } elseif (Auth::check() && Auth::user()->role == 'admin') {
-            return redirect('/admin');
+        } elseif (Auth::check() && Auth::user()->role == 'sale') {
+            return redirect('/create/home');
         } elseif (Auth::check() && Auth::user()->role == 'saleadmin') {
             return redirect('/index');
         } else {
-            return redirect('/index');
+            return redirect('/admin');
         }
     }
 

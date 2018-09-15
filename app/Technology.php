@@ -27,4 +27,9 @@ class Technology extends Model
      */
     protected $fillable = ['name', 'picture', 'video', 'service'];
 
+    public function equipment_assignments()
+    {
+        return $this->hasMany('App\EquipmentAssignment');
+    }
+
 }

@@ -21,12 +21,12 @@ class sale
             return redirect()->route('login');
         } else if (Auth::check() && Auth::user()->role == 'sale') {
             return $next($request);
-        } else if (Auth::check() && Auth::user()->role == 'admin') {
-            return redirect('/admin');
+        } else if (Auth::check() && Auth::user()->role == 'saleadmin') {
+            return redirect('/index');
         } else if (Auth::check() && Auth::user()->role == 'supervisor') {
             return redirect('/index');
         } else {
-            return redirect('/index');
+            return redirect('/admin');
         }
     }
 

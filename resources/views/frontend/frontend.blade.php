@@ -17,7 +17,7 @@
                         @else
                             @php $btn_class = 0; @endphp
                         @endif
-                        <a href="{{ $item['link'] }}" type="button" class="btn btn-{{ (Request::segment(2) == $item['link']) ? "primary" : "default" }} btn-circle" {{ ($btn_class >= $i or Request::segment(2) == $item['link']) ? "" : "disabled" }}>
+                        <a href="{{ route('create-form', $item['link']) }}" type="button" class="btn btn-{{ (Request::segment(2) == $item['link']) ? "primary" : "default" }} btn-circle {{ ($btn_class >= $i or Request::segment(2) == $item['link']) ? "" : "disabled" }}">
                             {{ ($i+1) }}
                         </a>
                         <p><strong>{{ $item['name'] }}</strong></p>
@@ -32,6 +32,9 @@
         {{-- <h1>@yield('page-title')</h1> --}}
         <ol class="breadcrumb">
             <li class="home">{{ config('app.name') }}</li>
+            @if (Request::segment(2) !== 'home')
+                <li class="active">{{ Request::segment(2) }}</li>
+            @endif
         </ol>
     </section>
     @yield('frontend-content')

@@ -115,6 +115,21 @@
     background: linear-gradient(to right, #075bc6, #0487b8, #00b5aa 95%); /* Standard syntax (must be last) */
 }
 
+/* btn-group */
+.btn-group-lg>.btn {
+    margin-right: 10px;
+    background-color: rgb(207, 207, 207);
+    border: none;
+    color: #777777;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.btn-group-lg>.btn:hover, .btn-group-lg>.btn.active {
+    background-color: #075bc6;
+    color: #fff;
+}
+
 .text-white {
     color: #fff !important;
 }

@@ -13,6 +13,13 @@
 
 Auth::routes();
 
+// all
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/admin/ajax-technology', 'Technology\\TechnologyController@dataAjaxTechnology')->name('ajax-technology');
+    Route::get('/admin/get-picture/{type}/{search}', 'Picture\\PictureController@getPicture')->name('picture.get-picture');
+    Route::get('/admin/ajax-equipment', 'Equipment\\EquipmentController@dataAjaxEquipment')->name('ajax-equipment');
+});
+
 // backend
 Route::group(['middleware' => ['auth', 'admin']], function () {
 
@@ -27,7 +34,6 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::resource('admin/customer', 'Customer\\CustomerController', ['as' => 'customer']);
 
     Route::resource('admin/technology', 'Technology\\TechnologyController', ['as' => 'technology']);
-    Route::get('/admin/ajax-technology', 'Technology\\TechnologyController@dataAjaxTechnology')->name('ajax-technology');
 
     Route::resource('admin/technology-picture', 'TechnologyPicture\\TechnologyPictureController',
         ['as' => 'technology-picture']
@@ -36,10 +42,8 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::resource('admin/picture', 'Picture\\PictureController',
         ['as' => 'picture']
     );
-    Route::get('/admin/get-picture/{type}/{search}', 'Picture\\PictureController@getPicture')->name('picture.get-picture');
 
     Route::resource('admin/equipment', 'Equipment\\EquipmentController', ['as' => 'equipment']);
-    Route::get('/admin/ajax-equipment', 'Equipment\\EquipmentController@dataAjaxEquipment')->name('ajax-equipment');
 
     Route::resource('admin/equipment-assignment', 'EquipmentAssignment\\EquipmentAssignmentController',
         ['as' => 'equipment-assignment']
@@ -54,20 +58,23 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 });
 //frontend
-Route::group(['middleware' => ['auth', 'saleadmin', 'sale', 'supervisor']], function () {
+Route::group(['middleware' => ['auth', 'sale']], function () {
     Route::get('/', function () {
         return redirect('/create/home');
     });
 
     Route::get('/create/{form}', 'FrontendController@index')->name('create-form');
+    Route::get('/create/service/{array}', 'FrontendController@service')->name('create-service-form');
     Route::get('/session-clear', 'FrontendController@clear');
+
     Route::post('/customer-create', 'FrontendController@postCreateCustomer')->name('customer-post-create');
+    Route::post('/service-create', 'FrontendController@postCreateService')->name('service-post-create');
+    Route::post('/technology-create', 'FrontendController@postCreateTechnology')->name('technology-post-create');
 
     Route::get('/customer-create', 'FrontendController@createCustomer')->name('customer-create');
     Route::get('/admin/ajax-customer', 'Customer\\CustomerController@dataAjaxCustomer')->name('ajax-customer');
 
-    Route::get('/service-create', 'Service\\ServiceController@createService')->name('service-create');
-    Route::post('/service-create', 'Service\\ServiceController@postCreateService')->name('service-post-create');
+    Route::get('/load-equipment-assignment', 'FrontendController@equipment_assignment')->name('load-equipment-assignment');
 
 //    Route::get('/home', 'HomeController@index')->name('home');
 

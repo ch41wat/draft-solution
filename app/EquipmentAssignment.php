@@ -27,4 +27,19 @@ class EquipmentAssignment extends Model
      */
     protected $fillable = ['technology_id', 'equipment_id', 'picture_id', 'layer'];
 
+    public function technology()
+    {
+        return $this->belongsTo('App\Technology');
+    }
+
+    public function equipment()
+    {
+        return $this->belongsTo('App\Equipment');
+    }
+
+    public function picture()
+    {
+        return $this->belongsTo('App\Picture');
+    }
+
 }

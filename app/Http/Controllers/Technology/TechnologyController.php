@@ -162,6 +162,8 @@ class TechnologyController extends Controller
                 $data[$key]->picture_id = implode(",", $picture_id);
                 $data[$key]->picture_name = implode(",", $picture_array);
             }
+        } else {
+            $data = Technology::latest()->paginate(1);
         }
 
         return response()->json($data);

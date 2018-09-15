@@ -1,8 +1,6 @@
 @extends('frontend.frontend')
 
-@section('frontend-title')
-    {{ config('app.name') }}
-@endsection
+@section('frontend-title') {{ config('app.name') }} @endsection
 @section('frontend-content')
 
     <div class="container">

@@ -14,10 +14,10 @@ class Equipment extends Model
     protected $table = 'equipment';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -27,5 +27,9 @@ class Equipment extends Model
      */
     protected $fillable = ['name', 'detail', 'picture'];
 
-    
+    public function equipment_assignments()
+    {
+        return $this->hasMany('App\EquipmentAssignment');
+    }
+
 }

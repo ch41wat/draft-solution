@@ -26,4 +26,9 @@ class Picture extends Model
      * @var array
      */
     protected $fillable = ['name', 'path'];
+
+    public function equipment_assignments()
+    {
+        return $this->hasMany('App\EquipmentAssignment');
+    }
 }
