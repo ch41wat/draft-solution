@@ -21,7 +21,7 @@
                             </ul>
                         @endif
 
-                        <form method="POST" action="{{ url('/admin/equipment-assignment') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                        <form method="POST" action="{{ url('/admin/equipment-assignment') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                             {{ csrf_field() }}
 
                             @include ('backend.equipment-assignment.form', ['formMode' => 'create'])
@@ -33,8 +33,46 @@
             </div>
         </div>
     </div>
+    <div class="modal modal-fullscreen fade" id="modal-layer">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal Layer</h4>
+                </div>
+                <div class="modal-body" style="min-height: 350px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="hidden" name="picture_id" id="picture-id">
+                            <input type="hidden" name="layer_id" id="layer-id">
+                            <div class="form-group">
+                                <select class="form-control" name="equipment" id="item-equipment"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btn-select">Select Layer</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
     <script type="text/javascript">
         $(function () {
+            $('#modal-layer').on('show.bs.modal', function (e) {
+                var image = $(e.relatedTarget).data('image'),
+                    layer = $(e.relatedTarget).data('layer');
+                // console.log(image + '-' + layer);
+                $('#picture-id').val(image);
+                $('#layer-id').val(layer);
+                // $("#modal-layer #show-thumbnail").load("{{ route('ajax-equipment') }}", function(){}); 
+            });
+
             $("#technology_id").change(function () {
                 $.ajax({
                     url: "{{ route('ajax-technology') }}",
@@ -44,7 +82,14 @@
                     success: function (data) {
                         var content = '';
                         data.forEach(item => {
-                            content += '<img src="{{ asset('storage/uploads/technology') }}/' + item['picture_name'] + '">';
+                            var pictures_id = item['picture_id'].split(','),
+                                pictures_name = item['picture_name'].split(',');
+                            pictures_id.forEach(function(id, key) {
+                                content += '<div class="col-md-12 col-xs-12" style="background-image: url({{ asset('storage/uploads') }}' + pictures_name[key] + '); background-size: 100% 100%; background-repeat: no-repeat; min-height: 390px; width: 100%; margin-bottom: 10px;">' +
+                                    get_layer(id, '') +
+                                '</div>' + 
+                                '<input type="hidden" name="picture_id[]" value="' + id + '">';
+                            });
                         });
                         $('#img-content').html(content);
                     },
@@ -67,6 +112,36 @@
                     },
                     cache: true
                 });
+            });
+
+            $('#item-equipment').select2({
+                placeholder: 'Select an item',
+                    ajax: {
+                    url: "{{ route('ajax-equipment') }}",
+                    type: 'get',
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results:  $.map(data, function (item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            $('#btn-select').click(function() {
+                var id = $('#picture-id').val(),
+                    layer = $('#layer-id').val(),
+                    equipment = $('#item-equipment').val();
+                $('#layer-' + id + '-' + layer).val(equipment);
+                $('#link-' + id + '-' + layer).html(layer + ' <span class="label label-success"><i class="fa fa-check-square"></i></span>');
+                $('#modal-layer').modal('hide');
             });
         });
 

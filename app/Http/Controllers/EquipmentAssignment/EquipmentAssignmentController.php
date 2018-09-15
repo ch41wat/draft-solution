@@ -52,12 +52,29 @@ class EquipmentAssignmentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'technology_id' => 'required',
+            'picture_id' => 'required|array',
+            'picture_id.*' => 'required',
+        ]);
 
-        $requestData = $request->all();
+        $layer = 1;
+        foreach ($request->get('picture_id') as $picture) {
+            for ($i = 1; $i <= 18; $i++) {
+                if (!empty($request->get('layer_' . $picture . '_' . $i))) {
+                    $equipment_assignment = new EquipmentAssignment();
+                    $equipment_assignment->technology_id = $request->get('technology_id');
+                    $equipment_assignment->equipment_id = $request->get('layer_' . $picture . '_' . $i);
+                    $equipment_assignment->picture_id = $picture;
+                    $equipment_assignment->layer = $i;
+                    $equipment_assignment->save();
+                }
+            }
+        }
 
-        equipment - assignment::create($requestData);
+        // $technology->save();
 
-        return redirect('admin/equipment-assignment')->with('flash_message', 'equipment-assignment added!');
+        return redirect('admin/equipment-assignment')->with('flash_message', 'Equipment Assignment added!');
     }
 
     /**

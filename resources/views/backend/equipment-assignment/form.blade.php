@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div id="img-content"></div>
+        <div id="img-content" style="min-height: 390px; margin: 5px auto; background-color: #ddd; padding: 0px; border: 1px solid #202020;"></div>
     </div>
 </div>
 

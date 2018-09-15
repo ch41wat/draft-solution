@@ -65,6 +65,8 @@
     <script src="{{ asset ('/bower_components/fastclick/lib/fastclick.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset ('/dist/js/adminlte.min.js') }}"></script>
+    <!-- main App -->
+    <script src="{{ asset ('/js/main.js') }}"></script>
 
     <!-- Google Font -->
     <!--<link rel="stylesheet"  href="{{ asset('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic') }}">-->

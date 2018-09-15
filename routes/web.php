@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/get-picture/{type}/{search}', 'Picture\\PictureController@getPicture')->name('picture.get-picture');
 
     Route::resource('admin/equipment', 'Equipment\\EquipmentController', ['as' => 'equipment']);
+    Route::get('/admin/ajax-equipment', 'Equipment\\EquipmentController@dataAjaxEquipment')->name('ajax-equipment');
 
     Route::resource('admin/equipment-assignment', 'EquipmentAssignment\\EquipmentAssignmentController',
         ['as' => 'equipment-assignment']

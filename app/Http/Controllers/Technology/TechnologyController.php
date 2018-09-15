@@ -157,8 +157,9 @@ class TechnologyController extends Controller
                 $picture_id = explode(",", $value->picture);
                 foreach ($picture_id as $pic) {
                     $picture_data = Picture::where('id', '=', $pic)->first();
-                    $picture_array[] = $picture_data->name;
+                    $picture_array[] = '/' . $picture_data->path . '/picture/' . $picture_data->name;
                 }
+                $data[$key]->picture_id = implode(",", $picture_id);
                 $data[$key]->picture_name = implode(",", $picture_array);
             }
         }

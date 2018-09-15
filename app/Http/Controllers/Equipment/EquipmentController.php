@@ -123,4 +123,15 @@ class EquipmentController extends Controller
 
         return redirect('admin/equipment')->with('flash_message', 'Equipment deleted!');
     }
+
+    public function dataAjaxEquipment(Request $request)
+    {
+        $data = [];
+        if ($request->has('q')) {
+            $search = $request->q;
+            $data = Equipment::where('name', 'LIKE', "%$search%")->get();
+        }
+
+        return response()->json($data);
+    }
 }

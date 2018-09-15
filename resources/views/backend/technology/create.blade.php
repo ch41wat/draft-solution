@@ -68,22 +68,12 @@
                 var items = $.map($('input.select-item:checkbox:checked'), function(n, i){
                         return n.value;
                     }),
-                    itemsID = new Array(), itemsImg = new Array(), column = '';
-                for (var i = 1; i <= 3; i++) {
-                    column += '<div class="row">' +
-                        '<div class="col-md-2 col-xs-2" style="min-height: 130px; border: 1px solid #202020;"><div class="row"><h3 class="text-center">' + i + '-1' + '</h3></div></div>' +
-                        '<div class="col-md-2 col-xs-2" style="min-height: 130px; border: 1px solid #202020;"><div class="row"><h3 class="text-center">' + i + '-2' + '</h3></div></div>' +
-                        '<div class="col-md-2 col-xs-2" style="min-height: 130px; border: 1px solid #202020;"><div class="row"><h3 class="text-center">' + i + '-3' + '</h3></div></div>' +
-                        '<div class="col-md-2 col-xs-2" style="min-height: 130px; border: 1px solid #202020;"><div class="row"><h3 class="text-center">' + i + '-4' + '</h3></div></div>' +
-                        '<div class="col-md-2 col-xs-2" style="min-height: 130px; border: 1px solid #202020;"><div class="row"><h3 class="text-center">' + i + '-5' + '</h3></div></div>' +
-                        '<div class="col-md-2 col-xs-2" style="min-height: 130px; border: 1px solid #202020;"><div class="row"><h3 class="text-center">' + i + '-6' + '</h3></div></div>' +
-                    '</div>';                 
-                }
+                    itemsID = new Array(), itemsImg = new Array();
                 items.forEach(function(item, key) {
                     var data = item.split('|');
                     itemsID[key] = data[0];
                     itemsImg[key] = '<div class="col-md-12 col-xs-12" style="background-image: url({{ asset('storage/uploads/') }}' + data[1] + '); background-size: 100% 100%; background-repeat: no-repeat; min-height: 390px; width: 100%; margin-bottom: 10px;">' +
-                        column +
+                        get_layer(data[0], 'disabled') +
                     '</div>';
                 });
                 $('#picture').val(itemsID.join(','));

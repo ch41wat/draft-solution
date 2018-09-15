@@ -77,6 +77,21 @@
                 </ul>
             </li>
             <li class="treeview">
+                <a href="#"><i class="fa fa-cogs"></i> <span>Equipment Assignment</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ route('equipment-assignment.equipment-assignment.create') }}">
+                        Create Equipment Assignment
+                    </a></li>
+                    <li><a href="{{ route('equipment-assignment.equipment-assignment.index') }}">
+                        Show Equipment Assignment
+                    </a></li>
+                </ul>
+            </li>
+            <li class="treeview">
                 <a href="#"><i class="fa fa-cogs"></i> <span>Picture</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>

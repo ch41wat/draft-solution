@@ -33,7 +33,9 @@
                                         <th>#</th>
                                         <th>Technology Id</th>
                                         <th>Equipment Id</th>
+                                        <th>Picture Id</th>
                                         <th>Layer</th>
+                                        <th>Tools</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -42,6 +44,8 @@
                                         <td>{{ $loop->iteration or $item->id }}</td>
                                         <td>{{ $item->technology_id }}</td>
                                         <td>{{ $item->equipment_id }}</td>
+                                        <td>{{ $item->picture_id }}</td>
+                                        <td>{{ $item->layer }}</td>
                                         <td>
                                             <a href="{{ url('/admin/equipment-assignment/' . $item->id) }}" title="View equipment-assignment"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/admin/equipment-assignment/' . $item->id . '/edit') }}" title="Edit equipment-assignment"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
