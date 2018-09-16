@@ -47,7 +47,7 @@ class FrontendController extends Controller
             )
             ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service')
             ->orderBy('p.id')
-            ->where('t.service', '=', $draft->service)
+            ->where('t.service', '=', (isset($draft->service)) ? $draft->service : null)
             ->get();
         return view("frontend.$form.create", compact(['step_form', 'draft', 'service', 'technology']));
     }
@@ -156,7 +156,8 @@ class FrontendController extends Controller
         $draft->start_service_duration = $request->input('start_service_duration');
         $draft->end_service_duration = $request->input('end_service_duration');
         $draft->other = $request->input('other');
-        $draft->location = $request->input('location');
+        $draft->latitude = $request->input('latitude');
+        $draft->longitude = $request->input('longitude');
         $draft->water_qty = $request->input('water_qty');
         $draft->pipe_size = $request->input('pipe_size');
         $draft->pipe_setup_price = $request->input('pipe_setup_price');

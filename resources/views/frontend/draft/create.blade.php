@@ -40,13 +40,24 @@
                                     <div class="col-md-6">
                                         <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
-                                            <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control">
-                                                {{ $draft->purpose[$item->id] or '' }}
-                                            </textarea>
+                                            <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->purpose[$item->id] or '' }}</textarea>
                                         </div>
-                                        <div class="form-group {{ $errors->has('location.' . $item->id) ? 'has-error' : ''}}">
+                                        <div class="form-group">
                                             <label class="control-label">{{ 'ตำแหน่งโรงงาน' }}</label>
-                                            <input type="text" name="location[{{ $item->id }}]" value="{{ $draft->location[$item->id] or '' }}" class="form-control">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group {{ $errors->has('latitude.' . $item->id) ? 'has-error' : ''}}">
+                                                    <label class="control-label">{{ 'ละติจูด' }}</label>
+                                                        <input type="text" name="latitude[{{ $item->id }}]" id="latitude-{{ $item->id }}" value="{{ $draft->latitude[$item->id] or '' }}" class="form-control">
+                                                    </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group {{ $errors->has('longitude.' . $item->id) ? 'has-error' : ''}}">
+                                                    <label class="control-label">{{ 'ลองจิจูด' }}</label>
+                                                    <input type="text" name="longitude[{{ $item->id }}]" id="longitude-{{ $item->id }}" value="{{ $draft->longitude[$item->id] or '' }}" class="form-control">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group {{ $errors->has('water_qty.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ปริมาณน้ำที่ต้องการ' }}</label>

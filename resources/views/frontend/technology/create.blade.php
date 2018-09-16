@@ -51,9 +51,7 @@
                                         </div>
                                         <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
-                                            <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control">
-                                                {{ $draft->purpose[$item->id] or '' }}
-                                            </textarea>
+                                            <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->purpose[$item->id] or '' }}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">{{ 'งบประมาณ (ถ้ามี)' }}</label>
@@ -81,15 +79,26 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">{{ 'อื่นๆ' }}</label>
-                                            <textarea name="other[{{ $item->id }}]" cols="3" class="form-control">
-                                                 {{ $draft->other[$item->id] or '' }}
-                                            </textarea>
+                                            <textarea name="other[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->other[$item->id] or '' }}</textarea>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group {{ $errors->has('location.' . $item->id) ? 'has-error' : ''}}">
+                                                <div class="form-group">
                                                     <label class="control-label">{{ 'ตำแหน่งโรงงาน' }}</label>
-                                                    <input type="text" name="location[{{ $item->id }}]" value="{{ $draft->location[$item->id] or '' }}" class="form-control">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group {{ $errors->has('latitude.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ละติจูด' }}</label>
+                                                            <input type="text" name="latitude[{{ $item->id }}]" id="latitude-{{ $item->id }}" value="{{ $draft->latitude[$item->id] or '' }}" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group {{ $errors->has('longitude.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ลองจิจูด' }}</label>
+                                                            <input type="text" name="longitude[{{ $item->id }}]" id="longitude-{{ $item->id }}" value="{{ $draft->longitude[$item->id] or '' }}" class="form-control">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="form-group {{ $errors->has('water_qty.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ปริมาณน้ำที่ต้องการ' }}</label>
@@ -107,7 +116,75 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="" class="control-label">{{ 'แผนที่' }}</label>
-                                                    {{-- <input type="date" name="water_need_qty" id="water_need_qty" class="form-control"> --}}
+                                                    <div id="map{{ $item->id }}" style="width:100%; height: 300px;"></div>
+                                                    <script type="text/javascript">
+                                                        $(function () {
+                                                            ymaps.ready(init{{ $item->id }});
+
+                                                            function init{{ $item->id }}() {
+                                                                var myPlacemark,
+                                                                    myMap = new ymaps.Map('map{{ $item->id }}', {
+                                                                        center: [13.757797803765193, 100.53866103124997],
+                                                                        zoom: 5
+                                                                    }, {
+                                                                        searchControlProvider: 'yandex#search'
+                                                                    });
+
+                                                                // Listening for a click on the map
+                                                                myMap.events.add('click', function (e) {
+                                                                    var coords = e.get('coords');
+                                                                    $('#latitude-{{ $item->id }}').val(coords[0]);
+                                                                    $('#longitude-{{ $item->id }}').val(coords[1]);
+
+                                                                    // Moving the placemark if it was already created
+                                                                    if (myPlacemark) {
+                                                                        myPlacemark.geometry.setCoordinates(coords);
+                                                                    }
+                                                                    // Otherwise, creating it.
+                                                                    else {
+                                                                        myPlacemark = createPlacemark(coords);
+                                                                        myMap.geoObjects.add(myPlacemark);
+                                                                        // Listening for the dragging end event on the placemark.
+                                                                        myPlacemark.events.add('dragend', function () {
+                                                                            getAddress(myPlacemark.geometry.getCoordinates());
+                                                                        });
+                                                                    }
+                                                                    getAddress(coords);
+                                                                });
+
+                                                                // Creating a placemark
+                                                                function createPlacemark(coords) {
+                                                                    return new ymaps.Placemark(coords, {
+                                                                        iconCaption: 'searching...'
+                                                                    }, {
+                                                                        preset: 'islands#violetDotIconWithCaption',
+                                                                        draggable: true
+                                                                    });
+                                                                }
+
+                                                                // Determining the address by coordinates (reverse geocoding).
+                                                                function getAddress(coords) {
+                                                                    myPlacemark.properties.set('iconCaption', 'searching...');
+                                                                    ymaps.geocode(coords).then(function (res) {
+                                                                        var firstGeoObject = res.geoObjects.get(0);
+
+                                                                        myPlacemark.properties
+                                                                            .set({
+                                                                                // Forming a string with the object's data.
+                                                                                iconCaption: [
+                                                                                    // The name of the municipality or the higher territorial-administrative formation.
+                                                                                    firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                                                                                    // Getting the path to the toponym; if the method returns null, then requesting the name of the building.
+                                                                                    firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                                                                                ].filter(Boolean).join(', '),
+                                                                                // Specifying a string with the address of the object as the balloon content.
+                                                                                balloonContent: firstGeoObject.getAddressLine()
+                                                                            });
+                                                                    });
+                                                                }
+                                                            }
+                                                        })
+                                                    </script>
                                                 </div>
                                             </div>
                                         </div>
@@ -126,4 +203,71 @@
                 </div>
             </div>
         </div>
+    <script type="text/javascript" src="https://api-maps.yandex.ru/2.1/?lang=en"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            function init(map) {
+                var myPlacemark,
+                    myMap = new ymaps.Map(map, {
+                        center: [13.757797803765193, 100.53866103124997],
+                        zoom: 5
+                    }, {
+                        searchControlProvider: 'yandex#search'
+                    });
+
+                // Listening for a click on the map
+                myMap.events.add('click', function (e) {
+                    var coords = e.get('coords');
+
+                    // Moving the placemark if it was already created
+                    if (myPlacemark) {
+                        myPlacemark.geometry.setCoordinates(coords);
+                    }
+                    // Otherwise, creating it.
+                    else {
+                        myPlacemark = createPlacemark(coords);
+                        myMap.geoObjects.add(myPlacemark);
+                        // Listening for the dragging end event on the placemark.
+                        myPlacemark.events.add('dragend', function () {
+                            getAddress(myPlacemark.geometry.getCoordinates());
+                        });
+                    }
+                    getAddress(coords);
+                });
+
+                // Creating a placemark
+                function createPlacemark(coords) {
+                    console.log(coords);
+                    return new ymaps.Placemark(coords, {
+                        iconCaption: 'searching...'
+                    }, {
+                        preset: 'islands#violetDotIconWithCaption',
+                        draggable: true
+                    });
+                }
+
+                // Determining the address by coordinates (reverse geocoding).
+                function getAddress(coords) {
+                    myPlacemark.properties.set('iconCaption', 'searching...');
+                    ymaps.geocode(coords).then(function (res) {
+                        var firstGeoObject = res.geoObjects.get(0);
+
+                        myPlacemark.properties
+                            .set({
+                                // Forming a string with the object's data.
+                                iconCaption: [
+                                    // The name of the municipality or the higher territorial-administrative formation.
+                                    firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                                    // Getting the path to the toponym; if the method returns null, then requesting the name of the building.
+                                    firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                                ].filter(Boolean).join(', '),
+                                // Specifying a string with the address of the object as the balloon content.
+                                balloonContent: firstGeoObject.getAddressLine()
+                            });
+                    });
+                }
+            }
+        })
+    </script>
 @endsection
