@@ -56,6 +56,12 @@
     {!! $errors->first('service', '<p class="help-block">:message</p>') !!}
 </div>
 
+<div class="form-group {{ $errors->has('price') ? 'has-error' : ''}}">
+    <label for="price" class="control-label">{{ 'Price' }}</label>
+    <input class="form-control" name="price" type="text" id="price" value="{{ $technology->price or ''}}" >
+    {!! $errors->first('price', '<p class="help-block">:message</p>') !!}
+</div>
+
 
 <div class="form-group">
     <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">

@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Equipment extends Model
-{
+class Reservoir extends Model {
+
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'equipment';
+    protected $table = 'reservoir';
 
     /**
      * The database primary key value.
@@ -25,11 +25,6 @@ class Equipment extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'detail', 'picture', 'qty', 'unit'];
-
-    public function equipment_assignments()
-    {
-        return $this->hasMany('App\EquipmentAssignment');
-    }
+    protected $fillable = ['name', 'latitude', 'longitude'];
 
 }

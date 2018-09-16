@@ -4,22 +4,24 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTechnologiesTable extends Migration {
-
+class CreateEquipmentTable extends Migration
+{
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up() {
-        Schema::create('technologies', function (Blueprint $table) {
+    public function up()
+    {
+        Schema::create('equipment', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->string('name')->nullable();
-            $table->string('video')->nullable();
+            $table->string('detail')->nullable();
             $table->string('picture')->nullable();
-            $table->string('service')->nullable();
-        });
+            $table->integer('qty')->nullable();
+            $table->string('unit')->nullable();
+            });
     }
 
     /**
@@ -27,8 +29,8 @@ class CreateTechnologiesTable extends Migration {
      *
      * @return void
      */
-    public function down() {
-        Schema::dropIfExists('technologies');
+    public function down()
+    {
+        Schema::dropIfExists('equipment');
     }
-
 }

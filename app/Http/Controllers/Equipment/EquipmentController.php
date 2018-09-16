@@ -22,6 +22,8 @@ class EquipmentController extends Controller
             $equipment = Equipment::where('name', 'LIKE', "%$keyword%")
                 ->orWhere('detail', 'LIKE', "%$keyword%")
                 ->orWhere('picture', 'LIKE', "%$keyword%")
+                ->orWhere('qty', 'LIKE', "%$keyword%")
+                ->orWhere('unit', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $equipment = Equipment::latest()->paginate($perPage);
@@ -54,6 +56,8 @@ class EquipmentController extends Controller
             'name' => 'required',
             'detail' => 'required',
             'picture' => 'required',
+            'qty' => 'required',
+            'unit' => 'required',
         ]);
 
         $requestData = $request->all();

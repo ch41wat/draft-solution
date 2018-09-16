@@ -25,7 +25,7 @@ class Technology extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'picture', 'video', 'service'];
+    protected $fillable = ['name', 'picture', 'video', 'service', 'price'];
 
     public function equipment_assignments()
     {
