@@ -71,18 +71,18 @@ Route::group(['middleware' => ['sale']], function () {
         return redirect('/sale/home');
     });
 
+    Route::get('/sale/customer-create', 'FrontendController@createCustomer')->name('sale-customer-create');
+    Route::get('/sale/ajax-customer', 'Customer\\CustomerController@dataAjaxCustomer')->name('sale-ajax-customer');
+
+    Route::get('/sale/load-equipment-assignment', 'FrontendController@equipment_assignment')
+        ->name('sale-load-equipment-assignment');
+
     Route::get('/sale/{form}', 'FrontendController@index')->name('sale-create-form');
     Route::get('/sale/service/{array}', 'FrontendController@service')->name('sale-create-service-form');
 
     Route::post('/sale/customer-create', 'FrontendController@postCreateCustomer')->name('sale-customer-post-create');
     Route::post('/sale/service-create', 'FrontendController@postCreateService')->name('sale-service-post-create');
     Route::post('/sale/technology-create', 'FrontendController@postCreateTechnology')->name('sale-technology-post-create');
-
-    Route::get('/sale/customer-create', 'FrontendController@createCustomer')->name('sale-customer-create');
-    Route::get('/sale/ajax-customer', 'Customer\\CustomerController@dataAjaxCustomer')->name('sale-ajax-customer');
-
-    Route::get('/sale/load-equipment-assignment', 'FrontendController@equipment_assignment')
-        ->name('sale-load-equipment-assignment');
 
 });
 
@@ -94,6 +94,12 @@ Route::group(['middleware' => ['saleadmin']], function () {
         return redirect('/saleadmin/home');
     });
 
+    Route::get('/saleadmin/customer-create', 'FrontendController@createCustomer')->name('saleadmin-customer-create');
+    Route::get('/saleadmin/ajax-customer', 'Customer\\CustomerController@dataAjaxCustomer')->name('saleadmin-ajax-customer');
+
+    Route::get('/saleadmin/load-equipment-assignment', 'FrontendController@equipment_assignment')
+        ->name('saleadmin-load-equipment-assignment');
+
     Route::get('/saleadmin/{form}', 'FrontendController@index')->name('saleadmin-create-form');
     Route::get('/saleadmin/service/{array}', 'FrontendController@service')->name('saleadmin-create-service-form');
 
@@ -103,12 +109,6 @@ Route::group(['middleware' => ['saleadmin']], function () {
         ->name('saleadmin-service-post-create');
     Route::post('/saleadmin/technology-create', 'FrontendController@postCreateTechnology')
         ->name('saleadmin-technology-post-create');
-
-    Route::get('/saleadmin/customer-create', 'FrontendController@createCustomer')->name('saleadmin-customer-create');
-    Route::get('/saleadmin/ajax-customer', 'Customer\\CustomerController@dataAjaxCustomer')->name('saleadmin-ajax-customer');
-
-    Route::get('/saleadmin/load-equipment-assignment', 'FrontendController@equipment_assignment')
-        ->name('saleadmin-load-equipment-assignment');
 
 });
 
@@ -120,6 +120,14 @@ Route::group(['middleware' => ['supervisor']], function () {
         return redirect('/supervisor/home');
     });
 
+    Route::get('/supervisor/customer-create', 'FrontendController@createCustomer')
+        ->name('supervisor-customer-create');
+    Route::get('/supervisor/ajax-customer', 'Customer\\CustomerController@dataAjaxCustomer')
+        ->name('supervisor-ajax-customer');
+
+    Route::get('/supervisor/load-equipment-assignment', 'FrontendController@equipment_assignment')
+        ->name('supervisor-load-equipment-assignment');
+
     Route::get('/supervisor/{form}', 'FrontendController@index')->name('supervisor-create-form');
     Route::get('/supervisor/service/{array}', 'FrontendController@service')->name('supervisor-create-service-form');
 
@@ -129,13 +137,5 @@ Route::group(['middleware' => ['supervisor']], function () {
         ->name('supervisor-service-post-create');
     Route::post('/supervisor/technology-create', 'FrontendController@postCreateTechnology')
         ->name('supervisor-technology-post-create');
-
-    Route::get('/supervisor/customer-create', 'FrontendController@createCustomer')
-        ->name('supervisor-customer-create');
-    Route::get('/supervisor/ajax-customer', 'Customer\\CustomerController@dataAjaxCustomer')
-        ->name('supervisor-ajax-customer');
-
-    Route::get('/supervisor/load-equipment-assignment', 'FrontendController@equipment_assignment')
-        ->name('supervisor-load-equipment-assignment');
 
 });

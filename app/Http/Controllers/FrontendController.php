@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class FrontendController extends Controller
 {
@@ -119,7 +120,7 @@ class FrontendController extends Controller
         $draft->draft_level = 1;
         $draft->customer_name_old = $request->input('customer_name_old');
         $request->session()->put('draft', $draft);
-        return redirect('/create/service');
+        return redirect(route(Auth::user()->role . '-create-form', 'service'));
 
     }
 
@@ -171,7 +172,7 @@ class FrontendController extends Controller
     public function clear(Request $request)
     {
         $request->session()->forget('draft');
-        return redirect('/create/customer');
+        return redirect(route(Auth::user()->role . '-create-service-form', 'customer'));
     }
 
     public function equipment_assignment(Request $request)
