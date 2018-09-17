@@ -59,6 +59,8 @@ Route::group(['middleware' => ['admin']], function () {
     Route::resource('admin/video', 'Video\\VideoController', ['as' => 'video']);
 
     Route::resource('admin/draft', 'Draft\\DraftController', ['as' => 'draft']);
+    
+    Route::resource('admin/reservoir', 'Reservoir\\ReservoirController', ['as' => 'reservoir']);
 
 });
 
