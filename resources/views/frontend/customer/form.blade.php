@@ -54,7 +54,7 @@
     $('#item-customer').select2({
         placeholder: 'Select an item',
             ajax: {
-            url: "{{ route('ajax-customer') }}",
+            url: "{{ route(Auth::user()->role . '-ajax-customer') }}",
             type: 'get',
             dataType: 'json',
             delay: 250,

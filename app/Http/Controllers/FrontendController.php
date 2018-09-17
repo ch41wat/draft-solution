@@ -137,7 +137,7 @@ class FrontendController extends Controller
         $draft->technology_id = $request->input('technology_id');
         $draft->draft_level = 2;
         $request->session()->put('draft', $draft);
-        return redirect(route('create-service-form', $request->input('technology_id')));
+        return redirect(route(Auth::user()->role . '-create-service-form', $request->input('technology_id')));
 
     }
 
@@ -164,7 +164,7 @@ class FrontendController extends Controller
         $draft->pipe_setup_price = $request->input('pipe_setup_price');
         $draft->draft_level = 3;
         $request->session()->put('draft', $draft);
-        return redirect(route('create-form', ['form' => 'draft']));
+        return redirect(route(Auth::user()->role . '-create-form', ['form' => 'draft']));
 
     }
 

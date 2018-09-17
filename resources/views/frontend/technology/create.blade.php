@@ -19,7 +19,7 @@
                             </ul>
                         @endif
 
-                        <form method="POST" action="{{ route('technology-post-create') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route(Auth::user()->role . '-technology-post-create') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                             {{ csrf_field() }}
 
                             @foreach ($technology as $item)
@@ -193,7 +193,7 @@
                                 <!-- /.box-body -->
                             </div>
                             @endforeach
-                            <a href="{{ route('create-form', ['form' => 'service']) }}" class="btn btn-danger">
+                            <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'service']) }}" class="btn btn-danger">
                                 {{ 'ย้อนกลับ' }}
                             </a>
                             <input class="btn btn-primary" type="submit" value="{{ 'ถัดไป' }}">

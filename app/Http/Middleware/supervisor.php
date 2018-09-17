@@ -23,7 +23,8 @@ class supervisor
             return $next($request);
         }
 
-        abort(403);
+        // abort(404);
+        return redirect(Auth::user()->role);
     }
 
 }

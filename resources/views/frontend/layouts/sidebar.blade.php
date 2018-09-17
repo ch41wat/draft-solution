@@ -32,7 +32,7 @@
             <li class="header">HEADER</li>
             <!-- Optionally, you can add icons to the links -->
             <li>
-                <a href="{{ route('create-form', ['form' => 'home']) }}">
+                <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'home']) }}">
                     <i class="fa fa-link"></i> <span>Create draft</span>
                 </a>
             </li>

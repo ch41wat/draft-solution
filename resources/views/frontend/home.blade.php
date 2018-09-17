@@ -8,7 +8,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body text-center">
-                        <a href="{{ route('create-form', ['form' => 'customer']) }}" class="btn btn-primary btn-lg">
+                        <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'customer']) }}" class="btn btn-primary btn-lg">
                             Create draft
                         </a>
                     </div>

@@ -23,7 +23,8 @@ class sale
             return $next($request);
         }
 
-        abort(404);
+        // abort(404);
+        return redirect(Auth::user()->role);
     }
 
 }

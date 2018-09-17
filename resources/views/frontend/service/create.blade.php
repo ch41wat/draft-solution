@@ -11,7 +11,7 @@
                 <div class="card">
                     {{-- <div class="card-header">Create New Service</div> --}}
                     <div class="card-body">
-                        <form method="POST" action="{{ route('service-post-create') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route(Auth::user()->role . '-service-post-create') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             {{-- {{ dd($draft) }} --}}
                             <div class="form-group text-center">
@@ -41,7 +41,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <a href="{{ route('create-form', ['form' => 'customer']) }}" class="btn btn-danger">
+                            <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'customer']) }}" class="btn btn-danger">
                                 {{ 'ย้อนกลับ' }}
                             </a>
                             <input class="btn btn-primary" type="submit" value="{{ 'ถัดไป' }}">
@@ -78,7 +78,7 @@
         $(function () {
             $('#modal-gallery').on('show.bs.modal', function (e) {
                 var id = $(e.relatedTarget).data('technology');
-                $("#modal-gallery #show-thumbnail").load("{{ route('load-equipment-assignment') }}", 'id=' + id, 
+                $("#modal-gallery #show-thumbnail").load("{{ route(Auth::user()->role . '-load-equipment-assignment') }}", 'id=' + id, 
                 function(){}); 
             });
 

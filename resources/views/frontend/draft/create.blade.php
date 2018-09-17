@@ -109,7 +109,7 @@
                                 <button type="button" class="btn btn-success">Export Excel</button>
                             </div>
                             <div class="col-md-6 text-right">
-                                <a href="{{ route('create-service-form', ['array' => $item->id]) }}" class="btn btn-danger">
+                                <a href="{{ route(Auth::user()->role . '-create-service-form', ['array' => $item->id]) }}" class="btn btn-danger">
                                     {{ 'ย้อนกลับ' }}
                                 </a>
                                 <input class="btn btn-primary" type="submit" value="{{ 'บันทึก' }}">
