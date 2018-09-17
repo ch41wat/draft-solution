@@ -21,6 +21,7 @@ class CreateEquipmentsTable extends Migration
             $table->string('unit')->nullable();
             $table->string('detail')->nullable();
             $table->string('picture')->nullable();
+            $table->string('price')->nullable();
         });
     }
 

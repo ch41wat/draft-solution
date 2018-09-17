@@ -6,23 +6,24 @@ use App\Equipment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class EquipmentController extends Controller
-{
+class EquipmentController extends Controller {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\View\View
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $keyword = $request->get('search');
         $perPage = 25;
 
         if (!empty($keyword)) {
             $equipment = Equipment::where('name', 'LIKE', "%$keyword%")
-                ->orWhere('detail', 'LIKE', "%$keyword%")
-                ->orWhere('picture', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
+                            ->orWhere('detail', 'LIKE', "%$keyword%")
+                            ->orWhere('picture', 'LIKE', "%$keyword%")
+                            ->orWhere('qty', 'LIKE', "%$keyword%")
+                            ->orWhere('unit', 'LIKE', "%$keyword%")
+                            ->latest()->paginate($perPage);
         } else {
             $equipment = Equipment::latest()->paginate($perPage);
         }
@@ -35,8 +36,7 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
-    {
+    public function create() {
         return view('backend.equipment.create');
     }
 
@@ -47,13 +47,14 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
 
         $this->validate($request, [
             'name' => 'required',
             'detail' => 'required',
             'picture' => 'required',
+            'qty' => 'required',
+            'unit' => 'required'
         ]);
 
         $requestData = $request->all();
@@ -70,8 +71,7 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function show($id)
-    {
+    public function show($id) {
         $equipment = Equipment::findOrFail($id);
 
         return view('backend.equipment.show', compact('equipment'));
@@ -84,8 +84,7 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $equipment = Equipment::findOrFail($id);
 
         return view('backend.equipment.edit', compact('equipment'));
@@ -99,8 +98,7 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
 
         $requestData = $request->all();
 
@@ -117,15 +115,13 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         Equipment::destroy($id);
 
         return redirect('admin/equipment')->with('flash_message', 'Equipment deleted!');
     }
 
-    public function dataAjaxEquipment(Request $request)
-    {
+    public function dataAjaxEquipment(Request $request) {
         $data = [];
         if ($request->has('q')) {
             $search = $request->q;
@@ -134,4 +130,5 @@ class EquipmentController extends Controller
 
         return response()->json($data);
     }
+
 }

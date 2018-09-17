@@ -25,7 +25,7 @@ class Equipment extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'detail', 'picture'];
+    protected $fillable = ['name', 'detail', 'picture', 'qty', 'unit'];
 
     public function equipment_assignments()
     {
