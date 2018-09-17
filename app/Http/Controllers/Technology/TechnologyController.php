@@ -28,7 +28,6 @@ class TechnologyController extends Controller
                 ->orWhere('picture', 'LIKE', "%$keyword%")
                 ->orWhere('video', 'LIKE', "%$keyword%")
                 ->orWhere('equipment', 'LIKE', "%$keyword%")
-                ->orWhere('price', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $technology = Technology::latest()->paginate($perPage);
@@ -66,7 +65,6 @@ class TechnologyController extends Controller
             'video' => 'required|array',
             'video.*' => 'required',
             'service' => 'required',
-            'price' => 'required',
         ]);
 
         $technology = new technology();
@@ -79,7 +77,6 @@ class TechnologyController extends Controller
         $technology->picture = $request->input('picture');
         $technology->name = $request->get('name');
         $technology->service = $request->get('service');
-        $technology->price = $request->get('price');
 
         $technology->save();
         return redirect('/admin/technology');
@@ -113,7 +110,7 @@ class TechnologyController extends Controller
         $equipment = Equipment::all();
         $technology = Technology::findOrFail($id);
 
-        return view('backend.technology.edit', compact('technology', 'service', 'video', 'equipment', 'price'));
+        return view('backend.technology.edit', compact('technology', 'service', 'video', 'equipment'));
     }
 
     /**

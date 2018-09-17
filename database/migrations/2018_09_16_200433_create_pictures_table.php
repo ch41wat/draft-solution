@@ -2,8 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateVideosTable extends Migration
+class CreatePicturesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +13,12 @@ class CreateVideosTable extends Migration
      */
     public function up()
     {
-        Schema::create('videos', function (Blueprint $table) {
+        Schema::create('pictures', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('video_name')->nullable();
-            $table->enum('video_type',['file','url'])->nullable();
-            $table->string('video_file')->nullable();
-            $table->string('video_url')->nullable();
-            });
+            $table->string('name')->nullable();
+            $table->enum('path', ['technology', 'equipment'])->nullable();
+        });
     }
 
     /**
@@ -29,6 +28,6 @@ class CreateVideosTable extends Migration
      */
     public function down()
     {
-        Schema::drop('videos');
+        Schema::dropIfExists('pictures');
     }
 }

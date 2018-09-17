@@ -19,8 +19,6 @@
                 <th>name</th>
                 <th>detail</th>
                 <th>picture</th>
-                <th>qty</th>
-                <th>unit</th>
             </tr>
         </thead>
         <tbody>
@@ -30,8 +28,6 @@
                 <td>{{ $item->name }}</td>
                 <td>{{ $item->detail }}</td>
                 <td>{{ $item->picture }}</td>
-                <td>{{ $item->qty }}</td>
-                <td>{{ $item->unit }}</td>
                 <td class="text-center">
                     <form action="{{ route('equipment.equipment.destroy', $item->id) }}" method="POST">
                         @method('DELETE')

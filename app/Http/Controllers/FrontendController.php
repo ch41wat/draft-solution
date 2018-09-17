@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class FrontendController extends Controller
 {
+
     public function index(Request $request, $form)
     {
         $step_form = [
@@ -38,7 +39,7 @@ class FrontendController extends Controller
         }
         $service = Service::all();
         $technology = DB::table('technologies AS t')
-            ->join('picture AS p', function ($join) {
+            ->join('pictures AS p', function ($join) {
                 $join->whereRaw("find_in_set(p.id, t.picture)");
             })
             ->select(
@@ -74,7 +75,7 @@ class FrontendController extends Controller
         ];
         $draft = $request->session()->get('draft');
         $query = DB::table('technologies AS t')
-            ->join('picture AS p', function ($join) {
+            ->join('pictures AS p', function ($join) {
                 $join->whereRaw("find_in_set(p.id, t.picture)");
             })
             ->select(
@@ -176,9 +177,15 @@ class FrontendController extends Controller
     public function equipment_assignment(Request $request)
     {
         $equipment_assignment = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
+        // ->select([
+        //     'technology_id', 'picture_id',
+        //     DB::raw('group_concat(equipment_id) as equipment_id'),
+        //     DB::raw('group_concat(layer) as layer'),
+        // ])
             ->where('technology_id', '=', $request->id)
+        // ->groupBy('picture_id', 'technology_id')
             ->get();
-
+        // dd($equipment_assignment);
         if ($request->ajax()) {
             return view('frontend.service.load', ['equipment_assignment' => $equipment_assignment])->render();
         }

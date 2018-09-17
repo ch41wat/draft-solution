@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateReservoirTable extends Migration
+class CreateCustomersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateReservoirTable extends Migration
      */
     public function up()
     {
-        Schema::create('reservoir', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('name')->nullable();
+            $table->string('company_name')->nullable();
+            $table->string('customer_name')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
         });
@@ -29,6 +30,6 @@ class CreateReservoirTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reservoir');
+        Schema::dropIfExists('customers');
     }
 }

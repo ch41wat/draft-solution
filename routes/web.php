@@ -15,13 +15,18 @@ Auth::routes();
 
 // all
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', function () {
+        return redirect('/admin');
+    });
     Route::get('/admin/ajax-technology', 'Technology\\TechnologyController@dataAjaxTechnology')->name('ajax-technology');
     Route::get('/admin/get-picture/{type}/{search}', 'Picture\\PictureController@getPicture')->name('picture.get-picture');
     Route::get('/admin/ajax-equipment', 'Equipment\\EquipmentController@dataAjaxEquipment')->name('ajax-equipment');
+
+    Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 });
 
 // backend
-Route::group(['middleware' => ['auth', 'admin']], function () {
+Route::group(['middleware' => ['admin']], function () {
 
     Route::get('/', function () {
         return redirect('/admin');
@@ -54,26 +59,16 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::resource('admin/video', 'Video\\VideoController', ['as' => 'video']);
 
     Route::resource('admin/draft', 'Draft\\DraftController', ['as' => 'draft']);
-    
-    Route::resource('admin/reservoir', 'Reservoir\\ReservoirController', ['as' => 'reservoir']);
 
-    Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 });
+
 //frontend
-Route::group([
-    'middleware' => [
-        'prefix' => 'sale',
-        'auth',
-        'sale',
-        'saleadmin',
-        'supervisor',
-        ]
-    ], function () {
+Route::group(['middleware' => ['sale']], function () {
     Route::get('/', function () {
-        return redirect('/create/home');
+        return redirect('/sale/home');
     });
 
-    Route::get('/create/{form}', 'FrontendController@index')->name('create-form');
+    Route::get('/sale/{form}', 'FrontendController@index')->name('create-form');
     Route::get('/create/service/{array}', 'FrontendController@service')->name('create-service-form');
     Route::get('/session-clear', 'FrontendController@clear');
 
@@ -86,7 +81,24 @@ Route::group([
 
     Route::get('/load-equipment-assignment', 'FrontendController@equipment_assignment')->name('load-equipment-assignment');
 
-//    Route::get('/home', 'HomeController@index')->name('home');
+});
 
-    Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::group(['middleware' => ['saleadmin']], function () {
+    Route::get('/', function () {
+        return redirect('/saleadmin/home');
+    });
+
+    Route::get('/saleadmin/{form}', 'FrontendController@index')->name('create-form');
+    Route::get('/create/service/{array}', 'FrontendController@service')->name('create-service-form');
+    Route::get('/session-clear', 'FrontendController@clear');
+
+    Route::post('/customer-create', 'FrontendController@postCreateCustomer')->name('customer-post-create');
+    Route::post('/service-create', 'FrontendController@postCreateService')->name('service-post-create');
+    Route::post('/technology-create', 'FrontendController@postCreateTechnology')->name('technology-post-create');
+
+    Route::get('/customer-create', 'FrontendController@createCustomer')->name('customer-create');
+    Route::get('/admin/ajax-customer', 'Customer\\CustomerController@dataAjaxCustomer')->name('ajax-customer');
+
+    Route::get('/load-equipment-assignment', 'FrontendController@equipment_assignment')->name('load-equipment-assignment');
+
 });

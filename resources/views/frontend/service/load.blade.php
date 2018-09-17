@@ -1,8 +1,7 @@
-@php $layer = 1 @endphp
 <div class="row" id="load" style="position: relative;">
     @foreach ($equipment_assignment as $item)
     <div class="col-md-12" style="background-image: url({{ asset('storage/uploads/' . $item->picture->path . '/picture/' . $item->picture->name) }}); background-size: 100% 100%; background-repeat: no-repeat; min-height: 390px; width: 100%; margin-bottom: 10px;">
-        {{-- <label for="technology-id-" class="control-label">Technology: {{ $item->technology->name }}</label> --}}
+        @php $layer = 1 @endphp
         @for ($i = 1; $i <= 3; $i++)
             <div class="row">
             @for ($j = 1; $j <= 6; $j++)

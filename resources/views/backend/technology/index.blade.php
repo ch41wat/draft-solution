@@ -20,7 +20,6 @@
                 <th>picture</th>
                 <th>video</th>
                 <th>service</th>
-                <th>price</th>
             </tr>
         </thead>
         <tbody>
@@ -31,7 +30,6 @@
                 <td>{{ $item->picture }}</td>
                 <td>{{ $item->video }}</td>
                 <td>{{ $item->service }}</td>
-                <td>{{ $item->price }}</td>
                 <td class="text-center">
                     <form action="{{ route('technology.technology.destroy', $item->id) }}" method="POST">
                         @method('DELETE')

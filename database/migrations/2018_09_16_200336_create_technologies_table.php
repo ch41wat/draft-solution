@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreteTechnologiesTable extends Migration
+class CreateTechnologiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,10 +17,10 @@ class CreteTechnologiesTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('name')->nullable();
+            $table->float('price')->nullable();
             $table->string('video')->nullable();
             $table->string('picture')->nullable();
             $table->string('service')->nullable();
-            $table->integer('price')->nullable();
         });
     }
 
@@ -31,6 +31,6 @@ class CreteTechnologiesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('technologies');
     }
 }
