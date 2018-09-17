@@ -60,7 +60,15 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 });
 //frontend
-Route::group(['middleware' => ['auth', 'sale']], function () {
+Route::group([
+    'middleware' => [
+        'prefix' => 'sale',
+        'auth',
+        'sale',
+        'saleadmin',
+        'supervisor',
+        ]
+    ], function () {
     Route::get('/', function () {
         return redirect('/create/home');
     });
@@ -80,5 +88,5 @@ Route::group(['middleware' => ['auth', 'sale']], function () {
 
 //    Route::get('/home', 'HomeController@index')->name('home');
 
-    //Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+    Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 });
