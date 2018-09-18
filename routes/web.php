@@ -79,12 +79,18 @@ Route::group(['middleware' => ['sale']], function () {
     Route::get('/sale/load-equipment-assignment', 'FrontendController@equipment_assignment')
         ->name('sale-load-equipment-assignment');
 
+    Route::get('/sale/generate-pdf','FrontendController@generate_pdf')->name('sale-generate-pdf');
+    Route::get('/sale/draft-excel','FrontendController@export')->name('sale-draft-excel');
+    Route::get('/sale/mail','FrontendController@test_mail')->name('sale-mail');
+
+    Route::get('/sale/draft', 'FrontendController@draft')->name('sale-draft');
     Route::get('/sale/{form}', 'FrontendController@index')->name('sale-create-form');
     Route::get('/sale/service/{array}', 'FrontendController@service')->name('sale-create-service-form');
 
     Route::post('/sale/customer-create', 'FrontendController@postCreateCustomer')->name('sale-customer-post-create');
     Route::post('/sale/service-create', 'FrontendController@postCreateService')->name('sale-service-post-create');
     Route::post('/sale/technology-create', 'FrontendController@postCreateTechnology')->name('sale-technology-post-create');
+    Route::post('/sale/draft-create', 'FrontendController@postCreateDraft')->name('sale-draft-post-create');
 
 });
 

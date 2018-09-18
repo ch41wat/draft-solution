@@ -9,7 +9,6 @@
             <div class="col-md-12">
                 <div class="card">
                     {{-- <div class="card-header">Create New Draft</div> --}}
-
                         @if ($errors->any())
                             <ul class="alert alert-danger">
                                 @foreach ($errors->all() as $error)
@@ -18,11 +17,11 @@
                             </ul>
                         @endif
 
-                        <form method="POST" action="{{ url('/admin/draft') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route(Auth::user()->role . '-draft-post-create') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                             {{ csrf_field() }}
 
                             @foreach ($technology as $item)
-                            <h3>{{ $item->service }}</h3>
+                            <h3>{{ strtoupper($service[$item->id]->name) }}</h3>
                             <div class="box box-default box-solid">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Technology: {{ $item->name }}</h3>
@@ -83,19 +82,29 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @foreach ($equipment_assignment[$item->id] as $eqm)
                                                 <tr>
                                                     <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
+                                                    <td>{{ $eqm->equipment->name }}</td>
+                                                    <td>{{ $eqm->equipment->qty }}</td>
+                                                    <td>{{ $eqm->equipment->unit }}</td>
                                                 </tr>
+                                                @endforeach
                                             </tbody>
                                             <tfoot>
-                                                <tr class="bg-default">
+                                                @php
+                                                    $total = $eqm->technology->price * $draft->water_need_qty[$item->id];
+                                                @endphp
+                                                <tr class="bg-danger">
                                                     <th></th>
                                                     <th>Total</th>
-                                                    <th></th>
-                                                    <th></th>
+                                                    @if ($draft->is_water[$item->id] > 0)
+                                                        @php
+                                                            $total += round($draft->distance[$item->id], 2) * $draft->pipe_setup_price[$item->id];
+                                                        @endphp
+                                                    @endif
+                                                    <th>{{ number_format($total) }}</th>
+                                                    <th>บาท</th>
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -105,8 +114,8 @@
                             </div>
                             @endforeach
                             <div class="col-md-6 text-left">
-                                <button type="button" class="btn btn-warning">Export PDF</button>
-                                <button type="button" class="btn btn-success">Export Excel</button>
+                                <a href="#{{-- route(Auth::user()->role . '-generate-pdf') --}}" class="btn btn-warning">Export PDF</a>
+                                <a href="{{ route(Auth::user()->role . '-draft-excel') }}" class="btn btn-success">Export Excel</a>
                             </div>
                             <div class="col-md-6 text-right">
                                 <a href="{{ route(Auth::user()->role . '-create-service-form', ['array' => $item->id]) }}" class="btn btn-danger">

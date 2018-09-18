@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateDraftsTable extends Migration
 {
@@ -28,9 +28,13 @@ class CreateDraftsTable extends Migration
             $table->integer('water_qty')->nullable();
             $table->float('pipe_size')->nullable();
             $table->float('pipe_setup_price')->nullable();
+            $table->float('total_price')->nullable();
+            $table->float('distance')->nullable();
+            $table->enum('cork_water', ['0', '1'])->nullable();
             $table->string('technology')->nullable();
             $table->string('sale_name')->nullable();
             $table->string('company')->nullable();
+            $table->string('draft_id', '15');
         });
     }
 

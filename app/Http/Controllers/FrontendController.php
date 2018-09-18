@@ -6,9 +6,16 @@ use App\Customer;
 use App\EquipmentAssignment;
 use App\Http\Controllers\Controller;
 use App\Service;
+use App\Reservoir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\DraftsExport;
+use Maatwebsite\Excel\Facades\Excel;
+use PDF;
+use Mail;
+use App\Mail\verifyUser;
+use App\Draft;
 
 class FrontendController extends Controller
 {
@@ -69,10 +76,7 @@ class FrontendController extends Controller
             ], [
                 'link' => 'draft',
                 'name' => 'สรุปรายละเอียด',
-            ], /*[
-        'link' => 'success',
-        'name' => 'บันทึก ' . config('app.name'),
-        ],*/
+            ],
         ];
         $draft = $request->session()->get('draft');
         $query = DB::table('technologies AS t')
@@ -85,12 +89,57 @@ class FrontendController extends Controller
             )
             ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service')
             ->orderBy('p.id');
-        // dd($array);
         foreach ($draft->technology_id as $item) {
             $query->orWhere('t.id', '=', $item);
         }
         $technology = $query->get();
-        return view("frontend.technology.create", compact(['step_form', 'draft', 'technology']));
+        $reservoir = Reservoir::all();
+        return view("frontend.technology.create", compact(['step_form', 'draft', 'technology', 'reservoir']));
+    }
+
+    public function draft(Request $request)
+    {
+        // dd($request);
+        $step_form = [
+            [
+                'link' => 'home',
+                'name' => config('app.name'),
+            ], [
+                'link' => 'customer',
+                'name' => 'ข้อมูลลูกค้า',
+            ], [
+                'link' => 'service',
+                'name' => 'เลือกประเภทบริการ/เทคโนโลยี',
+            ], [
+                'link' => 'draft',
+                'name' => 'สรุปรายละเอียด',
+            ],
+        ];
+        $draft = $request->session()->get('draft');
+        $query = DB::table('technologies AS t')
+            ->join('pictures AS p', function ($join) {
+                $join->whereRaw("find_in_set(p.id, t.picture)");
+            })
+            ->select(
+                't.id', 't.name', 't.video', 't.picture', 't.service',
+                DB::raw('GROUP_CONCAT(p.name) AS picture_name')
+            )
+            ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service')
+            ->orderBy('p.id');
+        foreach ($draft->technology_id as $item) {
+            $query->orWhere('t.id', '=', $item);
+            if ($draft->reservoir[$item]) {
+                $reservoir[$item] = Reservoir::findOrFail($draft->reservoir[$item]);
+            }
+            $service[$item] = Service::findOrFail($draft->service);
+            $equipment_assignment[$item] = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
+                ->where('technology_id', '=', $item)
+                ->get();
+        }
+        $technology = $query->get();
+        return view("frontend.draft.create", compact([
+            'step_form', 'draft', 'technology', 'reservoir', 'equipment_assignment', 'service'
+        ]));
     }
 
     public function postCreateCustomer(Request $request)
@@ -151,6 +200,7 @@ class FrontendController extends Controller
 
         $draft = $request->session()->get('draft');
         $draft->fill($validatedData);
+        $draft->is_water = $request->input('is_water');
         $draft->water_need_qty = $request->input('water_need_qty');
         $draft->purpose = $request->input('purpose');
         $draft->budget = $request->input('budget');
@@ -158,6 +208,10 @@ class FrontendController extends Controller
         $draft->start_service_duration = $request->input('start_service_duration');
         $draft->end_service_duration = $request->input('end_service_duration');
         $draft->other = $request->input('other');
+        $draft->reservoir = $request->input('reservoir');
+        $draft->reservoir_latitude = $request->input('reservoir_latitude');
+        $draft->reservoir_longitude = $request->input('reservoir_longitude');
+        $draft->distance = $request->input('distance');
         $draft->latitude = $request->input('latitude');
         $draft->longitude = $request->input('longitude');
         $draft->water_qty = $request->input('water_qty');
@@ -165,7 +219,41 @@ class FrontendController extends Controller
         $draft->pipe_setup_price = $request->input('pipe_setup_price');
         $draft->draft_level = 3;
         $request->session()->put('draft', $draft);
-        return redirect(route(Auth::user()->role . '-create-form', ['form' => 'draft']));
+        return redirect(route(Auth::user()->role . '-draft'));
+
+    }
+
+    public function postCreateDraft(Request $request)
+    {
+        $draft = $request->session()->get('draft');
+        $draft_id = time();
+        // dd($draft);
+        foreach ($draft->technology_id as $i) {
+            $drafts = new Draft;
+            $drafts->draft_id = $draft_id;
+            $drafts->water_need_qty = $draft->water_need_qty[$i];
+            $drafts->purpose = $draft->purpose[$i];
+            $drafts->budget = $draft->budget[$i];
+            $drafts->start_date = $draft->start_date[$i];
+            $drafts->start_service_duration = $draft->start_service_duration[$i];
+            $drafts->end_service_duration = $draft->end_service_duration[$i];
+            $drafts->other = $draft->other[$i];
+            $drafts->latitude = $draft->latitude[$i];
+            $drafts->longitude = $draft->longitude[$i];
+            $drafts->water_qty = $draft->water_qty[$i];
+            $drafts->pipe_size = $draft->watepipe_sizer_need_qty[$i];
+            $drafts->pipe_setup_price = $draft->pipe_setup_price[$i];
+            $drafts->total_price = $draft->total_price[$i];
+            $drafts->distance = $draft->distance[$i];
+            $drafts->cork_water = $draft->is_water[$i];
+            $drafts->technology = $i;
+            $drafts->sale_name = Auth::user()->email;
+            $drafts->company = ($draft->customer_type == 'customer-old') ? $draft->customer_name_old : $draft->customer_name;
+            $drafts->save();
+        }
+        $data = Draft::where('draft_id', '=', $draft_id)->first();
+        $this->sendEmail(Auth::user(), $data);
+        return redirect(route(Auth::user()->role . '-create-form', ['form' => 'home']));
 
     }
 
@@ -191,5 +279,78 @@ class FrontendController extends Controller
             return view('frontend.service.load', ['equipment_assignment' => $equipment_assignment])->render();
         }
         return view('frontend.service.load', compact('equipment_assignment'));
+    }
+
+    public function generate_pdf(Request $request)
+    {
+
+        $draft = $request->session()->get('draft');
+        $technology = DB::table('technologies AS t')
+            ->join('pictures AS p', function ($join) {
+                $join->whereRaw("find_in_set(p.id, t.picture)");
+            })
+            ->select(
+                't.id', 't.name', 't.video', 't.picture', 't.service',
+                DB::raw('GROUP_CONCAT(p.name) AS picture_name')
+            )
+            ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service')
+            ->orderBy('p.id')
+            ->where('t.service', '=', (isset($draft->service)) ? $draft->service : null)
+            ->get();
+        $data = [
+            'draft' => $draft,
+            'technology' => $technology
+        ];
+        $pdf = PDF::loadView('frontend.draft.export', $data);
+        return $pdf->download('draft.pdf');
+    }
+
+    public function export(Request $request) 
+    {
+        $draft = $request->session()->get('draft');
+        $query = DB::table('technologies AS t')
+            ->join('pictures AS p', function ($join) {
+                $join->whereRaw("find_in_set(p.id, t.picture)");
+            })
+            ->select(
+                't.id', 't.name', 't.video', 't.picture', 't.service',
+                DB::raw('GROUP_CONCAT(p.name) AS picture_name')
+            )
+            ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service')
+            ->orderBy('p.id');
+        foreach ($draft->technology_id as $item) {
+            $query->orWhere('t.id', '=', $item);
+            if ($draft->reservoir[$item]) {
+                $reservoir[$item] = Reservoir::findOrFail($draft->reservoir[$item]);
+            } else {
+                $reservoir[$item] = null;
+            }
+            $service[$item] = Service::findOrFail($draft->service);
+            $equipment_assignment[$item] = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
+                ->where('technology_id', '=', $item)
+                ->get();
+        }
+        $technology = $query->get();
+        // return view("frontend.draft.export", compact([
+        //     'draft', 'technology', 'reservoir', 'equipment_assignment', 'service'
+        // ]));
+        // return view("frontend.draft.export", compact(['draft', 'technology']));
+        return Excel::download(new DraftsExport(
+            'frontend.draft.export', [
+                'draft' => $draft, 'technology' => $technology,
+                'reservoir' => $reservoir, 'equipment_assignment' => $equipment_assignment, 'service' => $service
+            ]
+        ), time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    public function test_mail(Request $request)
+    {
+        $this->sendEmail(Auth::user());
+        return redirect(route(Auth::user()->role . '-create-form', ['form' => 'home']));
+    }
+
+    public function sendEmail($thisUser, $thisDraft){
+        Mail::to($thisUser['email'])
+            ->send(new verifyUser($thisUser, $thisDraft));
     }
 }

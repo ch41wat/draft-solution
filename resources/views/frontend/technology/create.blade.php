@@ -45,6 +45,13 @@
                                                 <img src="{{ asset('storage/uploads/technology/picture/' . $images[0]) }}" style="width: 100%; min-height: 390px;">
                                             </a>
                                         </div>
+                                        <div class="form-group {{ $errors->has('is_water.' . $item->id) ? 'has-error' : ''}}">
+                                            <label class="control-label">{{ 'ใช้น้ำประปาของ East water : ' }}</label>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-1" value="1" {{ (isset($draft->is_water) && $draft->is_water[$item->id] == 1) ? "checked" : "" }}>
+                                            <label for="is-water-1" class="control-label">{{ 'ใช้' }}</label>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-0" value="0" {{ (isset($draft->is_water) && $draft->is_water[$item->id] == 0) ? "checked" : "" }}>
+                                            <label for="is-water-0" class="control-label">{{ 'ไม่ใช้' }}</label>
+                                        </div>
                                         <div class="form-group {{ $errors->has('water_need_qty.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ปริมาณความต้องการใช้น้ำ' }}</label>
                                             <input type="text" name="water_need_qty[{{ $item->id }}]" value="{{ $draft->water_need_qty[$item->id] or '' }}" class="form-control">
@@ -83,6 +90,21 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">{{ 'ตำแหน่งอ่างเก็บน้ำ' }}</label>
+                                                    <input type="hidden" name="reservoir[{{ $item->id }}]" id="reservoir-{{ $item->id }}" value="{{ $draft->reservoir[$item->id] or '' }}">
+                                                    <input type="hidden" name="reservoir_latitude[{{ $item->id }}]" id="reservoir-latitude-{{ $item->id }}" value="{{ $draft->reservoir_latitude[$item->id] or '' }}">
+                                                    <input type="hidden" name="reservoir_longitude[{{ $item->id }}]" id="reservoir-longitude-{{ $item->id }}" value="{{ $draft->reservoir_longitude[$item->id] or '' }}">
+                                                    <input type="hidden" name="distance[{{ $item->id }}]" id="distance-{{ $item->id }}" value="{{ $draft->distance[$item->id] or '' }}">
+                                                    <select class="form-control" onchange="set_resercoir(this.value, '{{ $item->id }}')">
+                                                        <option value=""></option>
+                                                        @foreach ($reservoir as $reser)
+                                                            <option value="{{ $reser->id . ',' . $reser->latitude . ',' . $reser->longitude }}" {{ (isset($draft->reservoir) && $draft->reservoir == $reser->id) ? "select" : "" }}>
+                                                                {{ $reser->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                                 <div class="form-group">
                                                     <label class="control-label">{{ 'ตำแหน่งโรงงาน' }}</label>
                                                 </div>
@@ -135,6 +157,13 @@
                                                                     var coords = e.get('coords');
                                                                     $('#latitude-{{ $item->id }}').val(coords[0]);
                                                                     $('#longitude-{{ $item->id }}').val(coords[1]);
+                                                                    var distance = ymaps.coordSystem.geo.getDistance(
+                                                                        // start location 
+                                                                        [$('#reservoir-latitude-{{ $item->id }}').val(), $('#reservoir-longitude-{{ $item->id }}').val()],
+                                                                        [coords[0], coords[1]],
+                                                                    );
+                                                                    // alert(dis);
+                                                                    $('#distance-{{ $item->id }}').val(distance);
 
                                                                     // Moving the placemark if it was already created
                                                                     if (myPlacemark) {
@@ -204,4 +233,12 @@
             </div>
         </div>
     <script type="text/javascript" src="https://api-maps.yandex.ru/2.1/?lang=en"></script>
+    <script type="text/javascript">
+        function set_resercoir(value, id) {
+            var reservoir = value.split(',');
+            $('#reservoir-' + id).val(reservoir[0]);
+            $('#reservoir-latitude-' + id).val(reservoir[1]);
+            $('#reservoir-longitude-' + id).val(reservoir[2]);
+        }
+    </script>
 @endsection
