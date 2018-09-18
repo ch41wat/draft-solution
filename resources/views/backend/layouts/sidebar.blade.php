@@ -31,7 +31,7 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">HEADER</li>
             <!-- Optionally, you can add icons to the links -->
-            <li><a href="{{ route('admin') }}"><i class="fa fa-home"></i> <span>Home</span></a></li>
+            <li><a href="{{ route('admin') }}"><i class="fa fa-home"></i> <span>{{ trans('message.home') }}</span></a></li>
             <li class="treeview">
                 <a href="#"><i class="fa fa-user"></i> <span>Customer</span>
                     <span class="pull-right-container">

@@ -16,6 +16,31 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+                <!-- language bar -->
+                <li class="dropdown tasks-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-flag-o"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <!-- inner menu: contains the actual data -->
+                            <ul class="menu">
+                                <li><!-- Task item -->
+                                    <a href="{{ URL::to('change/th') }}">
+                                        <h3>
+                                            TH
+                                        </h3>
+                                    </a>
+                                    <a href="{{ URL::to('change/en') }}">
+                                        <h3>
+                                            EN
+                                        </h3>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
@@ -25,26 +50,27 @@
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
                         <span class="hidden-xs">{{Auth::user()->name}}</span>
                     </a>
-                    <ul class="dropdown-menu">
-                        <!-- The user image in the menu -->
-                        <li class="user-header">
-                            <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <ul class="dropdown-menu">
+                    <!-- The user image in the menu -->
+                    <li class="user-header">
+                        <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
-                            <p>
+                        <p>
                             {{Auth::user()->name}} - {{Auth::user()->email}}
                             <small>Member since {{Auth::user()->created_at}}</small>
-                            </p>
-                        </li>
-                        <!-- Menu Footer-->
-                        <li class="user-footer">
-                            <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
-                            </div>
-                            <div class="pull-right">
-                                <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Sign out</a>
-                            </div>
-                        </li>
-                    </ul>
+                        </p>
+                    </li>
+                    <!-- Menu Footer-->
+
+                    <li class="user-footer">
+                        <div class="pull-left">
+                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                        </div>
+                        <div class="pull-right">
+                            <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Sign out</a>
+                        </div>
+                    </li>
+                </ul>
                 </li>
             </ul>
         </div>
