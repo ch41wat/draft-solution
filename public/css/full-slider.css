@@ -56,7 +56,92 @@ body {
     margin: 0;
     padding: 0;
     float: right;
-    width: 30%;
+    width: 100%;
     height: 100%;
     display: table;
+    background: #ffffff;
+}
+
+.loginbutton {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #108dcc), color-stop(1, #116db4));
+	background:-moz-linear-gradient(top, #108dcc 5%, #116db4 100%);
+	background:-webkit-linear-gradient(top, #108dcc 5%, #116db4 100%);
+	background:-o-linear-gradient(top, #108dcc 5%, #116db4 100%);
+	background:-ms-linear-gradient(top, #108dcc 5%, #116db4 100%);
+	background:linear-gradient(to bottom, #108dcc 5%, #116db4 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#108dcc', endColorstr='#116db4',GradientType=0);
+	background-color:#108dcc;
+	-moz-border-radius:8px !important;
+	-webkit-border-radius:8px !important;
+	border-radius:8px !important;
+	border:1px solid #116db4;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	padding:10px 76px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+    letter-spacing: 2px;
+}
+.loginbutton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #116db4), color-stop(1, #108dcc));
+	background:-moz-linear-gradient(top, #116db4 5%, #108dcc 100%);
+	background:-webkit-linear-gradient(top, #116db4 5%, #108dcc 100%);
+	background:-o-linear-gradient(top, #116db4 5%, #108dcc 100%);
+	background:-ms-linear-gradient(top, #116db4 5%, #108dcc 100%);
+	background:linear-gradient(to bottom, #116db4 5%, #108dcc 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#116db4', endColorstr='#108dcc',GradientType=0);
+	background-color:#116db4;
+}
+.loginbutton:active {
+	position:relative;
+	top:1px;
+}
+
+.form-login input{
+    background-color: white !important;
+    border-bottom: #cccccc 1px solid;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    padding-left: 40px;
+    
+}
+
+.form-login input.username{
+    background: url(../img/user-icon.png) left top no-repeat;
+}
+
+.form-login input.username:-webkit-autofill{
+    background: url(../img/user-icon.png) left top no-repeat;
+}
+
+.form-login input.password{
+    background: url(../img/pass-icon.png) left top no-repeat;
+}
+
+.form-login input:active{
+    background-color: white !important;
+}
+
+.form-login input:focus{
+    background-color: white !important;
+}
+
+.form-login input:hover{
+    background-color: white !important;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+  background-color: transparent;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .carousel-inner{
+        width: 100%;
+    }
 }

@@ -2,9 +2,9 @@
 
 namespace Illuminate\Foundation\Auth;
 
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 trait RegistersUsers
 {
@@ -35,7 +35,7 @@ trait RegistersUsers
         $this->guard()->login($user);
 
         return $this->registered($request, $user)
-        ?: redirect($this->redirectPath());
+                        ?: redirect($this->redirectPath());
     }
 
     /**
