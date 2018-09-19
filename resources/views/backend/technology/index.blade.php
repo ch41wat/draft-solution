@@ -30,13 +30,13 @@
                 <td>{{ $item->picture }}</td>
                 <td>{{ $item->video }}</td>
                 <td>{{ $item->service }}</td>
-                <td class="text-center">
-                    <form action="{{ route('technology.technology.destroy', $item->id) }}" method="POST">
-                        @method('DELETE')
-                        @csrf
-                        <button class="btn btn-danger btn-sm">
-                            <i class="glyphicon glyphicon-trash"></i>
-                        </button>
+                <td>
+                    <a href="{{ url('/admin/technology/' . $item->id . '/edit') }}" title="Edit Technoogy"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+
+                    <form method="POST" action="{{ url('/admin/technology' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-danger btn-sm" title="Delete Technoogy" onclick="return confirm( & quot; Confirm delete? & quot; )"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                     </form>
                 </td>
             </tr>

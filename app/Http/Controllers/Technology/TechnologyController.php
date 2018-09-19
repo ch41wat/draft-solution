@@ -107,10 +107,11 @@ class TechnologyController extends Controller
     {
         $service = Service::all();
         $video = Video::all();
+        $picture = Picture::all();
         $equipment = Equipment::all();
         $technology = Technology::findOrFail($id);
 
-        return view('backend.technology.edit', compact('technology', 'service', 'video', 'equipment'));
+        return view('backend.technology.edit', compact('technology', 'service', 'video', 'equipment', 'picture'));
     }
 
     /**
@@ -128,6 +129,14 @@ class TechnologyController extends Controller
 
         $technology = Technology::findOrFail($id);
         $technology->update($requestData);
+        
+        if (count($request->input('video')) > 0) {
+            $technology->video = implode(",", $request->input('video'));
+        }
+        else if (count($request->input('picture')) > 0) {
+            $technology->picture = implode(",", $request->input('picture'));
+        }
+        
 
         return redirect('admin/technology')->with('flash_message', 'Technology updated!');
     }

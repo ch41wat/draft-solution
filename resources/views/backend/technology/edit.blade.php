@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('backend.layouts.main')
 
 @section('content')
     <div class="container">
@@ -25,7 +25,7 @@
                             {{ method_field('PATCH') }}
                             {{ csrf_field() }}
 
-                            @include ('backend.technology.form', ['formMode' => 'edit'])
+                            @include ('backend.technology.update', ['formMode' => 'edit'])
 
                         </form>
 
@@ -35,3 +35,4 @@
         </div>
     </div>
 @endsection
+
