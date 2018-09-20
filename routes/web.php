@@ -63,6 +63,8 @@ Route::group(['middleware' => ['admin']], function () {
     Route::resource('admin/draft', 'Draft\\DraftController', ['as' => 'draft']);
 
     Route::resource('admin/reservoir', 'Reservoir\\ReservoirController', ['as' => 'reservoir']);
+    
+    Route::resource('admin/pipe', 'Pipe\\PipeController', ['as' => 'pipe']);
 });
 
 //frontend
