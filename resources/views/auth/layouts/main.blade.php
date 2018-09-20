@@ -21,6 +21,7 @@
 
         <!-- Google Font -->
         <link rel="stylesheet"  href="{{ asset('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic') }}">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     </head>
 
     <body>
@@ -58,6 +59,9 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                         </a>
+                    </div>
+                    <div id="header-responsive">
+                        <img src="{{ asset('img/header-responsive.jpg') }}" alt="">
                     </div>
                 </div>
                 <div class="col-md-4">

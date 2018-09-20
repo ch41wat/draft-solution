@@ -64,6 +64,7 @@ class Kernel extends HttpKernel {
         'saleadmin' => 'App\Http\Middleware\saleadmin',
         'supervisor' => 'App\Http\Middleware\supervisor',
         'sale' => 'App\Http\Middleware\sale',
+        'language' => 'App\Http\Middleware\Language',
     ];
 
 }

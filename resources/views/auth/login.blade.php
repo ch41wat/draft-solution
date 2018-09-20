@@ -13,11 +13,11 @@
         <form action="{{ route('login') }}" class="form-login" method="post">
             @csrf
             <div class="form-group has-feedback">
-                <input type="email" name="email" class="form-control username" placeholder="Username">
+                <input type="email" name="email" class="form-control username" placeholder="Username" autocomplete="off">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="password" name="password" class="form-control password" placeholder="Password">
+                <input type="password" name="password" class="form-control password" placeholder="Password" autocomplete="off">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <button type="submit" class="btn btn-primary btn-block btn-flat loginbutton">LOGIN</button>

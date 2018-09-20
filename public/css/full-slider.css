@@ -5,6 +5,7 @@
  */
 body {
     height: 100%;
+    background: #ffffff;
 }
 
 .carousel-item {
@@ -19,15 +20,17 @@ body {
 
 .carousel-caption {
     width: 100%;
-    background-color: rgba(37, 141, 175, 0.7);
+    /*background-color: rgba(37, 141, 175, 0.7);*/
     padding: 20px;
     left: 0;
     right: 0;
     bottom: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 .carousel-caption h3 {
     font-weight: 0;
+    font-size: 30px;
 }
 
 .carousel-caption h3 strong {
@@ -36,13 +39,13 @@ body {
 }
 
 .carousel-caption p {
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 20px;
+    line-height: 22px;
 }
 
 .carousel-caption span {
-    font-size: 12px;
-    line-height: 12px;
+    font-size: 16px;
+    line-height: 18px;
 }
 
 .login-slide {
@@ -114,6 +117,14 @@ body {
     background: url(../img/user-icon.png) left top no-repeat;
 }
 
+.form-login input.username:active{
+    background: url(../img/user-icon.png) left top no-repeat;
+}
+
+.form-login input.username:focus{
+    background: url(../img/user-icon.png) left top no-repeat;
+}
+
 .form-login input.username:-webkit-autofill{
     background: url(../img/user-icon.png) left top no-repeat;
 }
@@ -139,9 +150,22 @@ input:-webkit-autofill {
   background-color: transparent;
 }
 
+@media only screen and (min-width: 768px) {
+    #carouselExampleIndicators{
+        display: block;
+    }
+    
+    #header-responsive{
+        display: none;
+    }
+}
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
     .carousel-inner{
         width: 100%;
+    }
+    
+    #carouselExampleIndicators{
+        display: none;
     }
 }

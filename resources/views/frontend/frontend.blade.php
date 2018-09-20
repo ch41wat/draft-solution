@@ -18,9 +18,9 @@
                             @php $btn_class = 0; @endphp
                         @endif
                         <a href="{{ route(Auth::user()->role . '-create-form', $item['link']) }}" type="button" class="btn btn-{{ (Request::segment(2) == $item['link']) ? "primary" : "default" }} btn-circle {{ ($btn_class >= $i or Request::segment(2) == $item['link']) ? "" : "disabled" }}">
-                            {{ ($i+1) }}
+                            
                         </a>
-                        <p><strong>{{ $item['name'] }}</strong></p>
+                        <p>{{ $item['name'] }}</p>
                     </div>
                     @endforeach
                 </div>

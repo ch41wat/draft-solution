@@ -35,6 +35,8 @@
     <link rel="stylesheet" href="{{ asset('dist/css/skins/skin-blue.min.css') }}">
     {{-- Style --}}
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    
+    <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
 
     <!-- jQuery 3 -->
     <script src="{{ asset ('/bower_components/jquery/dist/jquery.min.js') }}"></script>

@@ -14,11 +14,18 @@
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
-        <img src="{{ asset('img/logo-white.png') }}" alt="" class="navbar-logo img-responsive">
+        
+        <img src="{{ asset('img/logo-draft.png') }}" alt="" class="navbar-logo img-responsive">
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
+            
+            
             <ul class="nav navbar-nav">
                 <!-- User Account Menu -->
+                <li>
+                    <button class="historyButton">History</button>
+                    <button class="draftButton">Draft Solution</button>
+                </li>
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
