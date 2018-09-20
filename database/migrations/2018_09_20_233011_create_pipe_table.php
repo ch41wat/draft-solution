@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreatePicturesTable extends Migration
+class CreatePipeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreatePicturesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pictures', function (Blueprint $table) {
+        Schema::create('pipe', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->string('name')->nullable();
-            $table->enum('path', ['technology', 'equipment'])->nullable();
+            $table->string('size')->nullable();
+            $table->string('price')->nullable();
+            $table->float('labor_cost')->nullable();
         });
     }
 
@@ -28,6 +30,6 @@ class CreatePicturesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pictures');
+        Schema::dropIfExists('pipe');
     }
 }

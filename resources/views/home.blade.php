@@ -45,10 +45,7 @@
                                 <th>ความต้องการใช้น้ำ East water</th><td>{{ $draft->cork_water }}</td>
                             </tr>
                             <tr>
-                                <th>ปริมาณน้ำที่ต้องการ</th><td>{{ $draft->water_qty }}</td>
-                            </tr>
-                            <tr>
-                                <th>ขนาดท่อ</th><td>{{ $draft->pipe_size }}</td>
+                                <th>ขนาดท่อ</th><td>{{ $draft->pipe_size_need }}</td>
                             </tr>
                             <tr>
                                 <th>ราคาค่าวางท่อ</th><td>{{ $draft->pipe_setup_price }}</td>

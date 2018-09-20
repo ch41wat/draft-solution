@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateEquipmentsTable extends Migration
+class CreateTechnologiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateEquipmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('equipments', function (Blueprint $table) {
+        Schema::create('technologies', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->string('name')->nullable();
-            $table->integer('qty')->nullable();
-            $table->string('unit')->nullable();
-            $table->string('detail')->nullable();
+            $table->float('price')->nullable();
+            $table->string('video')->nullable();
             $table->string('picture')->nullable();
-            $table->string('price')->nullable();
+            $table->string('service')->nullable();
         });
     }
 
@@ -32,6 +31,6 @@ class CreateEquipmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('equipments');
+        Schema::dropIfExists('technologies');
     }
 }

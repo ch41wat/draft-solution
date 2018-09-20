@@ -39,7 +39,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
-                                            <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->purpose[$item->id] or '' }}</textarea>
+                                            <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control" readonly>{{ $draft->purpose[$item->id] or '' }}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">{{ 'ตำแหน่งโรงงาน' }}</label>
@@ -48,29 +48,30 @@
                                             <div class="col-md-6">
                                                 <div class="form-group {{ $errors->has('latitude.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ละติจูด' }}</label>
-                                                        <input type="text" name="latitude[{{ $item->id }}]" id="latitude-{{ $item->id }}" value="{{ $draft->latitude[$item->id] or '' }}" class="form-control">
+                                                        <input type="text" name="latitude[{{ $item->id }}]" id="latitude-{{ $item->id }}" value="{{ $draft->latitude[$item->id] or '' }}" class="form-control" readonly>
                                                     </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group {{ $errors->has('longitude.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ลองจิจูด' }}</label>
-                                                    <input type="text" name="longitude[{{ $item->id }}]" id="longitude-{{ $item->id }}" value="{{ $draft->longitude[$item->id] or '' }}" class="form-control">
+                                                    <input type="text" name="longitude[{{ $item->id }}]" id="longitude-{{ $item->id }}" value="{{ $draft->longitude[$item->id] or '' }}" class="form-control" readonly>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group {{ $errors->has('water_qty.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ปริมาณน้ำที่ต้องการ' }}</label>
-                                            <input type="text" name="water_qty[{{ $item->id }}]" value="{{ $draft->water_qty[$item->id] or '' }}" class="form-control">
+                                            <input type="text" name="water_qty[{{ $item->id }}]" value="{{ $draft->water_need_qty[$item->id] or '' }}" class="form-control" readonly>
                                         </div>
-                                        <div class="form-group {{ $errors->has('pipe_size.' . $item->id) ? 'has-error' : ''}}">
+                                        <div class="form-group {{ $errors->has('pipe_size_need.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ขนาดท่อ' }}</label>
-                                            <input type="text" name="pipe_size[{{ $item->id }}]" value="{{ $draft->pipe_size[$item->id] or '' }}" class="form-control">
+                                            <input type="text" name="pipe_size_need[{{ $item->id }}]" value="{{ $draft->pipe_size_need[$item->id] or '' }}" class="form-control" readonly>
                                         </div>
                                         <div class="form-group {{ $errors->has('pipe_setup_price.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ราคาค่าวางท่อ / เมตร' }}</label>
-                                            <input type="text" name="pipe_setup_price[{{ $item->id }}]" value="{{ $draft->pipe_setup_price[$item->id] or '' }}" class="form-control">
+                                            <input type="text" name="pipe_setup_price[{{ $item->id }}]" value="{{ $draft->pipe_setup_price[$item->id] or '' }}" class="form-control" readonly>
                                         </div>
                                     </div>
+                                    {{-- {{ dd($draft) }} --}}
                                     <div class="col-md-12">
                                         <table class="table table-bordered">
                                             <thead>
@@ -100,10 +101,13 @@
                                                     <th>Total</th>
                                                     @if ($draft->is_water[$item->id] > 0)
                                                         @php
-                                                            $total += round($draft->distance[$item->id], 2) * $draft->pipe_setup_price[$item->id];
+                                                            $total = $draft->pipe_setup_price[$item->id];
                                                         @endphp
                                                     @endif
-                                                    <th>{{ number_format($total) }}</th>
+                                                    @php
+                                                        $total_cost = $draft->pipe_cost[$item->id] * $draft->labor_cost[$item->id];
+                                                    @endphp
+                                                    <th>{{ number_format(($total + $total_cost), 2) }}</th>
                                                     <th>บาท</th>
                                                 </tr>
                                             </tfoot>

@@ -25,7 +25,7 @@ class Pipe extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'size', 'price'];
+    protected $fillable = ['name', 'size', 'price', 'labor_cost'];
 
     
 }

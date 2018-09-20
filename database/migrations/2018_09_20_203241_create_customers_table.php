@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateCustomersTable extends Migration
 {
@@ -20,6 +20,7 @@ class CreateCustomersTable extends Migration
             $table->string('customer_name')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
+            $table->enum('approve_status', ['0', '1']);
         });
     }
 

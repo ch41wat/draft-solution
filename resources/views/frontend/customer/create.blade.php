@@ -23,32 +23,32 @@
                             {{ csrf_field() }}
                             {{-- ลูกค้าปัจจุบัน --}}
                             <div class="form-group disabled">
-                                <input type="radio" name="customer_type" id="radio-customer-old" value="customer-old" {{ (isset($draft->customer_type) && $draft->customer_type == 'customer-old') ? "checked" : "" }}>
+                                <input type="radio" name="customer_type" id="radio-customer-old" value="customer-old" {{ ((isset($draft->customer_type) && $draft->customer_type == 'customer-old') || old('customer_type') == 'customer-old') ? "checked" : "" }} required>
                                 <label for="radio-customer-old" class="control-label">{{ 'ลูกค้าปัจจุบัน' }}</label>
                             </div>
                             
                             <div id="type-old">
                                 <div class="form-group {{ $errors->has('customer_name_old') ? 'has-error' : ''}}">
-                                    <select class="form-control" name="customer_name_old" id="item-customer" {{ $disabled_old }}>
-                                        <option value="{{ $draft->customer_name_old or ''}}">{{ $draft->customer_name_old or ''}}</option>
+                                    <select class="form-control" name="customer_name_old" id="item-customer" {{ $disabled_old }} required>
+                                        <option value="{{ $draft->customer_name_old or ''}}">{{ $draft->customer_name_old or old('customer_name_old') }}</option>
                                     </select>
                                 </div>
                             </div>
 
                             {{-- ลูกค้าใหม่ --}}
                             <div class="form-group">
-                                <input type="radio" name="customer_type" id="radio-customer-new" value="customer-new" {{ (isset($draft->customer_type) && $draft->customer_type == 'customer-new') ? "checked" : "" }}>
+                                <input type="radio" name="customer_type" id="radio-customer-new" value="customer-new" {{ ((isset($draft->customer_type) && $draft->customer_type == 'customer-new') || old('customer_type') == 'customer-new') ? "checked" : "" }} required>
                                 <label for="radio-customer-new" class="control-label">{{ 'ลูกค้าใหม่' }}</label>
                             </div>
                             <div id="type-new">
                                 <div class="form-group {{ $errors->has('company_name') ? 'has-error' : ''}}">
                                     <label for="company_name" class="control-label">{{ 'Company Name' }}</label>
-                                    <input class="form-control" name="company_name" type="text" id="company_name" value="{{ $draft->company_name or ''}}" {{ $disabled_new }}>
+                                    <input class="form-control" name="company_name" type="text" id="company_name" value="{{ $draft->company_name or old('company_name') }}" {{ $disabled_new }} required>
                                     {!! $errors->first('company_name', '<p class="help-block">:message</p>') !!}
                                 </div>
                                 <div class="form-group {{ $errors->has('customer_name') ? 'has-error' : ''}}">
                                     <label for="customer_name" class="control-label">{{ 'Customer Name' }}</label>
-                                    <input class="form-control" name="customer_name" type="text" id="customer_name" value="{{ $draft->customer_name or ''}}" {{ $disabled_new }}>
+                                    <input class="form-control" name="customer_name" type="text" id="customer_name" value="{{ $draft->customer_name or old('customer_name') }}" {{ $disabled_new }} required>
                                     {!! $errors->first('customer_name', '<p class="help-block">:message</p>') !!}
                                 </div>
                             </div>

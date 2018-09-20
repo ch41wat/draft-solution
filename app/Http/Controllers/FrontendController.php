@@ -16,6 +16,7 @@ use PDF;
 use Mail;
 use App\Mail\verifyUser;
 use App\Draft;
+use App\Pipe;
 
 class FrontendController extends Controller
 {
@@ -94,7 +95,8 @@ class FrontendController extends Controller
         }
         $technology = $query->get();
         $reservoir = Reservoir::all();
-        return view("frontend.technology.create", compact(['step_form', 'draft', 'technology', 'reservoir']));
+        $pipes = Pipe::all();
+        return view("frontend.technology.create", compact(['step_form', 'draft', 'technology', 'reservoir', 'pipes']));
     }
 
     public function draft(Request $request)
@@ -214,8 +216,13 @@ class FrontendController extends Controller
         $draft->distance = $request->input('distance');
         $draft->latitude = $request->input('latitude');
         $draft->longitude = $request->input('longitude');
-        $draft->water_qty = $request->input('water_qty');
+        $draft->pipe_size_need = $request->input('pipe_size_need');
+        $draft->pipe_select = $request->input('pipe_select');
         $draft->pipe_size = $request->input('pipe_size');
+        $draft->pipe_price = $request->input('pipe_price');
+        $draft->pipe_cost = $request->input('pipe_cost');
+        $draft->labor_cost = $request->input('labor_cost');
+        $draft->fast_flow = $request->input('fast_flow');
         $draft->pipe_setup_price = $request->input('pipe_setup_price');
         $draft->draft_level = 3;
         $request->session()->put('draft', $draft);
@@ -240,10 +247,11 @@ class FrontendController extends Controller
             $drafts->other = $draft->other[$i];
             $drafts->latitude = $draft->latitude[$i];
             $drafts->longitude = $draft->longitude[$i];
-            $drafts->water_qty = $draft->water_qty[$i];
-            $drafts->pipe_size = $draft->watepipe_sizer_need_qty[$i];
+            $drafts->pipe_size_need = $draft->pipe_size_need[$i];
+            $drafts->pipe_size_select = $draft->pipe_select[$i];
             $drafts->pipe_setup_price = $draft->pipe_setup_price[$i];
-            $drafts->total_price = $draft->total_price[$i];
+            $drafts->labor_cost = $draft->pipe_cost[$i] * $draft->labor_cost[$i];
+            $drafts->fast_flow = $draft->fast_flow[$i];
             $drafts->distance = $draft->distance[$i];
             $drafts->cork_water = $draft->is_water[$i];
             $drafts->technology = $i;
@@ -252,7 +260,7 @@ class FrontendController extends Controller
             $drafts->save();
         }
         $data = Draft::where('draft_id', '=', $draft_id)->first();
-        $this->sendEmail(Auth::user(), $data);
+        // $this->sendEmail(Auth::user(), $data);
         return redirect(route(Auth::user()->role . '-create-form', ['form' => 'home']));
 
     }
@@ -279,6 +287,15 @@ class FrontendController extends Controller
             return view('frontend.service.load', ['equipment_assignment' => $equipment_assignment])->render();
         }
         return view('frontend.service.load', compact('equipment_assignment'));
+    }
+
+    public function video(Request $request)
+    {
+        $videos = Video::where('id', '=', $request->id)->get();
+        if ($request->ajax()) {
+            return view('frontend.video.load', ['videos' => $equipment_assignment])->render();
+        }
+        return view('frontend.video.load', compact('videos'));
     }
 
     public function generate_pdf(Request $request)

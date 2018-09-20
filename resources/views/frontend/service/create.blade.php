@@ -18,7 +18,7 @@
                                 <div class="btn-group btn-group-lg" data-toggle="buttons">
                                     @foreach ($service as $item)
                                     <label class="btn {{ (isset($draft->service) && $draft->service == $item->id) ? "active" : "" }}">
-                                        <input type="radio" name="service" id="name-{{ $item->id }}" value="{{ $item->id or ''}}" {{ (isset($draft->service) && $draft->service == $item->id) ? "checked" : "" }}> 
+                                        <input type="radio" name="service" id="name-{{ $item->id }}" value="{{ $item->id or ''}}" {{ (isset($draft->service) && $draft->service == $item->id) ? "checked" : "" }} required> 
                                         {{ $item->name or ''}}
                                     </label>
                                     @endforeach

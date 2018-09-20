@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePipeTable extends Migration
+class CreateVideosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreatePipeTable extends Migration
      */
     public function up()
     {
-        Schema::create('pipe', function (Blueprint $table) {
+        Schema::create('videos', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('name')->nullable();
-            $table->string('size')->nullable();
-            $table->string('price')->nullable();
+            $table->string('video_name')->nullable();
+            $table->enum('video_type', ['file', 'url'])->nullable();
+            $table->string('video_file')->nullable();
+            $table->string('video_url')->nullable();
         });
     }
 
@@ -29,6 +30,6 @@ class CreatePipeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pipe');
+        Schema::dropIfExists('videos');
     }
 }

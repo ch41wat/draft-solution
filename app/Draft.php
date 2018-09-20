@@ -25,7 +25,10 @@ class Draft extends Model
      *
      * @var array
      */
-    protected $fillable = ['water_need_qty', 'purpose', 'budget', 'start_date', 'service_duration', 'pipe_size', 'pipe_setup_price', 'technology', 'sale_name', 'company', 'other'];
+    protected $fillable = [
+        'water_need_qty', 'purpose', 'budget', 'start_date', 'start_service_duration', 'end_service_duration', 
+        'other', 'latitude',
+        'pipe_setup_price', 'technology', 'sale_name', 'company', 'labor_cost', 'draft_id'];
 
     
 }

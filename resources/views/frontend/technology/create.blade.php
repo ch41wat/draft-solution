@@ -28,9 +28,9 @@
                                     <h3 class="box-title">Technology: {{ $item->name }}</h3>
 
                                     <div class="box-tools pull-right">
-                                        <button type="button" class="btn btn-danger btn-sm">
+                                        <a href="#" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#modal-video" data-video="{{ $item->video }}">
                                             <i class="fa fa-youtube-play"></i> Play video
-                                        </button>
+                                        </a>
                                     </div>
                                     <!-- /.box-tools -->
                                 </div>
@@ -47,59 +47,59 @@
                                         </div>
                                         <div class="form-group {{ $errors->has('is_water.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ใช้น้ำประปาของ East water : ' }}</label>
-                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-1" value="1" {{ (isset($draft->is_water) && $draft->is_water[$item->id] == 1) ? "checked" : "" }}>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-1" value="1" {{ ((isset($draft->is_water) && $draft->is_water[$item->id] == 1)) ? "checked" : "" }} required>
                                             <label for="is-water-1" class="control-label">{{ 'ใช้' }}</label>
-                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-0" value="0" {{ (isset($draft->is_water) && $draft->is_water[$item->id] == 0) ? "checked" : "" }}>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-0" value="0" {{ ((isset($draft->is_water) && $draft->is_water[$item->id] == 0)) ? "checked" : "" }} required>
                                             <label for="is-water-0" class="control-label">{{ 'ไม่ใช้' }}</label>
                                         </div>
                                         <div class="form-group {{ $errors->has('water_need_qty.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ปริมาณความต้องการใช้น้ำ' }}</label>
-                                            <input type="text" name="water_need_qty[{{ $item->id }}]" value="{{ $draft->water_need_qty[$item->id] or '' }}" class="form-control">
+                                            <input type="text" name="water_need_qty[{{ $item->id }}]" id="water-need-qty-{{ $item->id }}" onchange="pipe_calculate(this.value, '{{ $item->id }}')" value="{{ $draft->water_need_qty[$item->id] or old('water_need_qty.' . $item->id) }}" class="form-control" required>
                                         </div>
                                         <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
-                                            <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->purpose[$item->id] or '' }}</textarea>
+                                            <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control" required>{{ $draft->purpose[$item->id] or old('purpose.' . $item->id) }}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">{{ 'งบประมาณ (ถ้ามี)' }}</label>
-                                            <input type="text" name="budget[{{ $item->id }}]" value="{{ $draft->budget[$item->id] or '' }}" class="form-control">
+                                            <input type="text" name="budget[{{ $item->id }}]" value="{{ $draft->budget[$item->id] or old('budget.' . $item->id) }}" class="form-control">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group {{ $errors->has('start_date.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'วันที่มีกำหนดเริ่มต้นน้ำ' }}</label>
-                                                    <input type="date" name="start_date[{{ $item->id }}]" value="{{ $draft->start_date[$item->id] or '' }}" class="form-control">
+                                                    <input type="date" name="start_date[{{ $item->id }}]" value="{{ $draft->start_date[$item->id] or old('start_date.' . $item->id) }}" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group {{ $errors->has('start_service_duration.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ระยะเวลารับบริการ' }}</label>
-                                                    <input type="date" name="start_service_duration[{{ $item->id }}]" value="{{ $draft->start_service_duration[$item->id] or '' }}" class="form-control">
+                                                    <input type="date" name="start_service_duration[{{ $item->id }}]" value="{{ $draft->start_service_duration[$item->id] or old('start_service_duration.' . $item->id) }}" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group {{ $errors->has('end_service_duration.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ถึง' }}</label>
-                                                    <input type="date" name="end_service_duration[{{ $item->id }}]" value="{{ $draft->end_service_duration[$item->id] or '' }}" class="form-control">
+                                                    <input type="date" name="end_service_duration[{{ $item->id }}]" value="{{ $draft->end_service_duration[$item->id] or old('end_service_duration.' . $item->id) }}" class="form-control" required>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">{{ 'อื่นๆ' }}</label>
-                                            <textarea name="other[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->other[$item->id] or '' }}</textarea>
+                                            <textarea name="other[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->other[$item->id] or old('other.' . $item->id) }}</textarea>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">{{ 'ตำแหน่งอ่างเก็บน้ำ' }}</label>
-                                                    <input type="hidden" name="reservoir[{{ $item->id }}]" id="reservoir-{{ $item->id }}" value="{{ $draft->reservoir[$item->id] or '' }}">
-                                                    <input type="hidden" name="reservoir_latitude[{{ $item->id }}]" id="reservoir-latitude-{{ $item->id }}" value="{{ $draft->reservoir_latitude[$item->id] or '' }}">
-                                                    <input type="hidden" name="reservoir_longitude[{{ $item->id }}]" id="reservoir-longitude-{{ $item->id }}" value="{{ $draft->reservoir_longitude[$item->id] or '' }}">
-                                                    <input type="hidden" name="distance[{{ $item->id }}]" id="distance-{{ $item->id }}" value="{{ $draft->distance[$item->id] or '' }}">
-                                                    <select class="form-control" onchange="set_resercoir(this.value, '{{ $item->id }}')">
+                                                    <input type="hidden" name="reservoir[{{ $item->id }}]" id="reservoir-{{ $item->id }}" value="{{ $draft->reservoir[$item->id] or old('reservoir.' . $item->id) }}">
+                                                    <input type="hidden" name="reservoir_latitude[{{ $item->id }}]" id="reservoir-latitude-{{ $item->id }}" value="{{ $draft->reservoir_latitude[$item->id] or old('reservoir_latitude.' . $item->id) }}">
+                                                    <input type="hidden" name="reservoir_longitude[{{ $item->id }}]" id="reservoir-longitude-{{ $item->id }}" value="{{ $draft->reservoir_longitude[$item->id] or old('reservoir_longitude.' . $item->id) }}">
+                                                    <input type="hidden" name="distance[{{ $item->id }}]" id="distance-{{ $item->id }}" value="{{ $draft->distance[$item->id] or old('distance.' . $item->id) }}">
+                                                    <select class="form-control" name="reservoir_id[{{ $item->id }}]" onchange="set_resercoir(this.value, '{{ $item->id }}')">
                                                         <option value=""></option>
                                                         @foreach ($reservoir as $reser)
-                                                            <option value="{{ $reser->id . ',' . $reser->latitude . ',' . $reser->longitude }}" {{ (isset($draft->reservoir) && $draft->reservoir == $reser->id) ? "select" : "" }}>
+                                                            <option value="{{ $reser->id . ',' . $reser->latitude . ',' . $reser->longitude }}" {{ ((isset($draft->reservoir) && $draft->reservoir[$item->id] == $reser->id)) ? "selected" : "" }}>
                                                                 {{ $reser->name }}
                                                             </option>
                                                         @endforeach
@@ -112,27 +112,56 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('latitude.' . $item->id) ? 'has-error' : ''}}">
                                                             <label class="control-label">{{ 'ละติจูด' }}</label>
-                                                            <input type="text" name="latitude[{{ $item->id }}]" id="latitude-{{ $item->id }}" value="{{ $draft->latitude[$item->id] or '' }}" class="form-control">
+                                                            <input type="text" name="latitude[{{ $item->id }}]" id="latitude-{{ $item->id }}" value="{{ $draft->latitude[$item->id] or old('latitude.' . $item->id) }}" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('longitude.' . $item->id) ? 'has-error' : ''}}">
                                                             <label class="control-label">{{ 'ลองจิจูด' }}</label>
-                                                            <input type="text" name="longitude[{{ $item->id }}]" id="longitude-{{ $item->id }}" value="{{ $draft->longitude[$item->id] or '' }}" class="form-control">
+                                                            <input type="text" name="longitude[{{ $item->id }}]" id="longitude-{{ $item->id }}" value="{{ $draft->longitude[$item->id] or old('longitude.' . $item->id) }}" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group {{ $errors->has('water_qty.' . $item->id) ? 'has-error' : ''}}">
-                                                    <label class="control-label">{{ 'ปริมาณน้ำที่ต้องการ' }}</label>
-                                                    <input type="text" name="water_qty[{{ $item->id }}]" value="{{ $draft->water_qty[$item->id] or '' }}" class="form-control">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group {{ $errors->has('pipe_size_need.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ขนาดท่อที่ต้องการ' }}</label>
+                                                            <input type="text" name="pipe_size_need[{{ $item->id }}]" id="pipe-size-need-{{ $item->id }}" value="{{ $draft->pipe_size_need[$item->id] or old('pipe_size_need.' . $item->id) }}" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
+                                                    {{-- {{ dd($draft) }} --}}
+                                                    <div class="col-md-6">
+                                                        <div class="form-group {{ $errors->has('pipe_id.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ขนาดท่อที่เลือกใช้' }}</label>
+                                                            <select class="form-control" name="pipe_id[{{ $item->id }}]" id="pipe-id-{{ $item->id }}" onchange="fast_calculate(this.value, '{{ $item->id }}')">
+                                                                <option value=""></option>
+                                                                @foreach ($pipes as $pipe)
+                                                                    <option value="{{ $pipe->id . ',' . $pipe->size . ',' . $pipe->price . ',' . $pipe->labor_cost }}" {{ ((isset($draft->pipe_select) && $draft->pipe_select[$item->id] == $pipe->id) or old('pipe_id.' . $item->id) == $pipe->id) ? "selected" : "" }}>
+                                                                        {{ $pipe->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <input type="hidden" name="pipe_select[{{ $item->id }}]" id="pipe-select-{{ $item->id }}" value="{{ $draft->pipe_select[$item->id] or old('pipe_select.' . $item->id) }}">
+                                                            <input type="hidden" name="pipe_size[{{ $item->id }}]" id="pipe-size-{{ $item->id }}" value="{{ $draft->pipe_size[$item->id] or old('pipe_size.' . $item->id) }}">
+                                                            <input type="hidden" name="pipe_price[{{ $item->id }}]" id="pipe-price-{{ $item->id }}" value="{{ $draft->pipe_price[$item->id] or old('pipe_price.' . $item->id) }}">
+                                                            <input type="hidden" name="pipe_cost[{{ $item->id }}]" id="pipe-cost-{{ $item->id }}" value="{{ $draft->pipe_cost[$item->id] or old('pipe_cost.' . $item->id) }}">
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group {{ $errors->has('pipe_size.' . $item->id) ? 'has-error' : ''}}">
-                                                    <label class="control-label">{{ 'ขนาดท่อ' }}</label>
-                                                    <input type="text" name="pipe_size[{{ $item->id }}]" value="{{ $draft->pipe_size[$item->id] or '' }}" class="form-control">
+                                                <div class="form-group {{ $errors->has('fast_flow.' . $item->id) ? 'has-error' : ''}}">
+                                                    <label class="control-label">{{ 'ความเร็วในการไหลของน้ำ' }}</label>
+                                                    <input type="text" name="fast_flow[{{ $item->id }}]" id="fast-flow-{{ $item->id }}" value="{{ $draft->fast_flow[$item->id] or old('fast_flow.' . $item->id) }}" class="form-control" readonly>
+                                                </div>
+                                                <div class="form-group {{ $errors->has('labor_cost.' . $item->id) ? 'has-error' : ''}}">
+                                                    <label class="control-label">{{ 'ค่าแรง : ' }}</label>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }} required>
+                                                    <label for="is-cost-1" class="control-label">{{ 'รวม' }}</label>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }} required>
+                                                    <label for="is-cost-0" class="control-label">{{ 'ไม่รวม' }}</label>
                                                 </div>
                                                 <div class="form-group {{ $errors->has('pipe_setup_price.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ราคาค่าวางท่อ / เมตร' }}</label>
-                                                    <input type="text" name="pipe_setup_price[{{ $item->id }}]" value="{{ $draft->pipe_setup_price[$item->id] or '' }}" class="form-control">
+                                                    <input type="text" name="pipe_setup_price[{{ $item->id }}]" id="pipe-setup-price-{{ $item->id }}" value="{{ $draft->pipe_setup_price[$item->id] or old('pipe_setup_size.' . $item->id) }}" class="form-control" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -232,13 +261,66 @@
                 </div>
             </div>
         </div>
+    <div class="modal fade" id="modal-video" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modal-video-title">Video</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="show-thumbnail"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript" src="https://api-maps.yandex.ru/2.1/?lang=en"></script>
     <script type="text/javascript">
+        $(function () {
+            $('#modal-video').on('show.bs.modal', function (e) {
+                var id = $(e.relatedTarget).data('video');
+                $("#modal-video #show-thumbnail").load("{{ route(Auth::user()->role . '-load-equipment-assignment') }}", 'id=' + id, 
+                function(){}); 
+            });
+        })
+
         function set_resercoir(value, id) {
             var reservoir = value.split(',');
             $('#reservoir-' + id).val(reservoir[0]);
             $('#reservoir-latitude-' + id).val(reservoir[1]);
             $('#reservoir-longitude-' + id).val(reservoir[2]);
+        }
+
+        function pipe_calculate(value, id) {
+            value = parseFloat(value);
+            var pipe_need = Math.sqrt(4*(value/(24*60*60)/(1*Math.PI)));
+            $('#pipe-size-need-' + id).val(pipe_need.toFixed(3));
+        }
+
+        function fast_calculate(value, id) {
+            var pipe_select = value.split(','),
+                pipe_size = parseFloat(pipe_select[1]),
+                water_need = parseFloat($('#water-need-qty-' + id).val()),
+                distance = parseFloat($('#distance-' + id).val());
+                fast_flow = (water_need/(24*60*60))/(Math.PI*(Math.pow(pipe_size, 2)/4));
+            $('#pipe-select-' + id).val(pipe_select[0]);
+            $('#pipe-cost-' + id).val(pipe_select[3]);
+            $('#fast-flow-' + id).val(fast_flow.toFixed(3));
+            total_calculate(distance, pipe_select[2], id);
+        }
+
+        function total_calculate(distance, pipe_price, id) {
+            var total = distance * pipe_price;
+            $('#pipe-setup-price-' + id).val(total.toFixed(2));
+        }
+
+        function split_pipe(id, pipe) {
+            var pipe_select = $('#pipe-id-' + id).val().split(',');
+            // pipe == 1 (id), == 2 (size), == 3 (price)
+            return parseFloat(pipe_select[pipe]);
         }
     </script>
 @endsection
