@@ -36,6 +36,7 @@ class CreateDraftTable extends Migration
                 $table->enum('cork_water',['0', '1'])->nullable(); 
                 $table->float('distance')->nullable(); 
                 $table->float('fast_flow')->nullable(); 
+                $table->float('labor_cost')->nullable();
             });
     }
 

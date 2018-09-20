@@ -19,6 +19,7 @@ class CreatePipeTable extends Migration
             $table->string('name')->nullable();
             $table->string('size')->nullable();
             $table->string('price')->nullable();
+            $table->float('labor_cost')->nullable();
         });
     }
 
