@@ -1,12 +1,5 @@
 <div class="bg-header"></div>
 <header class="main-header">
-    <!-- Logo -->
-    <a href="index2.html" class="logo">
-        <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>D</b>S</span>
-        <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Draft</b>Solution</span>
-    </a>
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">
@@ -23,8 +16,12 @@
             <ul class="nav navbar-nav">
                 <!-- User Account Menu -->
                 <li>
-                    <button class="historyButton">History</button>
-                    <button class="draftButton">Draft Solution</button>
+                    <a href="{{ route(Auth::user()->role . '-history') }}" class="historyButton">History</a>
+                </li>
+                <li>
+                    <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'home']) }}" class="draftButton">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
                 </li>
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->

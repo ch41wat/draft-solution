@@ -27,5 +27,8 @@ class Customer extends Model
      */
     protected $fillable = ['company_name', 'customer_name', 'latitude', 'longitude', 'approve_status'];
 
-    
+    public function draft()
+    {
+        return $this->hasMany('App\Draft');
+    }
 }

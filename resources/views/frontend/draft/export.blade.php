@@ -114,11 +114,21 @@
                                 </tr>
                                 <tr>
                                     <td><label class="control-label">{{ 'ขนาดท่อ' }}</label></td>
-                                    <td>{{ $draft->pipe_size[$item->id] or '' }}</td>
+                                    <td>{{ $draft->pipe_size_need[$item->id] or '' }}</td>
                                 </tr>
                                 <tr>
-                                    <td><label class="control-label">{{ 'ราคาค่าวางท่อ / เมตร' }}</label></td>
+                                    <td><label class="control-label">{{ 'ราคาท่อ' }}</label></td>
                                     <td>{{ $draft->pipe_setup_price[$item->id] or '' }}</td>
+                                </tr>
+                                @if ($draft->labor_cost[$item->id] > 0)
+                                    <tr>
+                                        <td><label class="control-label">{{ 'ค่าแรง' }}</label></td>
+                                        <td>{{ $draft->pipe_cost[$item->id] or '' }}</td>
+                                </tr>
+                                @endif
+                                <tr>
+                                    <td><label class="control-label">{{ 'รวม' }}</label></td>
+                                    <td>{{ $draft->total_price[$item->id] or '' }}</td>
                                 </tr>
                             </tbody>
                         </table>      
@@ -149,11 +159,10 @@
                                     <th></th>
                                     <th>Total</th>
                                     @if ($draft->is_water[$item->id] > 0)
-                                        @php
-                                            $total += round($draft->distance[$item->id], 2) * $draft->pipe_setup_price[$item->id];
-                                        @endphp
+                                        @php $total = $draft->pipe_setup_price[$item->id]; @endphp
                                     @endif
-                                    <th>{{ number_format($total) }}</th>
+                                    @php $total_cost = $draft->pipe_cost[$item->id] * $draft->labor_cost[$item->id]; @endphp
+                                    <th>{{ number_format(($total + $total_cost), 2) }}</th>
                                     <th>บาท</th>
                                 </tr>
                             </tfoot>

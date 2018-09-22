@@ -72,7 +72,7 @@
     <!--<link rel="stylesheet"  href="{{ asset('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic') }}">-->
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-collapse">
     <div class="wrapper">
         <!-- Main Header -->
         @include('frontend.layouts.header')

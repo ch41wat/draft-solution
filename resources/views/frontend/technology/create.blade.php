@@ -28,7 +28,7 @@
                                     <h3 class="box-title">Technology: {{ $item->name }}</h3>
 
                                     <div class="box-tools pull-right">
-                                        <a href="#" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#modal-video" data-video="{{ $item->video }}">
+                                        <a href="#" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#modal-video" data-technology="{{ $item->id }}">
                                             <i class="fa fa-youtube-play"></i> Play video
                                         </a>
                                     </div>
@@ -144,7 +144,6 @@
                                                             <input type="hidden" name="pipe_select[{{ $item->id }}]" id="pipe-select-{{ $item->id }}" value="{{ $draft->pipe_select[$item->id] or old('pipe_select.' . $item->id) }}">
                                                             <input type="hidden" name="pipe_size[{{ $item->id }}]" id="pipe-size-{{ $item->id }}" value="{{ $draft->pipe_size[$item->id] or old('pipe_size.' . $item->id) }}">
                                                             <input type="hidden" name="pipe_price[{{ $item->id }}]" id="pipe-price-{{ $item->id }}" value="{{ $draft->pipe_price[$item->id] or old('pipe_price.' . $item->id) }}">
-                                                            <input type="hidden" name="pipe_cost[{{ $item->id }}]" id="pipe-cost-{{ $item->id }}" value="{{ $draft->pipe_cost[$item->id] or old('pipe_cost.' . $item->id) }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -154,15 +153,32 @@
                                                 </div>
                                                 <div class="form-group {{ $errors->has('labor_cost.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ค่าแรง : ' }}</label>
-                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }} required>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" onclick="total_calculate(this.value, '{{ $item->id }}')" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }} required>
                                                     <label for="is-cost-1" class="control-label">{{ 'รวม' }}</label>
-                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }} required>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" onclick="total_calculate(this.value, '{{ $item->id }}')" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }} required>
                                                     <label for="is-cost-0" class="control-label">{{ 'ไม่รวม' }}</label>
                                                 </div>
-                                                <div class="form-group {{ $errors->has('pipe_setup_price.' . $item->id) ? 'has-error' : ''}}">
-                                                    <label class="control-label">{{ 'ราคาค่าวางท่อ / เมตร' }}</label>
-                                                    <input type="text" name="pipe_setup_price[{{ $item->id }}]" id="pipe-setup-price-{{ $item->id }}" value="{{ $draft->pipe_setup_price[$item->id] or old('pipe_setup_size.' . $item->id) }}" class="form-control" readonly>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group {{ $errors->has('pipe_setup_price.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ราคาท่อ' }}</label>
+                                                            <input type="text" name="pipe_setup_price[{{ $item->id }}]" id="pipe-setup-price-{{ $item->id }}" value="{{ $draft->pipe_setup_price[$item->id] or old('pipe_setup_size.' . $item->id) }}" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group {{ $errors->has('pipe_setup_price.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ค่าแรง' }}</label>
+                                                            <input type="text" name="pipe_cost[{{ $item->id }}]" id="pipe-cost-{{ $item->id }}" value="{{ $draft->pipe_cost[$item->id] or old('pipe_cost.' . $item->id) }}" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group {{ $errors->has('total_price.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'รวม' }}</label>
+                                                            <input type="text" name="total_price[{{ $item->id }}]" id="total-price-{{ $item->id }}" value="{{ $draft->total_price[$item->id] or old('total_price.' . $item->id) }}" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -281,8 +297,8 @@
     <script type="text/javascript">
         $(function () {
             $('#modal-video').on('show.bs.modal', function (e) {
-                var id = $(e.relatedTarget).data('video');
-                $("#modal-video #show-thumbnail").load("{{ route(Auth::user()->role . '-load-equipment-assignment') }}", 'id=' + id, 
+                var id = $(e.relatedTarget).data('technology');
+                $("#modal-video #show-thumbnail").load("{{ route(Auth::user()->role . '-load-video') }}", 'id=' + id, 
                 function(){}); 
             });
         })
@@ -309,12 +325,18 @@
             $('#pipe-select-' + id).val(pipe_select[0]);
             $('#pipe-cost-' + id).val(pipe_select[3]);
             $('#fast-flow-' + id).val(fast_flow.toFixed(3));
-            total_calculate(distance, pipe_select[2], id);
+            price_calculate(distance, pipe_select[2], id);
         }
 
-        function total_calculate(distance, pipe_price, id) {
+        function price_calculate(distance, pipe_price, id) {
             var total = distance * pipe_price;
             $('#pipe-setup-price-' + id).val(total.toFixed(2));
+        }
+
+        function total_calculate(value, id) {
+            var pipe = parseFloat($('#pipe-setup-price-' + id).val()),
+                cost = parseFloat($('#pipe-cost-' + id).val()) * value;
+            $('#total-price-' + id).val((pipe + cost).toFixed(2));
         }
 
         function split_pipe(id, pipe) {

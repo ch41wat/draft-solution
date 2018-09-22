@@ -30,5 +30,15 @@ class Draft extends Model
         'other', 'latitude',
         'pipe_setup_price', 'technology', 'sale_name', 'company', 'labor_cost', 'draft_id'];
 
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'sale_name', 'email');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo('App\Customer', 'company', 'id');
+    }
+
     
 }

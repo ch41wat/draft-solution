@@ -144,6 +144,35 @@ class FrontendController extends Controller
         ]));
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function history(Request $request)
+    {
+        $company = $request->get('company');
+        $sale = (Auth::user()->role == 'sale') ? Auth::user()->name : $request->get('sale');
+        $perPage = 25;
+
+        if (!empty($company) or !empty($sale)) {
+            $drafts = Draft::with(['customer', 'user'])
+            ->whereHas('user', function ($query) use($sale) {
+                // $this->$sale = $sale;
+                $query->where('name', 'LIKE', "%$sale%");
+            })
+            ->WhereHas('customer', function ($query) use($company) {
+                // $this->$sale = $sale;
+                $query->where('company_name', 'LIKE', "%$company%");
+            })
+            ->latest()->paginate($perPage);
+        } else {
+            $drafts = Draft::with(['user', 'customer'])->latest()->paginate($perPage);
+        }
+
+        return view('frontend.history', compact('drafts'));
+    }
+
     public function postCreateCustomer(Request $request)
     {
         if ($request->input('customer_type') == 'customer-old') {
@@ -224,6 +253,7 @@ class FrontendController extends Controller
         $draft->labor_cost = $request->input('labor_cost');
         $draft->fast_flow = $request->input('fast_flow');
         $draft->pipe_setup_price = $request->input('pipe_setup_price');
+        $draft->total_price = $request->input('total_price');
         $draft->draft_level = 3;
         $request->session()->put('draft', $draft);
         return redirect(route(Auth::user()->role . '-draft'));
@@ -234,7 +264,19 @@ class FrontendController extends Controller
     {
         $draft = $request->session()->get('draft');
         $draft_id = time();
-        // dd($draft);
+        $customer_id = $draft->customer_name_old;
+        if ($draft->customer_type == 'customer-new') {
+            $customers = Customer::where('customer_name', 'LIKE', $draft->customer_name)->first();
+            if (!$customers) {
+                $customer = new Customer;
+                $customer->customer_name = $draft->customer_name;
+                $customer->company_name = $draft->company_name;
+                $customer->approve_status = '0';
+                $customer->save();
+                $customers = Customer::orderBy('id', 'desc')->first();
+            }
+            $customer_id = $customers->id;
+        }
         foreach ($draft->technology_id as $i) {
             $drafts = new Draft;
             $drafts->draft_id = $draft_id;
@@ -256,7 +298,7 @@ class FrontendController extends Controller
             $drafts->cork_water = $draft->is_water[$i];
             $drafts->technology = $i;
             $drafts->sale_name = Auth::user()->email;
-            $drafts->company = ($draft->customer_type == 'customer-old') ? $draft->customer_name_old : $draft->customer_name;
+            $drafts->company = $customer_id;
             $drafts->save();
         }
         $data = Draft::where('draft_id', '=', $draft_id)->first();
@@ -291,18 +333,24 @@ class FrontendController extends Controller
 
     public function video(Request $request)
     {
-        $videos = Video::where('id', '=', $request->id)->get();
+        $videos = DB::table('technologies AS t')
+            ->join('videos AS v', function ($join) {
+                $join->whereRaw("find_in_set(v.id, t.video)");
+            })
+            ->orWhere('t.id', '=', $request->id)
+            ->orderBy('v.id')
+            ->get();
+            
         if ($request->ajax()) {
-            return view('frontend.video.load', ['videos' => $equipment_assignment])->render();
+            return view('frontend.video.load', ['videos' => $videos])->render();
         }
         return view('frontend.video.load', compact('videos'));
     }
 
     public function generate_pdf(Request $request)
     {
-
         $draft = $request->session()->get('draft');
-        $technology = DB::table('technologies AS t')
+        $query = DB::table('technologies AS t')
             ->join('pictures AS p', function ($join) {
                 $join->whereRaw("find_in_set(p.id, t.picture)");
             })
@@ -311,15 +359,26 @@ class FrontendController extends Controller
                 DB::raw('GROUP_CONCAT(p.name) AS picture_name')
             )
             ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service')
-            ->orderBy('p.id')
-            ->where('t.service', '=', (isset($draft->service)) ? $draft->service : null)
-            ->get();
-        $data = [
-            'draft' => $draft,
-            'technology' => $technology
-        ];
-        $pdf = PDF::loadView('frontend.draft.export', $data);
-        return $pdf->download('draft.pdf');
+            ->orderBy('p.id');
+        foreach ($draft->technology_id as $item) {
+            $query->orWhere('t.id', '=', $item);
+            if ($draft->reservoir[$item]) {
+                $reservoir[$item] = Reservoir::findOrFail($draft->reservoir[$item]);
+            } else {
+                $reservoir[$item] = null;
+            }
+            $service[$item] = Service::findOrFail($draft->service);
+            $equipment_assignment[$item] = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
+                ->where('technology_id', '=', $item)
+                ->get();
+        }
+        $technology = $query->get();
+        $pdf = PDF::loadView('frontend.draft.export', [
+                'draft' => $draft, 'technology' => $technology,
+                'reservoir' => $reservoir, 'equipment_assignment' => $equipment_assignment, 'service' => $service
+            ]
+        );
+        return $pdf->download(time() . '.pdf');
     }
 
     public function export(Request $request) 
@@ -348,22 +407,12 @@ class FrontendController extends Controller
                 ->get();
         }
         $technology = $query->get();
-        // return view("frontend.draft.export", compact([
-        //     'draft', 'technology', 'reservoir', 'equipment_assignment', 'service'
-        // ]));
-        // return view("frontend.draft.export", compact(['draft', 'technology']));
         return Excel::download(new DraftsExport(
             'frontend.draft.export', [
                 'draft' => $draft, 'technology' => $technology,
                 'reservoir' => $reservoir, 'equipment_assignment' => $equipment_assignment, 'service' => $service
             ]
         ), time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-    }
-
-    public function test_mail(Request $request)
-    {
-        $this->sendEmail(Auth::user());
-        return redirect(route(Auth::user()->role . '-create-form', ['form' => 'home']));
     }
 
     public function sendEmail($thisUser, $thisDraft){
