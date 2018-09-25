@@ -30,13 +30,13 @@
                 <td>{{ $item->video_type }}</td>
                 <td>{{ $item->video_file }}</td>
                 <td>{{ $item->video_url }}</td>
-                <td class="text-center">
-                    <form action="{{ route('video.video.destroy', $item->id) }}" method="POST">
-                        @method('DELETE')
-                        @csrf
-                        <button class="btn btn-danger btn-sm">
-                            <i class="glyphicon glyphicon-trash"></i>
-                        </button>
+                <td>
+                    <a href="{{ url('/admin/video/' . $item->id . '/edit') }}" title="Edit video"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+
+                    <form method="POST" action="{{ url('/admin/video' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-danger btn-sm" title="Delete video" onclick="return confirm( & quot; Confirm delete? & quot; )"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                     </form>
                 </td>
             </tr>

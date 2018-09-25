@@ -22,6 +22,7 @@ class PipeController extends Controller
             $pipe = Pipe::where('name', 'LIKE', "%$keyword%")
                 ->orWhere('size', 'LIKE', "%$keyword%")
                 ->orWhere('price', 'LIKE', "%$keyword%")
+                ->orWhere('labor_cost', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $pipe = Pipe::latest()->paginate($perPage);
@@ -54,6 +55,7 @@ class PipeController extends Controller
             'name' => 'required',
             'size' => 'required',
             'price' => 'required',
+            'labor_cost' => 'required',
         ]);
 
         $requestData = $request->all();

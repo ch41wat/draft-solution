@@ -28,13 +28,13 @@ Reservoir
                 <td>{{ $item->name }}</td>
                 <td>{{ $item->latitude }}</td>
                 <td>{{ $item->longitude }}</td>
-                <td class="text-center">
-                    <form action="{{ route('reservoir.reservoir.destroy', $item->id) }}" method="POST">
-                        @method('DELETE')
-                        @csrf
-                        <button class="btn btn-danger btn-sm">
-                            <i class="glyphicon glyphicon-trash"></i>
-                        </button>
+                <td>
+                    <a href="{{ url('/admin/reservoir/' . $item->id . '/edit') }}" title="Edit reservoir"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+
+                    <form method="POST" action="{{ url('/admin/reservoir' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-danger btn-sm" title="reservoir video" onclick="return confirm( & quot; Confirm delete? & quot; )"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                     </form>
                 </td>
             </tr>
