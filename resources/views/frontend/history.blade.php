@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-hover">
                     <thead>
                         <tr class="bg-primary">
                             <th>Solution No.</th>

@@ -91,7 +91,6 @@ Route::group(['middleware' => ['sale']], function () {
     Route::get('/sale/draft', 'FrontendController@draft')->name('sale-draft');
 
     Route::get('/sale/history', 'FrontendController@history')->name('sale-history');
-    // Route::get('/sale/history/{company}/{sale}', 'FrontendController@history')->name('sale-draft');
 
     Route::get('/sale/{form}', 'FrontendController@index')->name('sale-create-form');
     Route::get('/sale/service/{array}', 'FrontendController@service')->name('sale-create-service-form');
@@ -127,6 +126,9 @@ Route::group(['middleware' => ['saleadmin']], function () {
     Route::get('/saleadmin/mail','FrontendController@test_mail')->name('saleadmin-mail');
 
     Route::get('/saleadmin/draft', 'FrontendController@draft')->name('saleadmin-draft');
+
+    Route::get('/saleadmin/history', 'FrontendController@history')->name('saleadmin-history');
+
     Route::get('/saleadmin/{form}', 'FrontendController@index')->name('saleadmin-create-form');
     Route::get('/saleadmin/service/{array}', 'FrontendController@service')->name('saleadmin-create-service-form');
 

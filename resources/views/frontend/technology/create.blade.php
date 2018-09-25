@@ -54,7 +54,7 @@
                                         </div>
                                         <div class="form-group {{ $errors->has('water_need_qty.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ปริมาณความต้องการใช้น้ำ' }}</label>
-                                            <input type="text" name="water_need_qty[{{ $item->id }}]" id="water-need-qty-{{ $item->id }}" onchange="pipe_calculate(this.value, '{{ $item->id }}')" value="{{ $draft->water_need_qty[$item->id] or old('water_need_qty.' . $item->id) }}" class="form-control" required>
+                                            <input type="text" name="water_need_qty[{{ $item->id }}]" id="water-need-qty-{{ $item->id }}" onchange="pipe_calculate('{{ $item->id }}'); fast_calculate('{{ $item->id }}');" value="{{ $draft->water_need_qty[$item->id] or old('water_need_qty.' . $item->id) }}" class="form-control" required>
                                         </div>
                                         <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
@@ -133,7 +133,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('pipe_id.' . $item->id) ? 'has-error' : ''}}">
                                                             <label class="control-label">{{ 'ขนาดท่อที่เลือกใช้' }}</label>
-                                                            <select class="form-control" name="pipe_id[{{ $item->id }}]" id="pipe-id-{{ $item->id }}" onchange="fast_calculate(this.value, '{{ $item->id }}')">
+                                                            <select class="form-control" name="pipe_id[{{ $item->id }}]" id="pipe-id-{{ $item->id }}" onchange="fast_calculate('{{ $item->id }}')">
                                                                 <option value=""></option>
                                                                 @foreach ($pipes as $pipe)
                                                                     <option value="{{ $pipe->id . ',' . $pipe->size . ',' . $pipe->price . ',' . $pipe->labor_cost }}" {{ ((isset($draft->pipe_select) && $draft->pipe_select[$item->id] == $pipe->id) or old('pipe_id.' . $item->id) == $pipe->id) ? "selected" : "" }}>
@@ -153,9 +153,9 @@
                                                 </div>
                                                 <div class="form-group {{ $errors->has('labor_cost.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ค่าแรง : ' }}</label>
-                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" onclick="total_calculate(this.value, '{{ $item->id }}')" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }} required>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" onclick="total_calculate('{{ $item->id }}')" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }} required>
                                                     <label for="is-cost-1" class="control-label">{{ 'รวม' }}</label>
-                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" onclick="total_calculate(this.value, '{{ $item->id }}')" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }} required>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" onclick="total_calculate('{{ $item->id }}')" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }} required>
                                                     <label for="is-cost-0" class="control-label">{{ 'ไม่รวม' }}</label>
                                                 </div>
                                                 <div class="row">
@@ -310,14 +310,14 @@
             $('#reservoir-longitude-' + id).val(reservoir[2]);
         }
 
-        function pipe_calculate(value, id) {
-            value = parseFloat(value);
-            var pipe_need = Math.sqrt(4*(value/(24*60*60)/(1*Math.PI)));
+        function pipe_calculate(id) {
+            var pipe = parseFloat($('#water-need-qty-' + id).val());
+            var pipe_need = Math.sqrt(4*(pipe/(24*60*60)/(1*Math.PI)));
             $('#pipe-size-need-' + id).val(pipe_need.toFixed(3));
         }
 
-        function fast_calculate(value, id) {
-            var pipe_select = value.split(','),
+        function fast_calculate(id) {
+            var pipe_select = $('#pipe-id-' + id).val().split(','),
                 pipe_size = parseFloat(pipe_select[1]),
                 water_need = parseFloat($('#water-need-qty-' + id).val()),
                 distance = parseFloat($('#distance-' + id).val());
@@ -330,11 +330,20 @@
 
         function price_calculate(distance, pipe_price, id) {
             var total = distance * pipe_price;
-            $('#pipe-setup-price-' + id).val(total.toFixed(2));
+            var modulus = parseInt(total) % 10;
+            var remainder = Math.floor( (parseInt(total) / 10) );	
+            var result = "";
+            if((parseInt(total) % 10) <= 5)
+                result = remainder + '0';
+            else
+                result =  Math.round( (parseInt(total) / 10) ) * 10;
+            $('#pipe-setup-price-' + id).val(parseFloat(parseInt(result) + (parseFloat(total).toFixed(2) - parseInt(total))).toFixed(2));
+            total_calculate(id);
         }
 
-        function total_calculate(value, id) {
-            var pipe = parseFloat($('#pipe-setup-price-' + id).val()),
+        function total_calculate(id) {
+            var value = $("input[name='labor_cost[" + id + "]']:checked").val();
+                pipe = parseFloat($('#pipe-setup-price-' + id).val()),
                 cost = parseFloat($('#pipe-cost-' + id).val()) * value;
             $('#total-price-' + id).val((pipe + cost).toFixed(2));
         }
