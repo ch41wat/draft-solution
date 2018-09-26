@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use LaravelLocalization;
 
 class HomeController extends Controller
 {
@@ -24,5 +25,15 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function switch_lang($locale, $url)
+    {
+        $default_url = str_replace('_', '/', $url);
+        $current_locale = substr($default_url, 0, 4);
+        $url = str_replace($current_locale, "/" . $locale . "/", $default_url);
+        // dd([ $default_url, $current_locale, $url ]);
+        LaravelLocalization::setLocale($locale);
+        return redirect($url)->with('switch_lang', $url);
     }
 }

@@ -32,12 +32,12 @@
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
-                                <li><!-- Task item -->
+                                <li class="{{ (Request::segment(1) == 'th') ? 'active' : '' }}"><!-- Task item -->
                                     <a href="{{ route('auth.lang', ['locale' => 'th', 'url' => str_replace('/', '_', $_SERVER['PATH_INFO'])]) }}">
                                         TH
                                     </a>
                                 </li>
-                                <li>
+                                <li class="{{ (Request::segment(1) == 'en') ? 'active' : '' }}">
                                     <a href="{{ route('auth.lang', ['locale' => 'en', 'url' => str_replace('/', '_', $_SERVER['PATH_INFO'])]) }}">
                                         EN
                                     </a>

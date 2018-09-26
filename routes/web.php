@@ -17,14 +17,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {
         return redirect('/admin');
     });
-    Route::get('change/{locale}/{url}', function ($locale, $url) {
-        $current_locale = "/" . LaravelLocalization::getCurrentLocale() . "/";
-        LaravelLocalization::setLocale($locale);
-        $url = str_replace($current_locale, "/" . $locale . "/", str_replace('_', '/', $url));
-        return redirect($locale);
-        // Session::set('locale', $locale); // กำหนดค่าตัวแปรแบบ locale session ให้มีค่าเท่ากับตัวแปรที่ส่งเข้ามา 
-        // return Redirect::back(); // สั่งให้โหลดหน้าเดิม
-    })->name('auth.lang');
+    Route::get('change/{locale}/{url}', 'HomeController@switch_lang')->name('auth.lang');
 
     Route::get('/admin/ajax-technology', 'Technology\\TechnologyController@dataAjaxTechnology')->name('ajax-technology');
     Route::get('/admin/get-picture/{type}/{search}', 'Picture\\PictureController@getPicture')->name('picture.get-picture');

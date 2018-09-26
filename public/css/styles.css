@@ -87,6 +87,19 @@ body{
     margin: 5px;
 }
 
+
+.menu li.active {
+    background-color: #33b2d2;
+}
+
+.menu li.active a {
+    color: #fff;
+}
+
+.menu li.active:hover a {
+    pointer-events: none;
+}
+
 .bg-header {
     position: absolute;
     top: 0;

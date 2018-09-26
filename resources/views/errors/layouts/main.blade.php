@@ -1,8 +1,3 @@
-@if (session('switch_lang'))
-    <script type="text/javascript">
-        window.location = "{{ url(session('switch_lang')) }}";//here double curly bracket
-    </script>
-@endif
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -79,30 +74,13 @@
 
 <body class="hold-transition skin-blue sidebar-collapse">
     <div class="wrapper">
-        <!-- Main Header -->
-        @include('frontend.layouts.header')
-        <!-- Left side column. contains the logo and sidebar -->
-        @include('frontend.layouts.sidebar')
-
-        <!-- Content Wrapper. Contains page content -->
         
         <!-- /.content-wrapper -->
         <div class="content-wrapper" style="min-height: 637px;">
             @yield('content')
         </div>
-        
-        <!-- Main Footer -->
-        @include('frontend.layouts.footer')
-        <!-- Add the sidebar's background. This div must be placed
-        immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
+
     </div>
     <!-- ./wrapper -->
-
-    <!-- REQUIRED JS SCRIPTS -->
-
-    <!-- Optionally, you can add Slimscroll and FastClick plugins.
-        Both of these plugins are recommended to enhance the
-        user experience. -->
 </body>
 </html>
