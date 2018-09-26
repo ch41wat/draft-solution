@@ -65,6 +65,10 @@ class Kernel extends HttpKernel {
         'supervisor' => 'App\Http\Middleware\supervisor',
         'sale' => 'App\Http\Middleware\sale',
         'language' => 'App\Http\Middleware\Language',
+        'localize' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
+		'localizationRedirect' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
+		'localeSessionRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
+        'localeViewPath' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class
     ];
 
 }

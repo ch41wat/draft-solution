@@ -405,6 +405,10 @@ class ComposerStaticInit122d7cc3023fe1889b15ddbf5ffc0d74
             array (
                 0 => __DIR__ . '/..' . '/mockery/mockery/library',
             ),
+            'Mcamara\\LaravelLocalization' => 
+            array (
+                0 => __DIR__ . '/..' . '/mcamara/laravel-localization/src',
+            ),
         ),
         'J' => 
         array (
@@ -2219,6 +2223,23 @@ class ComposerStaticInit122d7cc3023fe1889b15ddbf5ffc0d74
         'Maatwebsite\\Excel\\RegistersCustomConcerns' => __DIR__ . '/..' . '/maatwebsite/excel/src/RegistersCustomConcerns.php',
         'Maatwebsite\\Excel\\Sheet' => __DIR__ . '/..' . '/maatwebsite/excel/src/Sheet.php',
         'Maatwebsite\\Excel\\Writer' => __DIR__ . '/..' . '/maatwebsite/excel/src/Writer.php',
+        'Mcamara\\LaravelLocalization\\Commands\\RouteTranslationsCacheCommand' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Commands/RouteTranslationsCacheCommand.php',
+        'Mcamara\\LaravelLocalization\\Commands\\RouteTranslationsClearCommand' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Commands/RouteTranslationsClearCommand.php',
+        'Mcamara\\LaravelLocalization\\Commands\\RouteTranslationsListCommand' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Commands/RouteTranslationsListCommand.php',
+        'Mcamara\\LaravelLocalization\\Exceptions\\SupportedLocalesNotDefined' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Exceptions/SupportedLocalesNotDefined.php',
+        'Mcamara\\LaravelLocalization\\Exceptions\\UnsupportedLocaleException' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Exceptions/UnsupportedLocaleException.php',
+        'Mcamara\\LaravelLocalization\\Facades\\LaravelLocalization' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Facades/LaravelLocalization.php',
+        'Mcamara\\LaravelLocalization\\LanguageNegotiator' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/LanguageNegotiator.php',
+        'Mcamara\\LaravelLocalization\\LaravelLocalization' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/LaravelLocalization.php',
+        'Mcamara\\LaravelLocalization\\LaravelLocalizationServiceProvider' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/LaravelLocalizationServiceProvider.php',
+        'Mcamara\\LaravelLocalization\\Middleware\\LaravelLocalizationMiddlewareBase' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Middleware/LaravelLocalizationMiddlewareBase.php',
+        'Mcamara\\LaravelLocalization\\Middleware\\LaravelLocalizationRedirectFilter' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Middleware/LaravelLocalizationRedirectFilter.php',
+        'Mcamara\\LaravelLocalization\\Middleware\\LaravelLocalizationRoutes' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Middleware/LaravelLocalizationRoutes.php',
+        'Mcamara\\LaravelLocalization\\Middleware\\LaravelLocalizationViewPath' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Middleware/LaravelLocalizationViewPath.php',
+        'Mcamara\\LaravelLocalization\\Middleware\\LocaleCookieRedirect' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Middleware/LocaleCookieRedirect.php',
+        'Mcamara\\LaravelLocalization\\Middleware\\LocaleSessionRedirect' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Middleware/LocaleSessionRedirect.php',
+        'Mcamara\\LaravelLocalization\\Traits\\LoadsTranslatedCachedRoutes' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Traits/LoadsTranslatedCachedRoutes.php',
+        'Mcamara\\LaravelLocalization\\Traits\\TranslatedRouteCommandContext' => __DIR__ . '/..' . '/mcamara/laravel-localization/src/Mcamara/LaravelLocalization/Traits/TranslatedRouteCommandContext.php',
         'Mockery' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'Mockery\\Adapter\\Phpunit\\MockeryPHPUnitIntegration' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryPHPUnitIntegration.php',
         'Mockery\\Adapter\\Phpunit\\MockeryTestCase' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryTestCase.php',

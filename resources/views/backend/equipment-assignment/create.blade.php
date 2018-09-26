@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="modal modal-fullscreen fade" id="modal-layer">
+    <div class="modal fade" id="modal-layer">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -47,7 +47,13 @@
                             <input type="hidden" name="picture_id" id="picture-id">
                             <input type="hidden" name="layer_id" id="layer-id">
                             <div class="form-group">
-                                <select class="form-control" name="equipment" id="item-equipment"></select>
+                                <label for="item-equipment" class="control-label">Equipment </label>
+                                <select class="form-control" name="equipment" id="item-equipment">
+                                    <option value=""></option>
+                                    @foreach ($equipments as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -112,27 +118,6 @@
                     },
                     cache: true
                 });
-            });
-
-            $('#item-equipment').select2({
-                placeholder: 'Select an item',
-                    ajax: {
-                    url: "{{ route('ajax-equipment') }}",
-                    type: 'get',
-                    dataType: 'json',
-                    delay: 250,
-                    processResults: function (data) {
-                        return {
-                            results:  $.map(data, function (item) {
-                                return {
-                                    text: item.name,
-                                    id: item.id
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
             });
 
             $('#btn-select').click(function() {

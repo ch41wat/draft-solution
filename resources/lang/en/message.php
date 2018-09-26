@@ -25,4 +25,6 @@ return [
     'reservoir' => 'Reservoir',
     'create_reservoir' => 'Create Reservoir',
     'show_reservoir' => 'Show Reservoir',
+
+    'history' => 'History',
 ];

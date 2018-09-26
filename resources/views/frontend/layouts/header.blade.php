@@ -16,12 +16,35 @@
             <ul class="nav navbar-nav">
                 <!-- User Account Menu -->
                 <li>
-                    <a href="{{ route(Auth::user()->role . '-history') }}" class="historyButton">History</a>
+                    <a href="{{ route(Auth::user()->role . '-history') }}" class="historyButton">@lang('message.history')</a>
                 </li>
                 <li>
                     <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'home']) }}" class="draftButton">
                         {{ config('app.name', 'Laravel') }}
                     </a>
+                </li>
+                <!-- language bar -->
+                <li class="dropdown tasks-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-flag-o"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <!-- inner menu: contains the actual data -->
+                            <ul class="menu">
+                                <li><!-- Task item -->
+                                    <a href="{{ route('auth.lang', ['locale' => 'th', 'url' => str_replace('/', '_', $_SERVER['PATH_INFO'])]) }}">
+                                        TH
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('auth.lang', ['locale' => 'en', 'url' => str_replace('/', '_', $_SERVER['PATH_INFO'])]) }}">
+                                        EN
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </li>
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->

@@ -78,8 +78,8 @@ return [
     |
     */
 
-    //'locale' => 'en',
-    'locales' => ['en' => 'English', 'th' => 'Thai'],
+    'locale' => 'en',
+    // 'locales' => ['en' => 'English', 'th' => 'Thai'],
 
     /*
     |--------------------------------------------------------------------------
@@ -153,6 +153,7 @@ return [
          */
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -216,6 +217,7 @@ return [
 
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'LaravelLocalization' => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
 
     ],
 

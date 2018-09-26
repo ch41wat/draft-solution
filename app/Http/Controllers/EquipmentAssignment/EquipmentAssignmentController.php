@@ -5,6 +5,7 @@ namespace App\Http\Controllers\EquipmentAssignment;
 use App\EquipmentAssignment;
 use App\Http\Controllers\Controller;
 use App\Service;
+use App\Equipment;
 use Illuminate\Http\Request;
 
 class EquipmentAssignmentController extends Controller
@@ -40,7 +41,8 @@ class EquipmentAssignmentController extends Controller
     public function create()
     {
         $services = Service::all();
-        return view('backend.equipment-assignment.create', compact('services'));
+        $equipments = Equipment::all();
+        return view('backend.equipment-assignment.create', compact('services', 'equipments'));
     }
 
     /**

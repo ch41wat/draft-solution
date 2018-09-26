@@ -25,4 +25,6 @@ return [
     'reservoir' => 'อ่างเก็บน้ำ',
     'create_reservoir' => 'สร้างข้อมูลอ่างเก็บน้ำ',
     'show_reservoir' => 'แสดงข้อมูลอ่างเก็บน้ำ',
+
+    'history' => 'ประวัติ',
 ];
