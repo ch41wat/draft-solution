@@ -20,7 +20,7 @@
                 </li>
                 <li>
                     <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'home']) }}" class="draftButton">
-                        {{ config('app.name', 'Laravel') }}
+                        @lang('message.draft-solution')
                     </a>
                 </li>
                 <!-- language bar -->

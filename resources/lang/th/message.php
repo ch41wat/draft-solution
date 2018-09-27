@@ -27,4 +27,5 @@ return [
     'show_reservoir' => 'แสดงข้อมูลอ่างเก็บน้ำ',
 
     'history' => 'ประวัติ',
+    'draft-solution' => 'สร้างดราฟ',
 ];

@@ -27,4 +27,5 @@ return [
     'show_reservoir' => 'Show Reservoir',
 
     'history' => 'History',
+    'draft-solution' => 'Draft Solution',
 ];
