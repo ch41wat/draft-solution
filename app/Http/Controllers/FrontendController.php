@@ -17,6 +17,7 @@ use Mail;
 use App\Mail\verifyUser;
 use App\Draft;
 use App\Pipe;
+use App\Technology;
 
 class FrontendController extends Controller
 {
@@ -250,6 +251,7 @@ class FrontendController extends Controller
         $draft->pipe_size = $request->input('pipe_size');
         $draft->pipe_price = $request->input('pipe_price');
         $draft->pipe_cost = $request->input('pipe_cost');
+        $draft->pipe_cost_original = $request->input('pipe_cost_orginal');
         $draft->labor_cost = $request->input('labor_cost');
         $draft->fast_flow = $request->input('fast_flow');
         $draft->pipe_setup_price = $request->input('pipe_setup_price');
@@ -315,20 +317,49 @@ class FrontendController extends Controller
 
     public function equipment_assignment(Request $request)
     {
-        $equipment_assignment = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
-        // ->select([
-        //     'technology_id', 'picture_id',
-        //     DB::raw('group_concat(equipment_id) as equipment_id'),
-        //     DB::raw('group_concat(layer) as layer'),
-        // ])
-            ->where('technology_id', '=', $request->id)
-        // ->groupBy('picture_id', 'technology_id')
+        // $equipment_assignment = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
+        // // ->select([
+        // //     'technology_id', 'picture_id',
+        // //     DB::raw('group_concat(equipment_id) as equipment_id'),
+        // //     DB::raw('group_concat(layer) as layer'),
+        // // ])
+        //     ->where('technology_id', '=', $request->id)
+        // // ->groupBy('picture_id', 'technology_id')
+        //     ->get();
+        // // dd($equipment_assignment);
+        $technologies = DB::table('technologies AS t')
+            ->join('pictures AS p', function ($join) {
+                $join->whereRaw("find_in_set(p.id, t.picture)");
+            })
+            ->select('t.id', 't.name', 't.service', 'p.id AS picture_id', 'p.name AS picture_name', 'p.path')
+            ->orWhere('t.id', '=', $request->id)
+            ->orderBy('t.id', 'p.id')
             ->get();
-        // dd($equipment_assignment);
-        if ($request->ajax()) {
-            return view('frontend.service.load', ['equipment_assignment' => $equipment_assignment])->render();
+        if (count($technologies) > 0) {
+            foreach ($technologies as $i => $technology) {
+                $equipment_assignment = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
+                    ->where('technology_id', '=', $technology->id)
+                    ->where('picture_id', '=', $technology->picture_id)
+                    ->get();
+                foreach ($equipment_assignment as $j => $equipment) {
+                    $layer[$equipment->layer] = [
+                        'equipment_name' => $equipment->equipment->name,
+                        'equipment_qty' => $equipment->equipment->qty,
+                        'equipment_unit' => $equipment->equipment->unit,
+                        'equipment_detail' => $equipment->equipment->detail,
+                        'picture_name' => $equipment->picture->name,
+                        'picture_path' => $equipment->picture->path
+                    ];
+                }
+                $technologies[$i]->equipment_assignment = $layer;
+                $layer = [];
+            }
         }
-        return view('frontend.service.load', compact('equipment_assignment'));
+        // dd($technologies);
+        // if ($request->ajax()) {
+        //     return view('frontend.service.load', ['technologies' => $technologies])->render();
+        // }
+        return view('frontend.service.load', compact('technologies'));
     }
 
     public function video(Request $request)

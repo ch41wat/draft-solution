@@ -168,6 +168,7 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group {{ $errors->has('pipe_setup_price.' . $item->id) ? 'has-error' : ''}}">
                                                             <label class="control-label">{{ 'ค่าแรง' }}</label>
+                                                            <input type="hidden" name="pipe_cost_original[{{ $item->id }}]" id="pipe-cost-original-{{ $item->id }}" value="{{ $draft->pipe_cost_original[$item->id] or old('pipe_cost_original.' . $item->id) }}">
                                                             <input type="text" name="pipe_cost[{{ $item->id }}]" id="pipe-cost-{{ $item->id }}" value="{{ $draft->pipe_cost[$item->id] or old('pipe_cost.' . $item->id) }}" class="form-control" readonly>
                                                         </div>
                                                     </div>
@@ -321,29 +322,29 @@
                 pipe_size = parseFloat(pipe_select[1]),
                 water_need = parseFloat($('#water-need-qty-' + id).val()),
                 distance = parseFloat($('#distance-' + id).val());
-                fast_flow = (water_need/(24*60*60))/(Math.PI*(Math.pow(pipe_size, 2)/4));
+                fast_flow = (water_need/(24*60*60))/(Math.PI*(Math.pow(pipe_size, 2)/4)),
+                pipe_cost = remainder(parseFloat(pipe_select[3]) * distance);
+
+            
             $('#pipe-select-' + id).val(pipe_select[0]);
-            $('#pipe-cost-' + id).val(pipe_select[3]);
+            $('#pipe-cost-' + id).val(pipe_cost);
             $('#fast-flow-' + id).val(fast_flow.toFixed(3));
+            $('#pipe-cost-original-' + id).val(pipe_select[3]);
             price_calculate(distance, pipe_select[2], id);
         }
 
         function price_calculate(distance, pipe_price, id) {
             var total = distance * pipe_price;
-            var modulus = parseInt(total) % 10;
-            var remainder = Math.floor( (parseInt(total) / 10) );	
-            var result = "";
-            if((parseInt(total) % 10) <= 5)
-                result = remainder + '0';
-            else
-                result =  Math.round( (parseInt(total) / 10) ) * 10;
-            $('#pipe-setup-price-' + id).val(parseFloat(parseInt(result) + (parseFloat(total).toFixed(2) - parseInt(total))).toFixed(2));
+            var result = remainder(total);
+            $('#pipe-setup-price-' + id).val(parseInt(result));
+            // $('#pipe-setup-price-' + id).val(parseFloat(parseInt(result) + (parseFloat(total).toFixed(2) - parseInt(total))).toFixed(2));
             total_calculate(id);
         }
 
         function total_calculate(id) {
             var value = $("input[name='labor_cost[" + id + "]']:checked").val();
                 pipe = parseFloat($('#pipe-setup-price-' + id).val()),
+                distance = parseFloat($('#distance-' + id).val());
                 cost = parseFloat($('#pipe-cost-' + id).val()) * value;
             $('#total-price-' + id).val((pipe + cost).toFixed(2));
         }
@@ -352,6 +353,16 @@
             var pipe_select = $('#pipe-id-' + id).val().split(',');
             // pipe == 1 (id), == 2 (size), == 3 (price)
             return parseFloat(pipe_select[pipe]);
+        }
+
+        function remainder(total) {
+            var result = "";
+            var remainder = Math.floor( (parseInt(total) / 10) );	
+            if((parseInt(total) % 10) <= 5)
+                result = remainder + '0';
+            else
+                result =  Math.round( (parseInt(total) / 10) ) * 10;
+            return result;
         }
     </script>
 @endsection
