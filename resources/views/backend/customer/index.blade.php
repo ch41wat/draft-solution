@@ -11,38 +11,6 @@
 </script>
 <!-- Content Header (Page header) -->
 
-<<<<<<< HEAD
-    <div class="table-responsive">
-        <table id="table-customer" class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Company</th>
-                    <th>Customer Name</th>
-                    <th>Tool</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($customer as $item)
-                    <tr>
-                        <td>{{ $item->id }}</td>
-                        <td>{{ $item->company_name }}</td>
-                        <td>{{ $item->customer_name }}</td>
-                        <td class="text-center">
-                            <form action="{{ route('customer.customer.destroy', $item->id) }}" method="POST">
-                                @method('DELETE')
-                                @csrf
-                                <button class="btn btn-danger btn-sm" onclick="return confirm(&quot;Confirm delete?&quot;)">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-=======
 <div class="table-responsive">
     <table id="table-customer" class="table table-bordered table-striped">
         <thead>
@@ -65,7 +33,9 @@
                     <form method="POST" action="{{ url('/admin/customer' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                         {{ method_field('DELETE') }}
                         {{ csrf_field() }}
-                        <button type="submit" class="btn btn-danger btn-sm" title="Delete customer" onclick="return confirm( & quot; Confirm delete? & quot; )"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                        <button class="btn btn-danger btn-sm" title="Delete customer" onclick="return confirm(&quot;Confirm delete?&quot;)">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i> Delete
+                        </button>
                     </form>
                 </td>
             </tr>
@@ -73,5 +43,4 @@
         </tbody>
     </table>
 </div>
->>>>>>> cb83f4a92e5fe067ac2ead80077589e9a68a70e6
 @endsection
