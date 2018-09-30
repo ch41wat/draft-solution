@@ -78,19 +78,19 @@
                                     <div class="col-md-4">
                                         <div class="form-group {{ $errors->has('pipe_setup_price.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ราคาท่อ' }}</label>
-                                            <input type="text" name="pipe_setup_price[{{ $item->id }}]" value="{{ $draft->pipe_setup_price[$item->id] or '' }}" class="form-control" readonly>
+                                            <input type="text" name="pipe_setup_price[{{ $item->id }}]" value="{{ number_format($draft->pipe_setup_price[$item->id]) }}" class="form-control" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group {{ $errors->has('pipe_setup_price.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ค่าแรง' }}</label>
-                                            <input type="text" name="pipe_cost[{{ $item->id }}]" id="pipe-cost-{{ $item->id }}" value="{{ $draft->pipe_cost[$item->id] or '' }}" class="form-control" readonly>
+                                            <input type="text" name="pipe_cost[{{ $item->id }}]" id="pipe-cost-{{ $item->id }}" value="{{ number_format($draft->pipe_cost[$item->id]) }}" class="form-control" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group {{ $errors->has('total_price.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'รวม' }}</label>
-                                            <input type="text" name="total_price[{{ $item->id }}]" id="total-price-{{ $item->id }}" value="{{ $draft->total_price[$item->id] or '' }}" class="form-control" readonly>
+                                            <input type="text" name="total_price[{{ $item->id }}]" id="total-price-{{ $item->id }}" value="{{ number_format($draft->total_price[$item->id]) }}" class="form-control" readonly>
                                         </div>
                                     </div>
                                 </div>

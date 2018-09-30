@@ -17,6 +17,7 @@
             <tr>
                 <th>No.</th>
                 <th>Name</th>
+                <th>Tools</th>
             </tr>
         </thead>
         <tbody>

@@ -96,7 +96,6 @@
                                                     <input type="hidden" name="reservoir[{{ $item->id }}]" id="reservoir-{{ $item->id }}" value="{{ $draft->reservoir[$item->id] or old('reservoir.' . $item->id) }}">
                                                     <input type="hidden" name="reservoir_latitude[{{ $item->id }}]" id="reservoir-latitude-{{ $item->id }}" value="{{ $draft->reservoir_latitude[$item->id] or old('reservoir_latitude.' . $item->id) }}">
                                                     <input type="hidden" name="reservoir_longitude[{{ $item->id }}]" id="reservoir-longitude-{{ $item->id }}" value="{{ $draft->reservoir_longitude[$item->id] or old('reservoir_longitude.' . $item->id) }}">
-                                                    <input type="hidden" name="distance[{{ $item->id }}]" id="distance-{{ $item->id }}" value="{{ $draft->distance[$item->id] or old('distance.' . $item->id) }}">
                                                     <select class="form-control" name="reservoir_id[{{ $item->id }}]" onchange="set_resercoir(this.value, '{{ $item->id }}')">
                                                         <option value=""></option>
                                                         @foreach ($reservoir as $reser)
@@ -123,6 +122,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group {{ $errors->has('distance.' . $item->id) ? 'has-error' : ''}}">
+                                                    <label class="control-label">{{ 'ระยะทางจากอ่างเก็บน้ำ' }}</label>
+                                                    <input type="text" name="distance[{{ $item->id }}]" id="distance-{{ $item->id }}" value="{{ $draft->distance[$item->id] or old('distance.' . $item->id) }}" class="form-control" readonly>
+                                                </div>
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('pipe_size_need.' . $item->id) ? 'has-error' : ''}}">
@@ -144,7 +147,20 @@
                                                             </select>
                                                             <input type="hidden" name="pipe_select[{{ $item->id }}]" id="pipe-select-{{ $item->id }}" value="{{ $draft->pipe_select[$item->id] or old('pipe_select.' . $item->id) }}">
                                                             <input type="hidden" name="pipe_size[{{ $item->id }}]" id="pipe-size-{{ $item->id }}" value="{{ $draft->pipe_size[$item->id] or old('pipe_size.' . $item->id) }}">
-                                                            <input type="hidden" name="pipe_price[{{ $item->id }}]" id="pipe-price-{{ $item->id }}" value="{{ $draft->pipe_price[$item->id] or old('pipe_price.' . $item->id) }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group {{ $errors->has('pipe_price.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ราคาท่อก่อนคำนวณ' }}</label>
+                                                            <input type="text" name="pipe_price[{{ $item->id }}]" id="pipe-price-{{ $item->id }}" value="{{ $draft->pipe_price[$item->id] or old('pipe_price.' . $item->id) }}" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group {{ $errors->has('pipe_cost_original.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ค่าแรงก่อนคำนวณ' }}</label>
+                                                            <input type="text" name="pipe_cost_original[{{ $item->id }}]" id="pipe-cost-original-{{ $item->id }}" value="{{ $draft->pipe_cost_original[$item->id] or old('pipe_cost_original.' . $item->id) }}" class="form-control" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -169,7 +185,6 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group {{ $errors->has('pipe_setup_price.' . $item->id) ? 'has-error' : ''}}">
                                                             <label class="control-label">{{ 'ค่าแรง' }}</label>
-                                                            <input type="hidden" name="pipe_cost_original[{{ $item->id }}]" id="pipe-cost-original-{{ $item->id }}" value="{{ $draft->pipe_cost_original[$item->id] or old('pipe_cost_original.' . $item->id) }}">
                                                             <input type="text" name="pipe_cost[{{ $item->id }}]" id="pipe-cost-{{ $item->id }}" value="{{ $draft->pipe_cost[$item->id] or old('pipe_cost.' . $item->id) }}" class="form-control" readonly>
                                                         </div>
                                                     </div>
@@ -210,7 +225,7 @@
                                                                         [coords[0], coords[1]],
                                                                     );
                                                                     // alert(dis);
-                                                                    $('#distance-{{ $item->id }}').val(distance);
+                                                                    $('#distance-{{ $item->id }}').val(distance.toFixed(2));
 
                                                                     // Moving the placemark if it was already created
                                                                     if (myPlacemark) {
@@ -329,6 +344,7 @@
             pipe_cost = is_nan(pipe_cost);
             fast_flow = is_nan(fast_flow);
             $('#pipe-select-' + id).val(pipe_select[0]);
+            $('#pipe-price-' + id).val(pipe_select[2]);
             $('#pipe-cost-' + id).val(pipe_cost);
             $('#fast-flow-' + id).val(fast_flow.toFixed(3));
             $('#pipe-cost-original-' + id).val(pipe_select[3]);
@@ -381,6 +397,14 @@
                 return 0;
             }
             return number;
+        }
+
+        function number_format(n, digit) {
+            n = parseFloat(n);
+            if (digit == 0) {
+                return parseInt(n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
+            }
+            return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
         }
     </script>
 @endsection
