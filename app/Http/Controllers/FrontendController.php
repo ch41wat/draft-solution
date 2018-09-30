@@ -18,6 +18,7 @@ use App\Mail\verifyUser;
 use App\Draft;
 use App\Pipe;
 use App\Technology;
+use App\Picture;
 
 class FrontendController extends Controller
 {
@@ -26,9 +27,6 @@ class FrontendController extends Controller
     {
         $step_form = [
             [
-                'link' => 'home',
-                'name' => config('app.name'),
-            ], [
                 'link' => 'customer',
                 'name' => 'ข้อมูลลูกค้า',
             ], [
@@ -37,10 +35,7 @@ class FrontendController extends Controller
             ], [
                 'link' => 'draft',
                 'name' => 'สรุปรายละเอียด',
-            ], /*[
-        'link' => 'success',
-        'name' => 'บันทึก ' . config('app.name'),
-        ],*/
+            ], 
         ];
         $draft = $request->session()->get('draft');
         if ($form == 'home') {
@@ -58,7 +53,7 @@ class FrontendController extends Controller
             )
             ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service')
             ->orderBy('p.id')
-            ->where('t.service', '=', (isset($draft->service)) ? $draft->service : null)
+            ->where('t.service', 'LIKE', (isset($draft->service)) ? $draft->service : '%')
             ->get();
         return view("frontend.$form.create", compact(['step_form', 'draft', 'service', 'technology']));
     }
@@ -67,9 +62,6 @@ class FrontendController extends Controller
     {
         $step_form = [
             [
-                'link' => 'home',
-                'name' => config('app.name'),
-            ], [
                 'link' => 'customer',
                 'name' => 'ข้อมูลลูกค้า',
             ], [
@@ -86,10 +78,10 @@ class FrontendController extends Controller
                 $join->whereRaw("find_in_set(p.id, t.picture)");
             })
             ->select(
-                't.id', 't.name', 't.video', 't.picture', 't.service',
+                't.id', 't.name', 't.video', 't.picture', 't.service', 't.price',
                 DB::raw('GROUP_CONCAT(p.name) AS picture_name')
             )
-            ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service')
+            ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service', 't.price')
             ->orderBy('p.id');
         foreach ($draft->technology_id as $item) {
             $query->orWhere('t.id', '=', $item);
@@ -105,9 +97,6 @@ class FrontendController extends Controller
         // dd($request);
         $step_form = [
             [
-                'link' => 'home',
-                'name' => config('app.name'),
-            ], [
                 'link' => 'customer',
                 'name' => 'ข้อมูลลูกค้า',
             ], [
@@ -140,6 +129,7 @@ class FrontendController extends Controller
                 ->get();
         }
         $technology = $query->get();
+        // dd($technology);
         return view("frontend.draft.create", compact([
             'step_form', 'draft', 'technology', 'reservoir', 'equipment_assignment', 'service'
         ]));
@@ -234,6 +224,7 @@ class FrontendController extends Controller
         $draft->fill($validatedData);
         $draft->is_water = $request->input('is_water');
         $draft->water_need_qty = $request->input('water_need_qty');
+        $draft->technology_price = $request->input('technology_price');
         $draft->purpose = $request->input('purpose');
         $draft->budget = $request->input('budget');
         $draft->start_date = $request->input('start_date');
@@ -305,7 +296,7 @@ class FrontendController extends Controller
         }
         $data = Draft::where('draft_id', '=', $draft_id)->first();
         // $this->sendEmail(Auth::user(), $data);
-        return redirect(route(Auth::user()->role . '-create-form', ['form' => 'home']));
+        return redirect(route(Auth::user()->role . '-history'));
 
     }
 
@@ -327,6 +318,7 @@ class FrontendController extends Controller
         // // ->groupBy('picture_id', 'technology_id')
         //     ->get();
         // // dd($equipment_assignment);
+        $layer = [];
         $technologies = DB::table('technologies AS t')
             ->join('pictures AS p', function ($join) {
                 $join->whereRaw("find_in_set(p.id, t.picture)");
@@ -449,5 +441,31 @@ class FrontendController extends Controller
     public function sendEmail($thisUser, $thisDraft){
         Mail::to($thisUser['email'])
             ->send(new verifyUser($thisUser, $thisDraft));
+    }
+
+    public function dataAjaxTechnologySearch(Request $request)
+    {
+        $data = [];
+        if ($request->has('q')) {
+            $service = $request->q;
+            $name = $request->search;
+            $data = Technology::where('service', 'LIKE', "$service")
+                ->where('name', 'LIKE', "%$name%")
+                ->get();
+            foreach ($data as $key => $value) {
+                $picture_array = [];
+                $picture_id = explode(",", $value->picture);
+                foreach ($picture_id as $pic) {
+                    $picture_data = Picture::where('id', '=', $pic)->first();
+                    $picture_array[] = '/' . $picture_data->path . '/picture/' . $picture_data->name;
+                }
+                $data[$key]->picture_id = implode(",", $picture_id);
+                $data[$key]->picture_name = implode(",", $picture_array);
+            }
+        } else {
+            $data = Technology::latest()->paginate(1);
+        }
+
+        return response()->json($data);
     }
 }

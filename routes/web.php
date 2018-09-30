@@ -74,10 +74,10 @@ function()
     //frontend
     Route::group(['middleware' => ['sale']], function () {
         Route::get('/', function () {
-            return redirect('/sale/home');
+            return redirect('/sale/customer');
         });
         Route::get('/sale', function () {
-            return redirect('/sale/home');
+            return redirect('/sale/customer');
         });
 
         Route::get('/sale/customer-create', 'FrontendController@createCustomer')->name('sale-customer-create');
@@ -87,6 +87,8 @@ function()
                 ->name('sale-load-video');
         Route::get('/sale/load-equipment-assignment', 'FrontendController@equipment_assignment')
                 ->name('sale-load-equipment-assignment');
+
+        Route::get('/sale/seach-technology', 'FrontendController@dataAjaxTechnologySearch')->name('sale-search-technology');
 
         Route::get('/sale/generate-pdf','FrontendController@generate_pdf')->name('sale-generate-pdf');
         Route::get('/sale/draft-excel','FrontendController@export')->name('sale-draft-excel');

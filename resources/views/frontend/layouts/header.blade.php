@@ -19,7 +19,7 @@
                     <a href="{{ route(Auth::user()->role . '-history') }}" class="historyButton">@lang('message.history')</a>
                 </li>
                 <li>
-                    <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'home']) }}" class="draftButton">
+                    <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'customer']) }}" class="draftButton">
                         @lang('message.draft-solution')
                     </a>
                 </li>

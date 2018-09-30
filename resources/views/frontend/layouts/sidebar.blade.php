@@ -15,24 +15,12 @@
             </div>
         </div>
 
-        <!-- search form (Optional) -->
-        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-            <input type="text" name="q" class="form-control" placeholder="Search...">
-            <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-                </span>
-            </div>
-        </form>
-        <!-- /.search form -->
-
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">HEADER</li>
+            <li class="header">Menu</li>
             <!-- Optionally, you can add icons to the links -->
             <li>
-                <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'home']) }}">
+                <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'customer']) }}">
                     <i class="fa fa-link"></i> <span>Create draft</span>
                 </a>
             </li>

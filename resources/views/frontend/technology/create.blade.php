@@ -46,15 +46,16 @@
                                             </a>
                                         </div>
                                         <div class="form-group {{ $errors->has('is_water.' . $item->id) ? 'has-error' : ''}}">
-                                            <label class="control-label">{{ 'ใช้น้ำประปาของ East water : ' }}</label>
-                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-1" value="1" {{ ((isset($draft->is_water) && $draft->is_water[$item->id] == 1)) ? "checked" : "" }} required>
-                                            <label for="is-water-1" class="control-label">{{ 'ใช้' }}</label>
-                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-0" value="0" {{ ((isset($draft->is_water) && $draft->is_water[$item->id] == 0)) ? "checked" : "" }} required>
-                                            <label for="is-water-0" class="control-label">{{ 'ไม่ใช้' }}</label>
+                                            <label class="control-label">{{ 'คุณต้องการติดต่อท่อส่งน้ำหรือไม่ : ' }}</label>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-0" value="0" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((!isset($draft->is_water) or $draft->is_water[$item->id] == 0)) ? "checked" : "" }} required>
+                                            <label for="is-water-0" class="control-label">{{ 'ไม่' }}</label>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-1" value="1" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((isset($draft->is_water) && $draft->is_water[$item->id] == 1)) ? "checked" : "" }} required>
+                                            <label for="is-water-1" class="control-label">{{ 'ใช่' }}</label>
                                         </div>
                                         <div class="form-group {{ $errors->has('water_need_qty.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'ปริมาณความต้องการใช้น้ำ' }}</label>
                                             <input type="text" name="water_need_qty[{{ $item->id }}]" id="water-need-qty-{{ $item->id }}" onchange="pipe_calculate('{{ $item->id }}'); fast_calculate('{{ $item->id }}');" value="{{ $draft->water_need_qty[$item->id] or old('water_need_qty.' . $item->id) }}" class="form-control" required>
+                                            <input type="hidden" name="technology_price[{{ $item->id }}]" value="{{ $draft->technology_price[$item->id] or $item->price }}">
                                         </div>
                                         <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
@@ -88,7 +89,7 @@
                                             <label class="control-label">{{ 'อื่นๆ' }}</label>
                                             <textarea name="other[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->other[$item->id] or old('other.' . $item->id) }}</textarea>
                                         </div>
-                                        <div class="row">
+                                        <div class="row {{ ((!isset($draft->is_water) or $draft->is_water[$item->id] == 0)) ? 'hidden' : '' }}" id="box-is-water-{{ $item->id }}">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">{{ 'ตำแหน่งอ่างเก็บน้ำ' }}</label>
@@ -153,9 +154,9 @@
                                                 </div>
                                                 <div class="form-group {{ $errors->has('labor_cost.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ค่าแรง : ' }}</label>
-                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" onclick="total_calculate('{{ $item->id }}')" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }} required>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" onclick="total_calculate('{{ $item->id }}')" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }}>
                                                     <label for="is-cost-1" class="control-label">{{ 'รวม' }}</label>
-                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" onclick="total_calculate('{{ $item->id }}')" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }} required>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" onclick="total_calculate('{{ $item->id }}')" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }}>
                                                     <label for="is-cost-0" class="control-label">{{ 'ไม่รวม' }}</label>
                                                 </div>
                                                 <div class="row">
@@ -302,7 +303,7 @@
                 $("#modal-video #show-thumbnail").load("{{ route(Auth::user()->role . '-load-video') }}", 'id=' + id, 
                 function(){}); 
             });
-        })
+        });
 
         function set_resercoir(value, id) {
             var reservoir = value.split(',');
@@ -314,7 +315,7 @@
         function pipe_calculate(id) {
             var pipe = parseFloat($('#water-need-qty-' + id).val());
             var pipe_need = Math.sqrt(4*(pipe/(24*60*60)/(1*Math.PI)));
-            $('#pipe-size-need-' + id).val(pipe_need.toFixed(3));
+            $('#pipe-size-need-' + id).val(is_nan(pipe_need.toFixed(3)));
         }
 
         function fast_calculate(id) {
@@ -325,7 +326,8 @@
                 fast_flow = (water_need/(24*60*60))/(Math.PI*(Math.pow(pipe_size, 2)/4)),
                 pipe_cost = remainder(parseFloat(pipe_select[3]) * distance);
 
-            
+            pipe_cost = is_nan(pipe_cost);
+            fast_flow = is_nan(fast_flow);
             $('#pipe-select-' + id).val(pipe_select[0]);
             $('#pipe-cost-' + id).val(pipe_cost);
             $('#fast-flow-' + id).val(fast_flow.toFixed(3));
@@ -346,7 +348,7 @@
                 pipe = parseFloat($('#pipe-setup-price-' + id).val()),
                 distance = parseFloat($('#distance-' + id).val());
                 cost = parseFloat($('#pipe-cost-' + id).val()) * value;
-            $('#total-price-' + id).val((pipe + cost).toFixed(2));
+            $('#total-price-' + id).val(is_nan((pipe + cost).toFixed(2)));
         }
 
         function split_pipe(id, pipe) {
@@ -362,7 +364,23 @@
                 result = remainder + '0';
             else
                 result =  Math.round( (parseInt(total) / 10) ) * 10;
-            return result;
+            return is_nan(result);
+        }
+
+        function is_water(value, id) {
+            var is_water = value;
+            if (is_water == 1) {
+                $('#box-is-water-' + id).removeClass('hidden');
+            } else {
+                $('#box-is-water-' + id).addClass('hidden');
+            }
+        }
+
+        function is_nan(number) {
+            if (isNaN(number)) {
+                return 0;
+            }
+            return number;
         }
     </script>
 @endsection

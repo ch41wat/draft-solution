@@ -39,6 +39,7 @@
                                     <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
                                     <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control" readonly>{{ $draft->purpose[$item->id] or '' }}</textarea>
                                 </div>
+                                @if ($draft->is_water[$item->id] > 0)
                                 <div class="form-group">
                                     <label class="control-label">{{ 'ตำแหน่งโรงงาน' }}</label>
                                 </div>
@@ -56,6 +57,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                                 <div class="form-group {{ $errors->has('water_qty.' . $item->id) ? 'has-error' : ''}}">
                                     <label class="control-label">{{ 'ปริมาณน้ำที่ต้องการ' }}</label>
                                     <input type="text" name="water_qty[{{ $item->id }}]" value="{{ $draft->water_need_qty[$item->id] or '' }}" class="form-control" readonly>
@@ -64,6 +66,7 @@
                                     <label class="control-label">{{ 'ขนาดท่อ' }}</label>
                                     <input type="text" name="pipe_size_need[{{ $item->id }}]" value="{{ $draft->pipe_size_need[$item->id] or '' }}" class="form-control" readonly>
                                 </div>
+                                @if ($draft->is_water[$item->id] > 0)
                                 <div class="form-group {{ $errors->has('labor_cost.' . $item->id) ? 'has-error' : ''}}">
                                     <label class="control-label">{{ 'ค่าแรง : ' }}</label>
                                     <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }} onclick="return false;">
@@ -91,6 +94,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                             <div class="col-md-12">
                                 <table class="table table-bordered">
@@ -114,17 +118,18 @@
                                     </tbody>
                                     <tfoot>
                                         @php
-                                            $total = $eqm->technology->price * $draft->water_need_qty[$item->id];
+                                            $total_cost = 0;
+                                            $total = $draft->technology_price[$item->id] * $draft->water_need_qty[$item->id];
                                         @endphp
                                         <tr class="bg-danger">
                                             <th></th>
                                             <th>Total</th>
                                             @if ($draft->is_water[$item->id] > 0)
-                                                @php $total = $draft->pipe_setup_price[$item->id]; @endphp
-                                            @endif
-                                            @php
+                                                @php 
+                                                $total = $draft->pipe_setup_price[$item->id]; 
                                                 $total_cost = $draft->pipe_cost[$item->id] * $draft->labor_cost[$item->id];
-                                            @endphp
+                                                @endphp
+                                            @endif
                                             <th>{{ number_format(($total + $total_cost), 2) }}</th>
                                             <th>บาท</th>
                                         </tr>
