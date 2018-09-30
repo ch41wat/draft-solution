@@ -35,7 +35,7 @@ class FrontendController extends Controller
             ], [
                 'link' => 'draft',
                 'name' => 'สรุปรายละเอียด',
-            ], 
+            ],
         ];
         $draft = $request->session()->get('draft');
         if ($form == 'home') {
@@ -48,14 +48,14 @@ class FrontendController extends Controller
                 $join->whereRaw("find_in_set(p.id, t.picture)");
             })
             ->select(
-                't.id', 't.name', 't.video', 't.picture', 't.service',
+                't.id', 't.name', 't.video', 't.picture', 't.service', 't.price',
                 DB::raw('GROUP_CONCAT(p.name) AS picture_name')
             )
-            ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service')
+            ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service', 't.price')
             ->orderBy('p.id')
             ->where('t.service', 'LIKE', (isset($draft->service)) ? $draft->service : '%')
             ->get();
-        return view("frontend.$form.create", compact(['step_form', 'draft', 'service', 'technology']));
+        return view("frontend.$form.create", compact(['step_form', 'draft', 'service', 'technology' ,'price']));
     }
 
     public function service(Request $request, $array)
@@ -363,7 +363,7 @@ class FrontendController extends Controller
             ->orWhere('t.id', '=', $request->id)
             ->orderBy('v.id')
             ->get();
-            
+
         if ($request->ajax()) {
             return view('frontend.video.load', ['videos' => $videos])->render();
         }
@@ -404,7 +404,7 @@ class FrontendController extends Controller
         return $pdf->download(time() . '.pdf');
     }
 
-    public function export(Request $request) 
+    public function export(Request $request)
     {
         $draft = $request->session()->get('draft');
         $query = DB::table('technologies AS t')

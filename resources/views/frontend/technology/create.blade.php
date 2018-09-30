@@ -195,7 +195,21 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            
+                                                <div class="row">
+                                                  <div class="col-md-6">
+                                                    <div class="form-group {{ $errors->has('price.' . $item->id) ? 'has-error' : ''}}">
+                                                      <label class="control-label">{{ 'ราคาระบบ' }}</label>
+                                                      <input type="text" name="technology-id-{{ $item->id }}" id="technology-price-{{ $item->id }}" value="{{ $item->price }}" class="form-control" readonly>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                    <div class="form-group {{ $errors->has('pipe_price.' . $item->id) ? 'has-error' : ''}}">
+                                                        <label class="control-label">{{ 'ราคารวม' }}</label>
+                                                        <input type="text" name="pipe_price[{{ $item->id }}]" id="pipe-price-{{ $item->id }}"  class="form-control" readonly>
+                                                    </div>
+                                                  </div>
+                                                </div>
+
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -220,7 +234,7 @@
                                                                     $('#latitude-{{ $item->id }}').val(coords[0]);
                                                                     $('#longitude-{{ $item->id }}').val(coords[1]);
                                                                     var distance = ymaps.coordSystem.geo.getDistance(
-                                                                        // start location 
+                                                                        // start location
                                                                         [$('#reservoir-latitude-{{ $item->id }}').val(), $('#reservoir-longitude-{{ $item->id }}').val()],
                                                                         [coords[0], coords[1]],
                                                                     );
@@ -315,8 +329,8 @@
         $(function () {
             $('#modal-video').on('show.bs.modal', function (e) {
                 var id = $(e.relatedTarget).data('technology');
-                $("#modal-video #show-thumbnail").load("{{ route(Auth::user()->role . '-load-video') }}", 'id=' + id, 
-                function(){}); 
+                $("#modal-video #show-thumbnail").load("{{ route(Auth::user()->role . '-load-video') }}", 'id=' + id,
+                function(){});
             });
         });
 
@@ -375,7 +389,7 @@
 
         function remainder(total) {
             var result = "";
-            var remainder = Math.floor( (parseInt(total) / 10) );	
+            var remainder = Math.floor( (parseInt(total) / 10) );
             if((parseInt(total) % 10) <= 5)
                 result = remainder + '0';
             else
