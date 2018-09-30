@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Draft Solution'),
+    'name' => env('APP_NAME', 'e-Catalog'),
 
     /*
     |--------------------------------------------------------------------------
