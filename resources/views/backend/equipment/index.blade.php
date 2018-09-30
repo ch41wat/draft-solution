@@ -19,6 +19,7 @@
                 <th>name</th>
                 <th>detail</th>
                 <th>picture</th>
+                <th>Tools</th>
             </tr>
         </thead>
         <tbody>

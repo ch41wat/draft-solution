@@ -19,6 +19,7 @@ Reservoir
                 <th>name</th>
                 <th>latitude</th>
                 <th>longitude</th>
+                <th>Tools</th>
             </tr>
         </thead>
         <tbody>

@@ -65,6 +65,7 @@ class TechnologyController extends Controller
             'video' => 'required|array',
             'video.*' => 'required',
             'service' => 'required',
+            'price' => 'required',
         ]);
 
         $technology = new technology();
@@ -77,6 +78,7 @@ class TechnologyController extends Controller
         $technology->picture = $request->input('picture');
         $technology->name = $request->get('name');
         $technology->service = $request->get('service');
+        $technology->price = $request->get('price');
 
         $technology->save();
         return redirect('/admin/technology');
@@ -129,14 +131,14 @@ class TechnologyController extends Controller
 
         $technology = Technology::findOrFail($id);
         $technology->update($requestData);
-        
+
         if (count($request->input('video')) > 0) {
             $technology->video = implode(",", $request->input('video'));
         }
         else if (count($request->input('picture')) > 0) {
             $technology->picture = implode(",", $request->input('picture'));
         }
-        
+
 
         return redirect('admin/technology')->with('flash_message', 'Technology updated!');
     }

@@ -20,6 +20,7 @@
                 <th>type</th>
                 <th>file</th>
                 <th>url</th>
+                <th>Tools</th>
             </tr>
         </thead>
         <tbody>

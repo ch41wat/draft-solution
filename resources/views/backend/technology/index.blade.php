@@ -20,6 +20,8 @@
                 <th>picture</th>
                 <th>video</th>
                 <th>service</th>
+                <th>price</th>
+                <th>Tools</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +32,7 @@
                 <td>{{ $item->picture }}</td>
                 <td>{{ $item->video }}</td>
                 <td>{{ $item->service }}</td>
+                <td>{{ $item->price }}</td>
                 <td>
                     <a href="{{ url('/admin/technology/' . $item->id . '/edit') }}" title="Edit Technoogy"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 

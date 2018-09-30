@@ -18,6 +18,7 @@
                 <th>No.</th>
                 <th>Name</th>
                 <th>Path</th>
+                <th>Tools</th>
             </tr>
         </thead>
         <tbody>
