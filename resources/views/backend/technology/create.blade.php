@@ -72,7 +72,7 @@
                 items.forEach(function(item, key) {
                     var data = item.split('|');
                     itemsID[key] = data[0];
-                    itemsImg[key] = '<div class="col-md-12 col-xs-12" style="background-image: url({{ asset('storage/uploads/') }}' + data[1] + '); background-size: 100% 100%; background-repeat: no-repeat; min-height: 390px; width: 100%; margin-bottom: 10px;">' +
+                    itemsImg[key] = '<div class="col-md-12 col-xs-12" style="background-image: url({{ asset('storage/uploads/') }}' + data[1] + '); background-size: 100% 100%; background-repeat: no-repeat; min-height: 400px; width: 100%; margin-bottom: 10px;">' +
                         get_layer(data[0], 'disabled') +
                     '</div>';
                 });

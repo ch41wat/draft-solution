@@ -91,7 +91,7 @@
                             var pictures_id = item['picture_id'].split(','),
                                 pictures_name = item['picture_name'].split(',');
                             pictures_id.forEach(function(id, key) {
-                                content += '<div class="col-md-12 col-xs-12" style="background-image: url({{ asset('storage/uploads') }}' + pictures_name[key] + '); background-size: 100% 100%; background-repeat: no-repeat; min-height: 390px; width: 100%; margin-bottom: 10px;">' +
+                                content += '<div class="col-md-12 col-xs-12" style="background-image: url({{ asset('storage/uploads') }}' + pictures_name[key] + '); background-size: 100% 100%; background-repeat: no-repeat; min-height: 400px; width: 100%; margin-bottom: 10px;">' +
                                     get_layer(id, '') +
                                 '</div>' + 
                                 '<input type="hidden" name="picture_id[]" value="' + id + '">';

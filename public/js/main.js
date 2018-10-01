@@ -1,9 +1,9 @@
 function get_layer(id, disabled) {
     var column = '', layer = 1;
-    for (var i = 1; i <= 3; i++) {
+    for (var i = 1; i <= 4; i++) {
         column += '<div class="row">';
-        for (var j = 1; j <= 6; j++) {
-            column += '<div class="col-md-2 col-xs-2" style="min-height: 130px; border: 1px solid #202020;">' +
+        for (var j = 1; j <= 12; j++) {
+            column += '<div class="col-md-1 col-xs-1" style="min-height: 98px; border: 1px solid #202020;">' +
                 '<div class="row">' +
                     '<a href="#" class="btn btn-link ' + disabled + '" id="link-' + id + '-' + layer + '" data-toggle="modal" data-target="#modal-layer" data-image="' + id + '" data-layer="' + layer + '">' + 
                         layer + 
