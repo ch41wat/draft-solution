@@ -46,10 +46,10 @@
                                             </a>
                                         </div>
                                         <div class="form-group {{ $errors->has('is_water.' . $item->id) ? 'has-error' : ''}}">
-                                            <label class="control-label">{{ 'คุณต้องการติดต่อท่อส่งน้ำหรือไม่ : ' }}</label>
-                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-0" value="0" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((!isset($draft->is_water) or $draft->is_water[$item->id] == 0)) ? "checked" : "" }} required>
+                                            <label class="control-label">{{ 'คุณต้องการติดตั้งท่อส่งน้ำหรือไม่ : ' }}</label>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-0" value="0" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((!isset($draft->is_water[$item->id]) or $draft->is_water[$item->id] == 0)) ? "checked" : "" }} required>
                                             <label for="is-water-0" class="control-label">{{ 'ไม่' }}</label>
-                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-1" value="1" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((isset($draft->is_water) && $draft->is_water[$item->id] == 1)) ? "checked" : "" }} required>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-1" value="1" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((isset($draft->is_water[$item->id]) && $draft->is_water[$item->id] == 1)) ? "checked" : "" }} required>
                                             <label for="is-water-1" class="control-label">{{ 'ใช่' }}</label>
                                         </div>
                                         <div class="form-group {{ $errors->has('water_need_qty.' . $item->id) ? 'has-error' : ''}}">
@@ -89,7 +89,7 @@
                                             <label class="control-label">{{ 'อื่นๆ' }}</label>
                                             <textarea name="other[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->other[$item->id] or old('other.' . $item->id) }}</textarea>
                                         </div>
-                                        <div class="row {{ ((!isset($draft->is_water) or $draft->is_water[$item->id] == 0)) ? 'hidden' : '' }}" id="box-is-water-{{ $item->id }}">
+                                        <div class="row {{ ((!isset($draft->is_water[$item->id]) or $draft->is_water[$item->id] == 0)) ? 'hidden' : '' }}" id="box-is-water-{{ $item->id }}">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">{{ 'ตำแหน่งอ่างเก็บน้ำ' }}</label>
@@ -99,7 +99,7 @@
                                                     <select class="form-control" name="reservoir_id[{{ $item->id }}]" onchange="set_resercoir(this.value, '{{ $item->id }}')">
                                                         <option value=""></option>
                                                         @foreach ($reservoir as $reser)
-                                                            <option value="{{ $reser->id . ',' . $reser->latitude . ',' . $reser->longitude }}" {{ ((isset($draft->reservoir) && $draft->reservoir[$item->id] == $reser->id)) ? "selected" : "" }}>
+                                                            <option value="{{ $reser->id . ',' . $reser->latitude . ',' . $reser->longitude }}" {{ ((isset($draft->reservoir[$item->id]) && $draft->reservoir[$item->id] == $reser->id)) ? "selected" : "" }}>
                                                                 {{ $reser->name }}
                                                             </option>
                                                         @endforeach
@@ -140,7 +140,7 @@
                                                             <select class="form-control" name="pipe_id[{{ $item->id }}]" id="pipe-id-{{ $item->id }}" onchange="fast_calculate('{{ $item->id }}')">
                                                                 <option value=""></option>
                                                                 @foreach ($pipes as $pipe)
-                                                                    <option value="{{ $pipe->id . ',' . $pipe->size . ',' . $pipe->price . ',' . $pipe->labor_cost }}" {{ ((isset($draft->pipe_select) && $draft->pipe_select[$item->id] == $pipe->id) or old('pipe_id.' . $item->id) == $pipe->id) ? "selected" : "" }}>
+                                                                    <option value="{{ $pipe->id . ',' . $pipe->size . ',' . $pipe->price . ',' . $pipe->labor_cost }}" {{ ((isset($draft->pipe_select[$item->id]) && $draft->pipe_select[$item->id] == $pipe->id) or old('pipe_id.' . $item->id) == $pipe->id) ? "selected" : "" }}>
                                                                         {{ $pipe->name }}
                                                                     </option>
                                                                 @endforeach

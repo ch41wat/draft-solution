@@ -18,7 +18,7 @@
                                 <div class="btn-group btn-group-lg" data-toggle="buttons">
                                     @foreach ($service as $item)
                                     <label class="btn {{ (isset($draft->service) && $draft->service == $item->id) ? "active" : "" }}">
-                                        <input type="radio" name="service" id="name-{{ $item->id }}" value="{{ $item->id or ''}}" {{ (isset($draft->service) && $draft->service == $item->id) ? "checked" : "" }} required> 
+                                        <input type="radio" name="service" id="name-{{ $item->id }}" value="{{ $item->id or ''}}" {{ (isset($draft->service) && $draft->service == $item->id) ? "checked" : "" }}> 
                                         {{ $item->name or ''}}
                                     </label>
                                     @endforeach
@@ -82,12 +82,28 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal-alert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Alert</h4>
+                </div>
+                <div class="modal-body">
+                    <p>กรุณาเลือกเทคโนโลยี</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">ตกลง</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {{-- <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script> --}}
     <script type="text/javascript">
         $(function () {
             document.getElementById('service-form').onsubmit = function() {
                 if($('input:checkbox[name="technology_id[]"]:checked').length === 0){
-                    alert( 'กรุณาเลือกเทคโนโลยี' );
+                    $('#modal-alert').modal({backdrop: 'static'});
                     return false; // don't submit
                 }
                 return true; // submit

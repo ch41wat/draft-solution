@@ -123,7 +123,7 @@ class FrontendController extends Controller
             if ($draft->reservoir[$item]) {
                 $reservoir[$item] = Reservoir::findOrFail($draft->reservoir[$item]);
             }
-            $service[$item] = Service::findOrFail($draft->service);
+            $service[$item] = Service::findOrFail($draft->service[$item]);
             $equipment_assignment[$item] = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
                 ->where('technology_id', '=', $item)
                 ->get();
@@ -198,14 +198,20 @@ class FrontendController extends Controller
     public function postCreateService(Request $request)
     {
         $validatedData = $request->validate([
-            'service' => 'required',
             'technology_id' => 'required|array',
             'technology_id.*' => 'required',
         ]);
 
         $draft = $request->session()->get('draft');
         $draft->fill($validatedData);
-        $draft->service = $request->input('service');
+        $service = [];
+        if (count($request->input('technology_id')) > 0) {
+            foreach ($request->input('technology_id') as $item) {
+                $technology = Technology::findOrFail($item);
+                $service[$item] = $technology->service;
+            }
+        }
+        $draft->service = $service;
         $draft->technology_id = $request->input('technology_id');
         $draft->draft_level = 2;
         $request->session()->put('draft', $draft);

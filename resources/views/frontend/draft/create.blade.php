@@ -19,7 +19,6 @@
                     {{ csrf_field() }}
 
                     @foreach ($technology as $item)
-                    <h3>{{ strtoupper($service[$item->id]->name) }}</h3>
                     <div class="box box-default box-solid">
                         <div class="box-header with-border">
                             <h3 class="box-title">Technology: {{ $item->name }}</h3>
@@ -35,6 +34,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <h3>{{ strtoupper($service[$item->id]->name) }}</h3>
                                 <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                     <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
                                     <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control" readonly>{{ $draft->purpose[$item->id] or '' }}</textarea>
