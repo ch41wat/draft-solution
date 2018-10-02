@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDraftsTable extends Migration
+class CreateDraftTable extends Migration
 {
     /**
      * Run the migrations.
@@ -27,13 +27,13 @@ class CreateDraftsTable extends Migration
             $table->string('longitude')->nullable();
             $table->float('pipe_size_need')->nullable();
             $table->float('pipe_size_select')->nullable();
-            $table->float('pipe_setup_price')->nullable();
+            $table->biginteger('pipe_setup_price')->nullable();
             $table->string('technology')->nullable();
             $table->string('sale_name')->nullable();
             $table->string('company')->nullable();
             $table->integer('total_price')->nullable();
             $table->enum('cork_water',['0', '1'])->nullable();
-            $table->float('distance')->nullable();
+            $table->biginteger('distance')->nullable();
             $table->float('fast_flow')->nullable();
             $table->float('labor_cost')->nullable();
             $table->string('draft_id', 15);
@@ -47,6 +47,6 @@ class CreateDraftsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('drafts');
+        Schema::dropIfExists('draft');
     }
 }

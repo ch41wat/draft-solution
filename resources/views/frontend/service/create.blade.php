@@ -25,7 +25,12 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12 col-xs-12">
+                                <div class="col-md-6 col-xs-6">
+									<div class="form-inline form-group pull-left>
+										<label class="control-label" id="count-select">เลือก 0 เทคโนโลยี</label>
+									</div>
+								</div>
+								<div class="col-md-6 col-xs-6">
                                             <div class="form-inline form-group pull-right">
                                                 <label class="control-label">ค้นหา </label>
                                                 <input type="text" class="form-control" name="search" placeholder="เทคโนโลยี">
@@ -114,7 +119,10 @@
                 $("#modal-gallery #show-thumbnail").load("{{ route(Auth::user()->role . '-load-equipment-assignment') }}", 'id=' + id, 
                 function(){}); 
             });
-
+			$('input:checkbox[name="technology_id[]"]').click(function(){
+				var count = $('input:checkbox[name="technology_id[]"]:checked').length;
+				$('#count-select').text('เลือก' + count + ' เทคโนโลยี');
+			})
             $("input[type='radio']").change(function () {
                 $.ajax({
                     url: "{{ route('ajax-technology') }}",
