@@ -28,6 +28,8 @@
             });
 
             $('#modal-gallery-title').text('Technology: {{ $technologies[0]->name }}');
+			$('#modal-gallery-description').text('Description: {{ $technologies[0]->description }}');
+			
         })
     </script>
 {{-- {{ $equipment_assignment->links() }} --}}

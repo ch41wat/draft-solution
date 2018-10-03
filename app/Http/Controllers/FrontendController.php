@@ -329,7 +329,7 @@ class FrontendController extends Controller
             ->join('pictures AS p', function ($join) {
                 $join->whereRaw("find_in_set(p.id, t.picture)");
             })
-            ->select('t.id', 't.name', 't.service', 'p.id AS picture_id', 'p.name AS picture_name', 'p.path')
+            ->select('t.id', 't.name', 't.service', 't.description', 'p.id AS picture_id', 'p.name AS picture_name', 'p.path')
             ->orWhere('t.id', '=', $request->id)
             ->orderBy('t.id', 'p.id')
             ->get();

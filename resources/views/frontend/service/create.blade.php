@@ -82,6 +82,7 @@
                     <div id="show-thumbnail"></div>
                 </div>
                 <div class="modal-footer">
+					<h4 class="modal-title" id="modal-gallery-description" align="left"></h4>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>

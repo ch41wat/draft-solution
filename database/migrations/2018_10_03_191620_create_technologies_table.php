@@ -21,6 +21,7 @@ class CreateTechnologiesTable extends Migration
             $table->string('video')->nullable();
             $table->string('picture')->nullable();
             $table->string('service')->nullable();
+			$table->string('description')->nullable();
         });
     }
 

@@ -66,6 +66,7 @@ class TechnologyController extends Controller
             'video.*' => 'required',
             'service' => 'required',
             'price' => 'required',
+			'description' => 'required',
         ]);
 
         $technology = new technology();
@@ -79,6 +80,7 @@ class TechnologyController extends Controller
         $technology->name = $request->get('name');
         $technology->service = $request->get('service');
         $technology->price = $request->get('price');
+		$technology->description = $request->get('description');
 
         $technology->save();
         return redirect('/admin/technology');
@@ -141,6 +143,7 @@ class TechnologyController extends Controller
         $technology->name = $request->get('name');
         $technology->service = $request->get('service');
         $technology->price = $request->get('price');
+		$technology->description = $request->get('description');
         $technology->update();
 
         // else if (count($request->input('picture')) > 0) {
