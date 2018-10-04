@@ -234,7 +234,7 @@
                                                 <div class="form-group {{ $errors->has('fast_flow.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ความเร็วในการไหลของน้ำ(ตร.ม./วินาที)' }}</label>
                                                     <input type="text" name="fast_flow[{{ $item->id }}]" id="fast-flow-{{ $item->id }}" value="{{ $draft->fast_flow[$item->id] or old('fast_flow.' . $item->id) }}" class="form-control" readonly>
-                                                    <label class="control-label">{{ 'ความเร็วที่เหมาะสมคือ 1.00 - 2.50 ตร.ม./วินาที)' }}</label>
+                                                    <label>{{ 'ความเร็วที่เหมาะสมคือ 1.00 - 2.50 ตร.ม./วินาที)' }}</label>
                                                 </div>
                                                 <div class="form-group {{ $errors->has('labor_cost.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ค่าแรง : ' }}</label>
