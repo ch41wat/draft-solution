@@ -62,7 +62,7 @@ class EquipmentAssignmentController extends Controller
 
         $layer = 1;
         foreach ($request->get('picture_id') as $picture) {
-            for ($i = 1; $i <= 18; $i++) {
+            for ($i = 1; $i <= 60; $i++) {
                 if (!empty($request->get('layer_' . $picture . '_' . $i))) {
                     $equipment_assignment = new EquipmentAssignment();
                     $equipment_assignment->technology_id = $request->get('technology_id');
@@ -135,7 +135,7 @@ class EquipmentAssignmentController extends Controller
      */
     public function destroy($id)
     {
-        equipment - assignment::destroy($id);
+        equipmentAssignment::destroy($id);
 
         return redirect('admin/equipment-assignment')->with('flash_message', 'equipment-assignment deleted!');
     }

@@ -141,8 +141,8 @@
                     </div>
                     @endforeach
                     <div class="col-md-6 text-left">
-                        <a href="{{ route(Auth::user()->role . '-generate-pdf') }}" class="btn btn-warning">Export PDF</a>
-                        <a href="{{ route(Auth::user()->role . '-draft-excel') }}" class="btn btn-success">Export Excel</a>
+                        <a href="{{ route(Auth::user()->role . '-generate-pdf') }}" class="btn btn-warning">Preview</a>
+                        <!-- <a href="{{ route(Auth::user()->role . '-draft-excel') }}" class="btn btn-success">Export Excel</a> -->
                     </div>
                     <div class="col-md-6 text-right">
                         <a href="{{ route(Auth::user()->role . '-create-service-form', ['array' => $item->id]) }}" class="btn btn-danger">

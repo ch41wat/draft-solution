@@ -10,9 +10,17 @@
   | contains the "web" middleware group. Now create something great!
   |
  */
+ 
+ 
+//Route::get('/test1/{id}', function($id){
+	//return '...'.$id;
+//});
+ 
 Auth::routes();
 
 // all
+
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {
         return redirect('/admin');

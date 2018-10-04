@@ -56,12 +56,9 @@ class VideoController extends Controller
                 'video_file' => 'required|mimes:mp4,mov,ogg,flv,mov,avi,wmv|max:20000',
             ]);
             $video_file = $request->file('video_file');
-            $name = str_slug($request->video_name) . '.' . $video_file->getClientOriginalExtension();
-            $destinationPath = storage_path('/uploads/video/file');
-            $videoPath = $destinationPath . "/" . $name;
-            $video_file->move($destinationPath, $name);
+	    $name = date('Ymd') . '-' . time() . '.' . $video_file->getClientOriginalExtension();
+	    $video_file->storeAs("public/uploads/video/file/", $name);
             $video->video_file = $name;
-            $video->video_file = $request->get($destinationPath . 'video_name');
         }
 
         $video->video_name = $request->get('video_name');

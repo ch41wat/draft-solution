@@ -16,3 +16,14 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/test/{id}', function($id){
+	return '....'.$id;
+	
+});
+
+Route::get('/test1', 'WelcomeController@index');
+
+Route::get('/chklogin', 'HomeController@checkuser');
+
+//Route::get('/chklogin/{id}', ['uses' =>'HomeController@checkuser', 'user'=>'test']);
