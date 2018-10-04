@@ -45,20 +45,13 @@
                                                 <img src="{{ asset('storage/uploads/technology/picture/' . $images[0]) }}" style="width: 100%; min-height: 390px;">
                                             </a>
                                         </div>
-                                        <div class="form-group {{ $errors->has('is_water.' . $item->id) ? 'has-error' : ''}}">
-                                            <label class="control-label">{{ 'คุณต้องการติดตั้งท่อส่งน้ำหรือไม่ : ' }}</label>
-                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-0" value="0" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((!isset($draft->is_water[$item->id]) or $draft->is_water[$item->id] == 0)) ? "checked" : "" }} required>
-                                            <label for="is-water-0" class="control-label">{{ 'ไม่' }}</label>
-                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-1" value="1" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((isset($draft->is_water[$item->id]) && $draft->is_water[$item->id] == 1)) ? "checked" : "" }} required>
-                                            <label for="is-water-1" class="control-label">{{ 'ใช่' }}</label>
-                                        </div>
                                         <div class="form-group {{ $errors->has('water_need_qty.' . $item->id) ? 'has-error' : ''}}">
-                                            <label class="control-label">{{ 'ปริมาณความต้องการใช้น้ำ' }}</label>
+                                            <label class="control-label">{{ '*ปริมาณความต้องการใช้น้ำ' }}</label>
                                             <input type="text" name="water_need_qty[{{ $item->id }}]" id="water-need-qty-{{ $item->id }}" onchange="pipe_calculate('{{ $item->id }}'); fast_calculate('{{ $item->id }}');" value="{{ $draft->water_need_qty[$item->id] or old('water_need_qty.' . $item->id) }}" class="form-control" required>
                                             <input type="hidden" name="technology_price[{{ $item->id }}]" value="{{ $draft->technology_price[$item->id] or $item->price }}">
                                         </div>
                                         <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
-                                            <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
+                                            <label class="control-label">{{ '*จุดประสงค์ของการใช้' }}</label>
                                             <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control" required>{{ $draft->purpose[$item->id] or old('purpose.' . $item->id) }}</textarea>
                                         </div>
                                         <div class="form-group">
@@ -89,10 +82,98 @@
                                             <label class="control-label">{{ 'อื่นๆ' }}</label>
                                             <textarea name="other[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->other[$item->id] or old('other.' . $item->id) }}</textarea>
                                         </div>
+                                        <div class="form-group {{ $errors->has('is_water.' . $item->id) ? 'has-error' : ''}}">
+                                            <label class="control-label">{{ 'คุณต้องการติดตั้งท่อส่งน้ำหรือไม่ : ' }}</label>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-0" value="0" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((!isset($draft->is_water[$item->id]) or $draft->is_water[$item->id] == 0)) ? "checked" : "" }} required>
+                                            <label for="is-water-0" class="control-label">{{ 'ไม่' }}</label>
+                                            <input type="radio" name="is_water[{{ $item->id }}]" id="is-water-1" value="1" onclick="is_water(this.value, '{{ $item->id }}')" {{ ((isset($draft->is_water[$item->id]) && $draft->is_water[$item->id] == 1)) ? "checked" : "" }} required>
+                                            <label for="is-water-1" class="control-label">{{ 'ใช่' }}</label>
+                                        </div>
                                         <div class="row {{ ((!isset($draft->is_water[$item->id]) or $draft->is_water[$item->id] == 0)) ? 'hidden' : '' }}" id="box-is-water-{{ $item->id }}">
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label for="" class="control-label">{{ 'แผนที่' }}</label>
+                                                  <div id="map{{ $item->id }}" style="width:100%; height: 600px;"></div>
+                                                  <script type="text/javascript">
+                                                      $(function () {
+                                                          ymaps.ready(init{{ $item->id }});
+
+                                                          function init{{ $item->id }}() {
+                                                              var myPlacemark,
+                                                                  myMap = new ymaps.Map('map{{ $item->id }}', {
+                                                                      center: [13.757797803765193, 100.53866103124997],
+                                                                      zoom: 5
+                                                                  }, {
+                                                                      searchControlProvider: 'yandex#search'
+                                                                  });
+
+                                                              // Listening for a click on the map
+                                                              myMap.events.add('click', function (e) {
+                                                                  var coords = e.get('coords');
+                                                                  $('#latitude-{{ $item->id }}').val(coords[0]);
+                                                                  $('#longitude-{{ $item->id }}').val(coords[1]);
+                                                                  var distance = ymaps.coordSystem.geo.getDistance(
+                                                                      // start location
+                                                                      [$('#reservoir-latitude-{{ $item->id }}').val(), $('#reservoir-longitude-{{ $item->id }}').val()],
+                                                                      [coords[0], coords[1]],
+                                                                  );
+                                                                  // alert(dis);
+                                                                  $('#distance-{{ $item->id }}').val(distance.toFixed(2));
+
+                                                                  // Moving the placemark if it was already created
+                                                                  if (myPlacemark) {
+                                                                      myPlacemark.geometry.setCoordinates(coords);
+                                                                  }
+                                                                  // Otherwise, creating it.
+                                                                  else {
+                                                                      myPlacemark = createPlacemark(coords);
+                                                                      myMap.geoObjects.add(myPlacemark);
+                                                                      // Listening for the dragging end event on the placemark.
+                                                                      myPlacemark.events.add('dragend', function () {
+                                                                          getAddress(myPlacemark.geometry.getCoordinates());
+                                                                      });
+                                                                  }
+                                                                  getAddress(coords);
+                                                              });
+
+                                                              // Creating a placemark
+                                                              function createPlacemark(coords) {
+                                                                  return new ymaps.Placemark(coords, {
+                                                                      iconCaption: 'searching...'
+                                                                  }, {
+                                                                      preset: 'islands#violetDotIconWithCaption',
+                                                                      draggable: true
+                                                                  });
+                                                              }
+
+                                                              // Determining the address by coordinates (reverse geocoding).
+                                                              function getAddress(coords) {
+                                                                  myPlacemark.properties.set('iconCaption', 'searching...');
+                                                                  ymaps.geocode(coords).then(function (res) {
+                                                                      var firstGeoObject = res.geoObjects.get(0);
+
+                                                                      myPlacemark.properties
+                                                                          .set({
+                                                                              // Forming a string with the object's data.
+                                                                              iconCaption: [
+                                                                                  // The name of the municipality or the higher territorial-administrative formation.
+                                                                                  firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                                                                                  // Getting the path to the toponym; if the method returns null, then requesting the name of the building.
+                                                                                  firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                                                                              ].filter(Boolean).join(', '),
+                                                                              // Specifying a string with the address of the object as the balloon content.
+                                                                              balloonContent: firstGeoObject.getAddressLine()
+                                                                          });
+                                                                  });
+                                                              }
+                                                          }
+                                                      })
+                                                  </script>
+                                              </div>
+                                          </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">{{ 'ตำแหน่งอ่างเก็บน้ำ' }}</label>
+                                                    <label class="control-label">{{ 'แนวเส้นท่อ' }}</label>
                                                     <input type="hidden" name="reservoir[{{ $item->id }}]" id="reservoir-{{ $item->id }}" value="{{ $draft->reservoir[$item->id] or old('reservoir.' . $item->id) }}">
                                                     <input type="hidden" name="reservoir_latitude[{{ $item->id }}]" id="reservoir-latitude-{{ $item->id }}" value="{{ $draft->reservoir_latitude[$item->id] or old('reservoir_latitude.' . $item->id) }}">
                                                     <input type="hidden" name="reservoir_longitude[{{ $item->id }}]" id="reservoir-longitude-{{ $item->id }}" value="{{ $draft->reservoir_longitude[$item->id] or old('reservoir_longitude.' . $item->id) }}">
@@ -106,7 +187,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label">{{ 'ตำแหน่งโรงงาน' }}</label>
+                                                    <label class="control-label">{{ 'ตำแหน่งโรงงานลูกค้า' }}</label>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -123,13 +204,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group {{ $errors->has('distance.' . $item->id) ? 'has-error' : ''}}">
-                                                    <label class="control-label">{{ 'ระยะทางจากอ่างเก็บน้ำ' }}</label>
+                                                    <label class="control-label">{{ 'ระยะทางจากอ่างเก็บน้ำ(กม.)' }}</label>
                                                     <input type="text" name="distance[{{ $item->id }}]" id="distance-{{ $item->id }}" value="{{ $draft->distance[$item->id] or old('distance.' . $item->id) }}" class="form-control" readonly>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('pipe_size_need.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'ขนาดท่อที่ต้องการ' }}</label>
+                                                            <label class="control-label">{{ 'ขนาดท่อที่ต้องการ(เมตร)' }}</label>
                                                             <input type="text" name="pipe_size_need[{{ $item->id }}]" id="pipe-size-need-{{ $item->id }}" value="{{ $draft->pipe_size_need[$item->id] or old('pipe_size_need.' . $item->id) }}" class="form-control" readonly>
                                                         </div>
                                                     </div>
@@ -150,23 +231,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group {{ $errors->has('pipe_price.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'ราคาท่อก่อนคำนวณ' }}</label>
-                                                            <input type="text" name="pipe_price[{{ $item->id }}]" id="pipe-price-{{ $item->id }}" value="{{ $draft->pipe_price[$item->id] or old('pipe_price.' . $item->id) }}" class="form-control" readonly>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group {{ $errors->has('pipe_cost_original.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'ค่าแรงก่อนคำนวณ' }}</label>
-                                                            <input type="text" name="pipe_cost_original[{{ $item->id }}]" id="pipe-cost-original-{{ $item->id }}" value="{{ $draft->pipe_cost_original[$item->id] or old('pipe_cost_original.' . $item->id) }}" class="form-control" readonly>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 <div class="form-group {{ $errors->has('fast_flow.' . $item->id) ? 'has-error' : ''}}">
-                                                    <label class="control-label">{{ 'ความเร็วในการไหลของน้ำ' }}</label>
+                                                    <label class="control-label">{{ 'ความเร็วในการไหลของน้ำ(ตร.ม./วินาที)' }}</label>
                                                     <input type="text" name="fast_flow[{{ $item->id }}]" id="fast-flow-{{ $item->id }}" value="{{ $draft->fast_flow[$item->id] or old('fast_flow.' . $item->id) }}" class="form-control" readonly>
+                                                    <label class="control-label">{{ 'ความเร็วที่เหมาะสมคือ 1.00 - 2.50 ตร.ม./วินาที)' }}</label>
                                                 </div>
                                                 <div class="form-group {{ $errors->has('labor_cost.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ค่าแรง : ' }}</label>
@@ -174,6 +242,20 @@
                                                     <label for="is-cost-1" class="control-label">{{ 'รวม' }}</label>
                                                     <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" onclick="total_calculate('{{ $item->id }}')" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }}>
                                                     <label for="is-cost-0" class="control-label">{{ 'ไม่รวม' }}</label>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group {{ $errors->has('pipe_price.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ราคาท่อ(เมตร)' }}</label>
+                                                            <input type="text" name="pipe_price[{{ $item->id }}]" id="pipe-price-{{ $item->id }}" value="{{ $draft->pipe_price[$item->id] or old('pipe_price.' . $item->id) }}" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group {{ $errors->has('pipe_cost_original.' . $item->id) ? 'has-error' : ''}}">
+                                                            <label class="control-label">{{ 'ค่าแรง(เมตร)' }}</label>
+                                                            <input type="text" name="pipe_cost_original[{{ $item->id }}]" id="pipe-cost-original-{{ $item->id }}" value="{{ $draft->pipe_cost_original[$item->id] or old('pipe_cost_original.' . $item->id) }}" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-4">
@@ -190,113 +272,31 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group {{ $errors->has('total_price.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'รวม' }}</label>
+                                                            <label class="control-label">{{ 'รวม(บาท)' }}</label>
                                                             <input type="text" name="total_price[{{ $item->id }}]" id="total-price-{{ $item->id }}" value="{{ $draft->total_price[$item->id] or old('total_price.' . $item->id) }}" class="form-control" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                  <div class="col-md-6">
-                                                    <div class="form-group {{ $errors->has('price.' . $item->id) ? 'has-error' : ''}}">
-                                                      <label class="control-label">{{ 'ราคาระบบ' }}</label>
-                                                      <input type="text" name="technology-id-{{ $item->id }}" id="technology-price-{{ $item->id }}" value="{{ $item->price }}" class="form-control" readonly>
-                                                    </div>
-                                                  </div>
-                                                  <div class="col-md-6">
-                                                    <div class="form-group {{ $errors->has('pipe_price.' . $item->id) ? 'has-error' : ''}}">
-                                                        <label class="control-label">{{ 'ราคารวม' }}</label>
-                                                        <input type="text" name="pipe_price[{{ $item->id }}]" id="pipe-price-{{ $item->id }}"  class="form-control" readonly>
-                                                    </div>
-                                                  </div>
-                                                </div>
+
 
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="" class="control-label">{{ 'แผนที่' }}</label>
-                                                    <div id="map{{ $item->id }}" style="width:100%; height: 300px;"></div>
-                                                    <script type="text/javascript">
-                                                        $(function () {
-                                                            ymaps.ready(init{{ $item->id }});
-
-                                                            function init{{ $item->id }}() {
-                                                                var myPlacemark,
-                                                                    myMap = new ymaps.Map('map{{ $item->id }}', {
-                                                                        center: [13.757797803765193, 100.53866103124997],
-                                                                        zoom: 5
-                                                                    }, {
-                                                                        searchControlProvider: 'yandex#search'
-                                                                    });
-
-                                                                // Listening for a click on the map
-                                                                myMap.events.add('click', function (e) {
-                                                                    var coords = e.get('coords');
-                                                                    $('#latitude-{{ $item->id }}').val(coords[0]);
-                                                                    $('#longitude-{{ $item->id }}').val(coords[1]);
-                                                                    var distance = ymaps.coordSystem.geo.getDistance(
-                                                                        // start location
-                                                                        [$('#reservoir-latitude-{{ $item->id }}').val(), $('#reservoir-longitude-{{ $item->id }}').val()],
-                                                                        [coords[0], coords[1]],
-                                                                    );
-                                                                    // alert(dis);
-                                                                    $('#distance-{{ $item->id }}').val(distance.toFixed(2));
-
-                                                                    // Moving the placemark if it was already created
-                                                                    if (myPlacemark) {
-                                                                        myPlacemark.geometry.setCoordinates(coords);
-                                                                    }
-                                                                    // Otherwise, creating it.
-                                                                    else {
-                                                                        myPlacemark = createPlacemark(coords);
-                                                                        myMap.geoObjects.add(myPlacemark);
-                                                                        // Listening for the dragging end event on the placemark.
-                                                                        myPlacemark.events.add('dragend', function () {
-                                                                            getAddress(myPlacemark.geometry.getCoordinates());
-                                                                        });
-                                                                    }
-                                                                    getAddress(coords);
-                                                                });
-
-                                                                // Creating a placemark
-                                                                function createPlacemark(coords) {
-                                                                    return new ymaps.Placemark(coords, {
-                                                                        iconCaption: 'searching...'
-                                                                    }, {
-                                                                        preset: 'islands#violetDotIconWithCaption',
-                                                                        draggable: true
-                                                                    });
-                                                                }
-
-                                                                // Determining the address by coordinates (reverse geocoding).
-                                                                function getAddress(coords) {
-                                                                    myPlacemark.properties.set('iconCaption', 'searching...');
-                                                                    ymaps.geocode(coords).then(function (res) {
-                                                                        var firstGeoObject = res.geoObjects.get(0);
-
-                                                                        myPlacemark.properties
-                                                                            .set({
-                                                                                // Forming a string with the object's data.
-                                                                                iconCaption: [
-                                                                                    // The name of the municipality or the higher territorial-administrative formation.
-                                                                                    firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
-                                                                                    // Getting the path to the toponym; if the method returns null, then requesting the name of the building.
-                                                                                    firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
-                                                                                ].filter(Boolean).join(', '),
-                                                                                // Specifying a string with the address of the object as the balloon content.
-                                                                                balloonContent: firstGeoObject.getAddressLine()
-                                                                            });
-                                                                    });
-                                                                }
-                                                            }
-                                                        })
-                                                    </script>
-                                                </div>
+                                            <div class="row" align="center">
+                                              <div class="col-md-4">
+                                                  <div class="form-group {{ $errors->has('total_price.' . $item->id) ? 'has-error' : ''}}">
+                                                      <label class="control-label">{{ 'ราคารวม' }}</label>
+                                                      <input type="text" name="total_price[{{ $item->id }}]" id="total-price-{{ $item->id }}" value="{{ $draft->total_price[$item->id] or old('total_price.' . $item->id) }}" class="form-control" readonly>
+                                                  </div>
+                                              </div>
                                             </div>
                                         </div>
+
                                     </div>
+
                                 </div>
                                 <!-- /.box-body -->
+
                             </div>
+
                             @endforeach
                             <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'service']) }}" class="btn btn-danger">
                                 {{ 'ย้อนกลับ' }}

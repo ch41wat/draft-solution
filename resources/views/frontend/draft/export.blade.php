@@ -76,7 +76,7 @@
         <div class="card">
             @if ($technology)
             @foreach ($technology as $item)
-            <h3>{{ strtoupper($service[$item->id]->name) }}</h3>
+            
             <div class="box box-default box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title">Technology: {{ $item->name }}</h3>

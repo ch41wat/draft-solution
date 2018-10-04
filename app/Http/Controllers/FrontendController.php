@@ -253,6 +253,7 @@ class FrontendController extends Controller
         $draft->fast_flow = $request->input('fast_flow');
         $draft->pipe_setup_price = $request->input('pipe_setup_price');
         $draft->total_price = $request->input('total_price');
+        $draft->last_price = $request->input('last_price');
         $draft->draft_level = 3;
         $request->session()->put('draft', $draft);
         return redirect(route(Auth::user()->role . '-draft'));
