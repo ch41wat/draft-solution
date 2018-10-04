@@ -12,7 +12,7 @@
             <i class="fa fa-plus"></i>
         </button>
         <input class="form-control" name="picture" type="hidden" id="picture" value="{{ $technology->picture or ''}}" >
-        <div id="img-thumbnail" style="min-height: 390px; margin: 5px auto; background-color: #ddd; padding: 0px; border: 1px solid #202020;"></div>
+        <div id="img-thumbnail" style="min-height: 400px; margin: 5px auto; background-color: #ddd; padding: 0px; border: 1px solid #202020;"></div>
         {!! $errors->first('picture', '<p class="help-block">:message</p>') !!}
     </div>
 
@@ -46,28 +46,36 @@
     </div>
 </div>
 
-<div class="form-group {{ $errors->has('service') ? 'has-error' : ''}}">
-    <label for="service" class="control-label">{{ 'Service' }}</label>
-    <select name="service" id="service" class="form-control">
-        @foreach ($service as $item)
-            <option value="{{ $item->id }}">{{ $item->name }}</option>
-        @endforeach
-    </select>
-    {!! $errors->first('service', '<p class="help-block">:message</p>') !!}
+<div class="addel-service">
+    <div class="form-group {{ $errors->has('service') ? 'has-error' : ''}}">
+        <label for="service" class="control-label">{{ 'Service' }}</label>
+        {{-- <input class="form-control" name="service" type="file" id="service" value="{{ $technology->service or ''}}" > --}}
+        <div class="input-group target" style="margin-bottom: 10px;">
+            <select name="service[]" id="service" class="form-control">
+                @foreach ($service as $item)
+                <option value="{{ $item->id }}">{{ $item->name }}</option>
+            @endforeach
+            </select>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-danger addel-delete"><i class="fa fa-remove"></i></button>
+            </span>
+        </div>
+        <button type="button" class="btn btn-success btn-block addel-add"><i class="fa fa-plus"></i></button>
+        {!! $errors->first('service', '<p class="help-block">:message</p>') !!}
+    </div>
 </div>
 
 <div class="form-group {{ $errors->has('price') ? 'has-error' : ''}}">
-    <label for="price" class="control-label">{{ 'Price/Bath' }}</label>
+    <label for="price" class="control-label">{{ 'Price' }}</label>
     <input class="form-control" name="price" type="text" id="price" value="{{ $technology->price or ''}}" >
     {!! $errors->first('price', '<p class="help-block">:message</p>') !!}
 </div>
 
 <div class="form-group {{ $errors->has('description') ? 'has-error' : ''}}">
     <label for="description" class="control-label">{{ 'Description' }}</label>
-    <input class="form-control" name="description" type="textArea" id="description" value="{{ $technology->description or ''}}" >
+    <input class="form-control" name="description" type="text" id="description" value="{{ $technology->description or ''}}" >
     {!! $errors->first('description', '<p class="help-block">:message</p>') !!}
 </div>
-
 
 <div class="form-group">
     <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
@@ -84,6 +92,20 @@
                 duration: 100
             }
         }).on('addel-video:delete', function (event) {
+            event.target.find(':select').val()
+            // if (!window.confirm('Are you absolutely positive you would like to delete: ' + '"' + event.target.find(':input').val() + '"?')) {
+            //     console.log('preventDefault()!');
+            //     event.preventDefault();
+            // }
+        });
+		$('.addel-service').addel({
+            classes: {
+                target: 'target'
+            },
+            animation: {
+                duration: 100
+            }
+        }).on('addel-service:delete', function (event) {
             event.target.find(':select').val()
             // if (!window.confirm('Are you absolutely positive you would like to delete: ' + '"' + event.target.find(':input').val() + '"?')) {
             //     console.log('preventDefault()!');

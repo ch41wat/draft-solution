@@ -26,6 +26,11 @@ class HomeController extends Controller
     {
         return view('home');
     }
+	
+	public function checkuser()
+	{
+		return 'check user function';
+	}
 
     public function switch_lang($locale, $url)
     {

@@ -35,7 +35,7 @@ class CreateDraftTable extends Migration
             $table->enum('cork_water',['0', '1'])->nullable();
             $table->biginteger('distance')->nullable();
             $table->float('fast_flow')->nullable();
-            $table->float('labor_cost')->nullable();
+            $table->biginteger('labor_cost')->nullable();
             $table->string('draft_id', 15);
         });
     }

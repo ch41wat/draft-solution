@@ -66,7 +66,7 @@ class TechnologyController extends Controller
             'video.*' => 'required',
             'service' => 'required',
             'price' => 'required',
-			'description' => 'required',
+			//'description' => 'required',
         ]);
 
         $technology = new technology();
@@ -74,11 +74,15 @@ class TechnologyController extends Controller
 
         if (count($request->input('video')) > 0) {
             $technology->video = implode(",", $request->input('video'));
+			if (count($request->input('service')) > 0) {
+            $technology->service = implode(",", $request->input('service'));
+			}
         }
+		
 
         $technology->picture = $request->input('picture');
         $technology->name = $request->get('name');
-        $technology->service = $request->get('service');
+        //$technology->service = $request->get('service');
         $technology->price = $request->get('price');
 		$technology->description = $request->get('description');
 
