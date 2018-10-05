@@ -2,7 +2,7 @@
     <div class="col-md-6">
         <div class="form-group {{ $errors->has('service') ? 'has-error' : ''}}">
             <label for="service" class="control-label">{{ 'Services' }}</label>
-            <select name="service" id="service" class="form-control">
+            <select name="service" id="service" class="form-control" required>
                  <option value="">{{ '---Choose services---' }}</option>
                 @foreach ($services as $item)
                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -14,7 +14,7 @@
     <div class="col-md-6">
         <div class="form-group {{ $errors->has('technology_id') ? 'has-error' : ''}}">
             <label for="technology_id" class="control-label">{{ 'Technology Id' }}</label>
-            <select name="technology_id" id="technology_id" class="form-control">
+            <select name="technology_id" id="technology_id" class="form-control" required>
                 <option value=""></option>
             </select>{!! $errors->first('technology_id', '<p class="help-block">:message</p>') !!}
         </div>

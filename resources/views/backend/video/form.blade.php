@@ -1,31 +1,31 @@
 <div class="form-group {{ $errors->has('video_name') ? 'has-error' : ''}}">
     <label for="video_name" class="control-label">{{ 'Video Name' }}</label>
-    <input class="form-control" name="video_name" type="text" id="video_name" value="{{ $video->video_name or ''}}" >
+    <input class="form-control" name="video_name" type="text" id="video_name" value="{{ $video->video_name or ''}}" required>
     {!! $errors->first('video_name', '<p class="help-block">:message</p>') !!}
 </div>
 
 <div class="form-group disabled">
-    <input type="radio" name="video_type" id="radio-video-file" value="file">
+    <input type="radio" name="video_type" id="radio-video-file" value="file" required>
     <label for="radio-video-file" class="control-label">{{ 'ไฟล์วีดีโอ' }}</label>
 </div>
 
 <div id="type-file">
     <div class="form-group {{ $errors->has('video_file') ? 'has-error' : ''}}">
         <label for="video_file" class="control-label">{{ 'Video File' }}</label>
-        <input class="form-control" name="video_file" type="file" id="video_file" accept="video/*" value="{{ $video->video_file or ''}}" disabled >
+        <input class="form-control" name="video_file" type="file" id="video_file" accept="video/*" value="{{ $video->video_file or ''}}" disabled required>
         {!! $errors->first('video_file', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
 
 <div class="form-group">
-    <input type="radio" name="video_type" id="radio-video-url" value="url">
+    <input type="radio" name="video_type" id="radio-video-url" value="url" required>
     <label for="radio-video-url" class="control-label">{{ 'ลิงค์วีดีโอ' }}</label>
 </div>
 
 <div id="type-url">
     <div class="form-group {{ $errors->has('video_url') ? 'has-error' : ''}}">
         <label for="video_url" class="control-label">{{ 'Video Url' }}</label>
-        <input class="form-control" name="video_url" type="text" id="video_url" value="{{ $video->video_url or ''}}" disabled>
+        <input class="form-control" name="video_url" type="text" id="video_url" value="{{ $video->video_url or ''}}" disabled required>
         {!! $errors->first('video_url', '<p class="help-block">:message</p>') !!}
     </div>
 </div>

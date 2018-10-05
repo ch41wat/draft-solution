@@ -53,7 +53,7 @@ class FrontendController extends Controller
             )
             ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service', 't.price')
             ->orderBy('p.id')
-            ->where('t.service', 'LIKE', (isset($draft->service)) ? $draft->service : '%')
+            // ->where('t.service', 'LIKE', (isset($draft->service)) ? $draft->service : '%')
             ->get();
         return view("frontend.$form.create", compact(['step_form', 'draft', 'service', 'technology' ,'price']));
     }
@@ -142,6 +142,7 @@ class FrontendController extends Controller
      */
     public function history(Request $request)
     {
+        $request->session()->forget('draft');
         $company = $request->get('company');
         $sale = (Auth::user()->role == 'sale') ? Auth::user()->name : $request->get('sale');
         $perPage = 25;
@@ -254,6 +255,7 @@ class FrontendController extends Controller
         $draft->pipe_setup_price = $request->input('pipe_setup_price');
         $draft->total_price = $request->input('total_price');
         $draft->last_price = $request->input('last_price');
+        $draft->total_all = $request->input('total_all');
         $draft->draft_level = 3;
         $request->session()->put('draft', $draft);
         return redirect(route(Auth::user()->role . '-draft'));

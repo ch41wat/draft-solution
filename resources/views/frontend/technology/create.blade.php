@@ -47,8 +47,8 @@
                                         </div>
                                         <div class="form-group {{ $errors->has('water_need_qty.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ '*ปริมาณความต้องการใช้น้ำ' }}</label>
-                                            <input type="text" name="water_need_qty[{{ $item->id }}]" id="water-need-qty-{{ $item->id }}" onchange="pipe_calculate('{{ $item->id }}'); fast_calculate('{{ $item->id }}');" value="{{ $draft->water_need_qty[$item->id] or old('water_need_qty.' . $item->id) }}" class="form-control" required>
-                                            <input type="hidden" name="technology_price[{{ $item->id }}]" value="{{ $draft->technology_price[$item->id] or $item->price }}">
+                                            <input type="text" name="water_need_qty[{{ $item->id }}]" id="water-need-qty-{{ $item->id }}" onchange="pipe_calculate('{{ $item->id }}'); fast_calculate('{{ $item->id }}'); total_all('{{ $item->id }}');" value="{{ $draft->water_need_qty[$item->id] or old('water_need_qty.' . $item->id) }}" class="form-control" required>
+                                            <input type="hidden" name="technology_price[{{ $item->id }}]" id="technology-price-{{ $item->id }}" value="{{ $draft->technology_price[$item->id] or $item->price }}">
                                         </div>
                                         <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ '*จุดประสงค์ของการใช้' }}</label>
@@ -117,6 +117,8 @@
                                                                       [$('#reservoir-latitude-{{ $item->id }}').val(), $('#reservoir-longitude-{{ $item->id }}').val()],
                                                                       [coords[0], coords[1]],
                                                                   );
+                                                                //   m to km
+                                                                  distance /= 1000; 
                                                                   // alert(dis);
                                                                   $('#distance-{{ $item->id }}').val(distance.toFixed(2));
 
@@ -238,9 +240,9 @@
                                                 </div>
                                                 <div class="form-group {{ $errors->has('labor_cost.' . $item->id) ? 'has-error' : ''}}">
                                                     <label class="control-label">{{ 'ค่าแรง : ' }}</label>
-                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" onclick="total_calculate('{{ $item->id }}')" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }}>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" onclick="total_calculate('{{ $item->id }}'); total_all('{{ $item->id }}');" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }}>
                                                     <label for="is-cost-1" class="control-label">{{ 'รวม' }}</label>
-                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" onclick="total_calculate('{{ $item->id }}')" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }}>
+                                                    <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" onclick="total_calculate('{{ $item->id }}'); total_all('{{ $item->id }}');" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }}>
                                                     <label for="is-cost-0" class="control-label">{{ 'ไม่รวม' }}</label>
                                                 </div>
                                                 <div class="row">
@@ -277,16 +279,16 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
                                             </div>
-                                            <div class="row" align="center">
-                                              <div class="col-md-4">
-                                                  <div class="form-group {{ $errors->has('total_price.' . $item->id) ? 'has-error' : ''}}">
-                                                      <label class="control-label">{{ 'ราคารวม' }}</label>
-                                                      <input type="text" name="total_price[{{ $item->id }}]" id="total-price-{{ $item->id }}" value="{{ $draft->total_price[$item->id] or old('total_price.' . $item->id) }}" class="form-control" readonly>
-                                                  </div>
-                                              </div>
+                                        </div>
+                                        {{-- end box is water --}}
+                                        <div class="row">
+                                            <div class="col-md-6 col-xs-offset-3">
+                                                <div class="form-group {{ $errors->has('total_all.' . $item->id) ? 'has-error' : ''}}">
+                                                    <label class="control-label">{{ 'ราคารวม' }}</label>
+                                                    <input type="hidden" name="total_all[{{ $item->id }}]" id="total-all-none-{{ $item->id }}" value="{{ $draft->total_all[$item->id] or old('total_all.' . $item->id) }}">
+                                                    <input type="text" id="total-all-{{ $item->id }}" value="{{ number_format($draft->total_all[$item->id], 2) }}" class="form-control" readonly>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -379,6 +381,19 @@
                 distance = parseFloat($('#distance-' + id).val());
                 cost = parseFloat($('#pipe-cost-' + id).val()) * value;
             $('#total-price-' + id).val(is_nan((pipe + cost).toFixed(2)));
+             total_all(id);
+        }
+
+        function total_all(id) {
+            var water_need = parseFloat($('#water-need-qty-' + id).val()),
+                technology_price = parseFloat($('#technology-price-' + id).val()),
+                total_all = is_nan(water_need * technology_price);
+            if ($("input[name='is_water[" + id + "]']:checked").val() == 1) {
+                var total_calculate = parseFloat($('#total-price-' + id).val());
+                total_all = is_nan(total_all + total_calculate);
+            }
+            $('#total-all-none-' + id).val(total_all.toFixed(2));
+            $('#total-all-' + id).val(number_format(total_all.toFixed(2), 2));
         }
 
         function split_pipe(id, pipe) {
@@ -390,10 +405,8 @@
         function remainder(total) {
             var result = "";
             var remainder = Math.floor( (parseInt(total) / 10) );
-            if((parseInt(total) % 10) <= 5)
-                result = remainder + '0';
-            else
-                result =  Math.round( (parseInt(total) / 10) ) * 10;
+            if((parseInt(total) % 10) <= 5) result = remainder + '0';
+            else result =  Math.round( (parseInt(total) / 10) ) * 10;
             return is_nan(result);
         }
 
@@ -401,9 +414,14 @@
             var is_water = value;
             if (is_water == 1) {
                 $('#box-is-water-' + id).removeClass('hidden');
+                $('#box-is-water-' + id + ' input').prop('required', true);
+                $('#box-is-water-' + id + ' select').prop('required', true);
             } else {
                 $('#box-is-water-' + id).addClass('hidden');
+                $('#box-is-water-' + id + ' input').prop('required', false);
+                $('#box-is-water-' + id + ' select').prop('required', false);
             }
+            total_all(id);
         }
 
         function is_nan(number) {

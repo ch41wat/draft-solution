@@ -1,6 +1,6 @@
 <div class="form-group {{ $errors->has('name') ? 'has-error' : ''}}">
     <label for="name" class="control-label">{{ 'Name' }}</label>
-    <input class="form-control" name="name" type="text" id="name" value="{{ $technology->name or ''}}" >
+    <input class="form-control" name="name" type="text" id="name" value="{{ $technology->name or ''}}" required>
     {!! $errors->first('name', '<p class="help-block">:message</p>') !!}
 </div>
 
@@ -32,7 +32,7 @@
         <label for="video" class="control-label">{{ 'Video' }}</label>
         {{-- <input class="form-control" name="picture" type="file" id="picture" value="{{ $technology->picture or ''}}" > --}}
         <div class="input-group target" style="margin-bottom: 10px;">
-            <select name="video[]" id="video" class="form-control">
+            <select name="video[]" id="video" class="form-control" required>
                 @foreach ($video as $item)
                 <option value="{{ $item->id }}">{{ $item->video_name }}</option>
             @endforeach
@@ -51,7 +51,7 @@
         <label for="service" class="control-label">{{ 'Service' }}</label>
         {{-- <input class="form-control" name="service" type="file" id="service" value="{{ $technology->service or ''}}" > --}}
         <div class="input-group target" style="margin-bottom: 10px;">
-            <select name="service[]" id="service" class="form-control">
+            <select name="service[]" id="service" class="form-control" required>
                 @foreach ($service as $item)
                 <option value="{{ $item->id }}">{{ $item->name }}</option>
             @endforeach
@@ -67,13 +67,13 @@
 
 <div class="form-group {{ $errors->has('price') ? 'has-error' : ''}}">
     <label for="price" class="control-label">{{ 'Price' }}</label>
-    <input class="form-control" name="price" type="text" id="price" value="{{ $technology->price or ''}}" >
+    <input class="form-control" name="price" type="text" id="price" value="{{ $technology->price or ''}}" required>
     {!! $errors->first('price', '<p class="help-block">:message</p>') !!}
 </div>
 
 <div class="form-group {{ $errors->has('description') ? 'has-error' : ''}}">
     <label for="description" class="control-label">{{ 'Description' }}</label>
-    <input class="form-control" name="description" type="text" id="description" value="{{ $technology->description or ''}}" >
+    <input class="form-control" name="description" type="text" id="description" value="{{ $technology->description or ''}}" required>
     {!! $errors->first('description', '<p class="help-block">:message</p>') !!}
 </div>
 

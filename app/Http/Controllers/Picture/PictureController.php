@@ -53,15 +53,17 @@ class PictureController extends Controller
             'picture' => 'required|array|max:2048',
             'picture.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        // dd($request->file('picture'));
         if (count($request->file('picture')) > 0) {
             foreach ($request->file('picture') as $picture) {
-                $pictures = new Picture();
+                $pictures = new Picture;
                 $path = $request->get('path');
-                $name = date('Ymd') . '-' . time() . '.' . $picture->getClientOriginalExtension();
+                $name = date('Ymd'). '-' .time(). '-' .uniqid(). '.' .$picture->getClientOriginalExtension();
                 $picture->storeAs("public/uploads/$path/picture/", $name);
                 $pictures->path = $path;
                 $pictures->name = $name;
                 $pictures->save();
+                $pictures = null;
             }
         }
         return redirect('/admin/picture');
@@ -109,7 +111,14 @@ class PictureController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $picture = Picture::findOrfail($id);
+        $picture_path = 'public\\uploads\\' . $picture->path . '\\picture\\' . $picture->name;
+        if (Storage::exists($picture_path)) {
+            Storage::delete($picture_path);
+        }
+        Picture::destroy($id);
+
+        return redirect('admin/picture')->with('flash_message', 'Technology Picture deleted!');
     }
 
     public function getPicture($type, $search)

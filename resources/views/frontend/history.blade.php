@@ -64,4 +64,13 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(function () {
+            if (typeof(Storage) !== undefined) {
+                if (localStorage.technology !== undefined) {
+                    localStorage.clear();
+                }
+            }
+        });
+    </script>
 @endsection

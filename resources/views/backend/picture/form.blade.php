@@ -1,6 +1,6 @@
 <div class="form-group {{ $errors->has('path') ? 'has-error' : ''}}">
     <label for="path" class="control-label">{{ 'Path' }}</label>
-    <select name="path" id="path" class="form-control">
+    <select name="path" id="path" class="form-control" required>
         <option value="{{ 'technology' }}">{{ 'Technology' }}</option>
         <option value="{{ 'equipment' }}">{{ 'Equipment' }}</option>
     </select>
@@ -11,7 +11,7 @@
     <div class="form-group {{ $errors->has('picture') ? 'has-error' : ''}}">
         <label for="picture" class="control-label">{{ 'Picture' }}</label>
         <div class="input-group target" style="margin-bottom: 10px;">
-            <input type="file" name="picture[]" class="form-control" accept="image/*" value="{{ $picture->picture or ''}}">
+            <input type="file" name="picture[]" class="form-control" accept="image/*" value="{{ $picture->picture or ''}}" required>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-danger addel-delete"><i class="fa fa-remove"></i></button>
             </span>

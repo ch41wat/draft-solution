@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('change/{locale}/{url}', 'HomeController@switch_lang')->name('auth.lang');
 
     Route::get('/admin/ajax-technology', 'Technology\\TechnologyController@dataAjaxTechnology')->name('ajax-technology');
+    Route::get('/admin/ajax-technology-service', 'Technology\\TechnologyController@dataAjaxTechnologyService')
+        ->name('ajax-technology-service');
     Route::get('/admin/get-picture/{type}/{search}', 'Picture\\PictureController@getPicture')->name('picture.get-picture');
     Route::get('/admin/ajax-equipment', 'Equipment\\EquipmentController@dataAjaxEquipment')->name('ajax-equipment');
 

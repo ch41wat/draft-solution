@@ -127,7 +127,7 @@
 
             $("input[type='radio']").change(function () {
                 $.ajax({
-                    url: "{{ route('ajax-technology') }}",
+                    url: "{{ route('ajax-technology-service') }}",
                     type: 'get',
                     data: { column: 'service', q: $(this).val() },
                     dataType: 'json',
@@ -201,9 +201,9 @@
 
 	function add_technology() {
 		var technology = $('input:checkbox[name="technology_select[]"]:checked').map(function(){
-      			return $(this).val();
-    		});
-                if (typeof(Storage) !== undefined) {
+      		return $(this).val();
+    	});
+        if (typeof(Storage) !== undefined) {
 			localStorage.technology = JSON.stringify(technology);
 		}
 		check_technology();

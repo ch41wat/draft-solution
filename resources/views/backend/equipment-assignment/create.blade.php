@@ -105,7 +105,7 @@
 
             $("#service").change(function () {
                 $.ajax({
-                    url: "{{ route('ajax-technology') }}",
+                    url: "{{ route('ajax-technology-service') }}",
                     type: 'get',
                     data: { column: 'service', q: $(this).val() },
                     dataType: 'json',
@@ -114,6 +114,7 @@
                         data.forEach(item => {
                             content += '<option value="' + item['id'] + '">' + item['name'] + '</option>'
                         });
+                        $('#img-content').html('');
                         $('#technology_id').html(content);
                     },
                     cache: true

@@ -30,7 +30,7 @@
                 <td>
                     <a href="{{ url('/admin/picture/' . $item->id . '/edit') }}" title="Edit picture"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 
-                    <form method="POST" action="{{ route('technology-picture.technology-picture.destroy', $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                    <form method="POST" action="{{ route('picture.picture.destroy', $item->id) }}" accept-charset="UTF-8" style="display:inline">
                         {{ method_field('DELETE') }}
                         {{ csrf_field() }}
                         <button class="btn btn-danger btn-sm" title="Delete picture" onclick="return confirm(&quot;Confirm delete?&quot;)">

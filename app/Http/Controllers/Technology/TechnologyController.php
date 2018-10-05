@@ -195,4 +195,30 @@ class TechnologyController extends Controller
         return response()->json($data);
     }
 
+    public function dataAjaxTechnologyService(Request $request)
+    {
+        $data = [];
+        if ($request->has('q')) {
+            $column = $request->column;
+            $search = $request->q;
+            $data = Technology::whereRaw("FIND_IN_SET($search, $column)")
+                ->groupBy('id')
+                ->get();
+            foreach ($data as $key => $value) {
+                $picture_array = [];
+                $picture_id = explode(",", $value->picture);
+                foreach ($picture_id as $pic) {
+                    $picture_data = Picture::where('id', '=', $pic)->first();
+                    $picture_array[] = '/' . $picture_data->path . '/picture/' . $picture_data->name;
+                }
+                $data[$key]->picture_id = implode(",", $picture_id);
+                $data[$key]->picture_name = implode(",", $picture_array);
+            }
+        } else {
+            $data = Technology::latest()->paginate(1);
+        }
+
+        return response()->json($data);
+    }
+
 }
