@@ -22,6 +22,11 @@
         <!-- Google Font -->
         <link rel="stylesheet"  href="{{ asset('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic') }}">
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+        <!-- Scripts -->
+        <!-- jQuery 3 -->
+        <script src="{{ asset ('/bower_components/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
 
     <body>
@@ -71,12 +76,6 @@
                 </div>
 
             </div>
-
-    
-        
-
-        <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
 
     </body>
 

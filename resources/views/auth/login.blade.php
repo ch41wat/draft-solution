@@ -27,4 +27,13 @@
     <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
+<script type="text/javascript">
+    $(function () {
+        if (typeof(Storage) !== undefined) {
+            if (localStorage.technology !== undefined) {
+                localStorage.removeItem('technology');
+            }
+        }
+    });
+</script>
 @endsection

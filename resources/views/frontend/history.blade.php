@@ -68,7 +68,7 @@
         $(function () {
             if (typeof(Storage) !== undefined) {
                 if (localStorage.technology !== undefined) {
-                    localStorage.clear();
+                    localStorage.removeItem('technology');
                 }
             }
         });

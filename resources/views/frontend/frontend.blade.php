@@ -10,7 +10,7 @@
             <div class="stepwizard">
                 {{-- {{ dd(Request::segment(2)) }} --}}
                 <div class="stepwizard-row setup-panel">
-                    @foreach ($step_form as $i => $item)
+                    @foreach (Helpers::stepForm() as $i => $item)
                     <div class="stepwizard-step">
                         @if (isset($draft->draft_level))
                             @php $btn_class = $draft->draft_level; @endphp

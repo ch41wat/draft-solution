@@ -205,6 +205,9 @@
     	});
         if (typeof(Storage) !== undefined) {
 			localStorage.technology = JSON.stringify(technology);
+            if (technology.length == 0) {
+                localStorage.removeItem('technology');
+            }
 		}
 		check_technology();
 	}

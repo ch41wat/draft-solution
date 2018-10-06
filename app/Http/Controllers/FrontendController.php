@@ -25,22 +25,10 @@ class FrontendController extends Controller
 
     public function index(Request $request, $form)
     {
-        $step_form = [
-            [
-                'link' => 'customer',
-                'name' => 'ข้อมูลลูกค้า',
-            ], [
-                'link' => 'service',
-                'name' => 'เลือกประเภทบริการ/เทคโนโลยี',
-            ], [
-                'link' => 'draft',
-                'name' => 'สรุปรายละเอียด',
-            ],
-        ];
         $draft = $request->session()->get('draft');
         if ($form == 'home') {
             $request->session()->forget('draft');
-            return view("frontend.$form", compact(['step_form', 'draft']));
+            return view("frontend.$form", compact(['draft']));
         }
         $service = Service::all();
         $technology = DB::table('technologies AS t')
@@ -53,25 +41,12 @@ class FrontendController extends Controller
             )
             ->groupBy('t.id', 't.name', 't.video', 't.picture', 't.service', 't.price')
             ->orderBy('p.id')
-            // ->where('t.service', 'LIKE', (isset($draft->service)) ? $draft->service : '%')
             ->get();
-        return view("frontend.$form.create", compact(['step_form', 'draft', 'service', 'technology' ,'price']));
+        return view("frontend.$form.create", compact(['draft', 'service', 'technology' ,'price']));
     }
 
-    public function service(Request $request, $array)
+    public function technology(Request $request)
     {
-        $step_form = [
-            [
-                'link' => 'customer',
-                'name' => 'ข้อมูลลูกค้า',
-            ], [
-                'link' => 'service',
-                'name' => 'เลือกประเภทบริการ/เทคโนโลยี',
-            ], [
-                'link' => 'draft',
-                'name' => 'สรุปรายละเอียด',
-            ],
-        ];
         $draft = $request->session()->get('draft');
         $query = DB::table('technologies AS t')
             ->join('pictures AS p', function ($join) {
@@ -89,24 +64,11 @@ class FrontendController extends Controller
         $technology = $query->get();
         $reservoir = Reservoir::all();
         $pipes = Pipe::all();
-        return view("frontend.technology.create", compact(['step_form', 'draft', 'technology', 'reservoir', 'pipes']));
+        return view("frontend.technology.create", compact(['draft', 'technology', 'reservoir', 'pipes']));
     }
 
     public function draft(Request $request)
     {
-        // dd($request);
-        $step_form = [
-            [
-                'link' => 'customer',
-                'name' => 'ข้อมูลลูกค้า',
-            ], [
-                'link' => 'service',
-                'name' => 'เลือกประเภทบริการ/เทคโนโลยี',
-            ], [
-                'link' => 'draft',
-                'name' => 'สรุปรายละเอียด',
-            ],
-        ];
         $draft = $request->session()->get('draft');
         $query = DB::table('technologies AS t')
             ->join('pictures AS p', function ($join) {
@@ -123,7 +85,15 @@ class FrontendController extends Controller
             if ($draft->reservoir[$item]) {
                 $reservoir[$item] = Reservoir::findOrFail($draft->reservoir[$item]);
             }
-            $service[$item] = Service::findOrFail($draft->service[$item]);
+            // $service[$item] = Service::findOrFail($draft->service[$item]);
+            $service[$item] = DB::table('technologies AS t')
+                ->join('services AS s', function ($join) {
+                    $join->whereRaw("find_in_set(s.id, t.service)");
+                })
+                ->select( 's.id', 's.name' )
+                ->groupBy('s.id')
+                ->orderBy('s.id')
+                ->get();
             $equipment_assignment[$item] = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
                 ->where('technology_id', '=', $item)
                 ->get();
@@ -131,7 +101,7 @@ class FrontendController extends Controller
         $technology = $query->get();
         // dd($technology);
         return view("frontend.draft.create", compact([
-            'step_form', 'draft', 'technology', 'reservoir', 'equipment_assignment', 'service'
+            'draft', 'technology', 'reservoir', 'equipment_assignment', 'service'
         ]));
     }
 
@@ -216,7 +186,7 @@ class FrontendController extends Controller
         $draft->technology_id = $request->input('technology_id');
         $draft->draft_level = 2;
         $request->session()->put('draft', $draft);
-        return redirect(route(Auth::user()->role . '-create-service-form', $request->input('technology_id')));
+        return redirect(route(Auth::user()->role . '-technology'));
 
     }
 
@@ -304,29 +274,12 @@ class FrontendController extends Controller
             $drafts->save();
         }
         $data = Draft::where('draft_id', '=', $draft_id)->first();
-        // $this->sendEmail(Auth::user(), $data);
         return redirect(route(Auth::user()->role . '-history'));
 
     }
 
-    public function clear(Request $request)
-    {
-        $request->session()->forget('draft');
-        return redirect(route(Auth::user()->role . '-create-service-form', 'customer'));
-    }
-
     public function equipment_assignment(Request $request)
     {
-        // $equipment_assignment = EquipmentAssignment::with(['technology', 'equipment', 'picture'])
-        // // ->select([
-        // //     'technology_id', 'picture_id',
-        // //     DB::raw('group_concat(equipment_id) as equipment_id'),
-        // //     DB::raw('group_concat(layer) as layer'),
-        // // ])
-        //     ->where('technology_id', '=', $request->id)
-        // // ->groupBy('picture_id', 'technology_id')
-        //     ->get();
-        // // dd($equipment_assignment);
         $layer = [];
         $technologies = DB::table('technologies AS t')
             ->join('pictures AS p', function ($join) {
@@ -356,10 +309,6 @@ class FrontendController extends Controller
                 $layer = [];
             }
         }
-        // dd($technologies);
-        // if ($request->ajax()) {
-        //     return view('frontend.service.load', ['technologies' => $technologies])->render();
-        // }
         return view('frontend.service.load', compact('technologies'));
     }
 

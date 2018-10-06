@@ -104,12 +104,12 @@ function()
         Route::get('/sale/draft-excel','FrontendController@export')->name('sale-draft-excel');
         Route::get('/sale/mail','FrontendController@test_mail')->name('sale-mail');
 
+        Route::get('/sale/technology', 'FrontendController@technology')->name('sale-technology');
         Route::get('/sale/draft', 'FrontendController@draft')->name('sale-draft');
 
         Route::get('/sale/history', 'FrontendController@history')->name('sale-history');
 
         Route::get('/sale/{form}', 'FrontendController@index')->name('sale-create-form');
-        Route::get('/sale/service/{array}', 'FrontendController@service')->name('sale-create-service-form');
 
         Route::post('/sale/customer-create', 'FrontendController@postCreateCustomer')->name('sale-customer-post-create');
         Route::post('/sale/service-create', 'FrontendController@postCreateService')->name('sale-service-post-create');
@@ -141,12 +141,12 @@ function()
         Route::get('/saleadmin/draft-excel','FrontendController@export')->name('saleadmin-draft-excel');
         Route::get('/saleadmin/mail','FrontendController@test_mail')->name('saleadmin-mail');
 
+        Route::get('/saleadmin/technology', 'FrontendController@technology')->name('saleadmin-technology');
         Route::get('/saleadmin/draft', 'FrontendController@draft')->name('saleadmin-draft');
 
         Route::get('/saleadmin/history', 'FrontendController@history')->name('saleadmin-history');
 
         Route::get('/saleadmin/{form}', 'FrontendController@index')->name('saleadmin-create-form');
-        Route::get('/saleadmin/service/{array}', 'FrontendController@service')->name('saleadmin-create-service-form');
 
         Route::post('/saleadmin/customer-create', 'FrontendController@postCreateCustomer')
             ->name('saleadmin-customer-post-create');
@@ -181,9 +181,9 @@ function()
         Route::get('/supervisor/draft-excel','FrontendController@export')->name('supervisor-draft-excel');
         Route::get('/supervisor/mail','FrontendController@test_mail')->name('supervisor-mail');
 
+        Route::get('/supervisor/technology', 'FrontendController@technology')->name('supervisor-technology');
         Route::get('/supervisor/draft', 'FrontendController@draft')->name('supervisor-draft');
         Route::get('/supervisor/{form}', 'FrontendController@index')->name('supervisor-create-form');
-        Route::get('/supervisor/service/{array}', 'FrontendController@service')->name('supervisor-create-service-form');
 
         Route::post('/supervisor/customer-create', 'FrontendController@postCreateCustomer')
             ->name('supervisor-customer-post-create');

@@ -34,7 +34,13 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <h3>{{ strtoupper($service[$item->id]->name) }}</h3>
+                                @php $serviceName = []; @endphp
+                                @if (count($service[$item->id]) > 0)
+                                    @foreach ($service[$item->id] as $itemService)
+                                        @php $serviceName[] = $itemService->name; @endphp
+                                    @endforeach
+                                @endif
+                                <h3>{{ strtoupper(implode(', ', $serviceName)) }}</h3>
                                 <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                     <label class="control-label">{{ 'จุดประสงค์ของการใช้' }}</label>
                                     <textarea name="purpose[{{ $item->id }}]" cols="3" class="form-control" readonly>{{ $draft->purpose[$item->id] or '' }}</textarea>
@@ -60,7 +66,7 @@
                                 @endif
                                 <div class="form-group {{ $errors->has('water_qty.' . $item->id) ? 'has-error' : ''}}">
                                     <label class="control-label">{{ 'ปริมาณน้ำที่ต้องการ' }}</label>
-                                    <input type="text" name="water_qty[{{ $item->id }}]" value="{{ $draft->water_need_qty[$item->id] or '' }}" class="form-control" readonly>
+                                    <input type="text" name="water_qty[{{ $item->id }}]" value="{{ number_format($draft->water_need_qty[$item->id]) }}" class="form-control" readonly>
                                 </div>
                                 <div class="form-group {{ $errors->has('pipe_size_need.' . $item->id) ? 'has-error' : ''}}">
                                     <label class="control-label">{{ 'ขนาดท่อ' }}</label>
@@ -117,20 +123,10 @@
                                         @endforeach
                                     </tbody>
                                     <tfoot>
-                                        @php
-                                            $total_cost = 0;
-                                            $total = $draft->technology_price[$item->id] * $draft->water_need_qty[$item->id];
-                                        @endphp
                                         <tr class="bg-danger">
                                             <th></th>
                                             <th>Total</th>
-                                            @if ($draft->is_water[$item->id] > 0)
-                                                @php 
-                                                $total = $draft->pipe_setup_price[$item->id]; 
-                                                $total_cost = $draft->pipe_cost[$item->id] * $draft->labor_cost[$item->id];
-                                                @endphp
-                                            @endif
-                                            <th>{{ number_format(($total + $total_cost), 2) }}</th>
+                                            <th>{{ number_format($draft->total_all[$item->id], 2) }}</th>
                                             <th>บาท</th>
                                         </tr>
                                     </tfoot>
@@ -145,7 +141,7 @@
                         <!-- <a href="{{ route(Auth::user()->role . '-draft-excel') }}" class="btn btn-success">Export Excel</a> -->
                     </div>
                     <div class="col-md-6 text-right">
-                        <a href="{{ route(Auth::user()->role . '-create-service-form', ['array' => $item->id]) }}" class="btn btn-danger">
+                        <a href="{{ route(Auth::user()->role . '-technology') }}" class="btn btn-danger">
                             {{ 'ย้อนกลับ' }}
                         </a>
                         <input class="btn btn-primary" type="submit" value="{{ 'บันทึก' }}">
