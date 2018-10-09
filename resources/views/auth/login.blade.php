@@ -8,7 +8,10 @@
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg"><strong>Log in</strong> your account</p>
+        <h3 class="text-center">{{ config('app.name', 'Laravel') }}</h3>
+        <p class="login-box-msg">
+            <strong>Log in</strong> your account
+        </p>
 
         <form action="{{ route('login') }}" class="form-login" method="post">
             @csrf

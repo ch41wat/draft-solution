@@ -40,6 +40,7 @@ body{
 }
 
 .stepwizard-step {
+    width: 25%;
     display: table-cell;
     text-align: center;
     position: relative;
@@ -158,6 +159,10 @@ body{
 
 .text-white {
     color: #fff !important;
+}
+
+.text-danger {
+    color: red !important;
 }
 
 h3 {

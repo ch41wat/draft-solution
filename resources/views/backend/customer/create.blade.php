@@ -11,32 +11,27 @@
                 <img src="{{ asset('img/form-customer.jpg') }}" class="img-responsive" alt="">
             </div>
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>{{ config('app.name') }}</h3>
-                    </div>
-                    <div class="card-body">
-                        {{-- <a href="{{ url('/admin/customer') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
-                        <br />
-                        <br /> --}}
-
-                        @if ($errors->any())
-                            <ul class="alert alert-danger">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        @endif
-
-                        <form method="POST" action="{{ url('/admin/customer') }}" accept-charset="UTF-8" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-
+                <form method="POST" action="{{ url('/admin/customer') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs pull-right">
+                            <li class=""><a href="#tab_en" data-toggle="tab">ภาษาอังกฤษ</a></li>
+                            <li class="active"><a href="#tab_th" data-toggle="tab">ภาษาไทย</a></li>
+                            <li class="pull-left header">{{ config('app.name') }}</li>
+                        </ul>
+                        <div class="tab-content">
                             @include ('backend.customer.form', ['formMode' => 'create'])
-
-                        </form>
-
+                        </div>
+                        <!-- /.tab-content -->
                     </div>
-                </div>
+                </form>
+                @if ($errors->any())
+                <ul class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                @endif
             </div>
         </div>
     {{-- </div> --}}

@@ -48,7 +48,6 @@
                                         <div class="form-group {{ $errors->has('water_need_qty.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ '*ปริมาณความต้องการใช้น้ำ' }}</label>
                                             <input type="text" name="water_need_qty[{{ $item->id }}]" id="water-need-qty-{{ $item->id }}" onchange="pipe_calculate('{{ $item->id }}'); fast_calculate('{{ $item->id }}'); total_all('{{ $item->id }}');" value="{{ $draft->water_need_qty[$item->id] or old('water_need_qty.' . $item->id) }}" class="form-control" required>
-                                            <input type="hidden" name="technology_price[{{ $item->id }}]" id="technology-price-{{ $item->id }}" value="{{ $draft->technology_price[$item->id] or $item->price }}">
                                         </div>
                                         <div class="form-group {{ $errors->has('purpose.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ '*จุดประสงค์ของการใช้' }}</label>
@@ -81,6 +80,11 @@
                                         <div class="form-group">
                                             <label class="control-label">{{ 'อื่นๆ' }}</label>
                                             <textarea name="other[{{ $item->id }}]" cols="3" class="form-control">{{ $draft->other[$item->id] or old('other.' . $item->id) }}</textarea>
+                                        </div>
+                                        <div class="form-group {{ $errors->has('technology_price.' . $item->id) ? 'has-error' : ''}}">
+                                            <label class="control-label">{{ 'ค่าระบบ' }}</label>
+                                            <input type="text" name="technology_price[{{ $item->id }}]" id="technology-price-{{ $item->id }}" value="{{ $draft->technology_price[$item->id] or $item->price }}" class="form-control" readonly required>
+                                            <span class="text-danger">หมายเหตุ: ราคานี้ไม่รวม Booster pump</span>
                                         </div>
                                         <div class="form-group {{ $errors->has('is_water.' . $item->id) ? 'has-error' : ''}}">
                                             <label class="control-label">{{ 'คุณต้องการติดตั้งท่อส่งน้ำหรือไม่ : ' }}</label>
@@ -175,7 +179,7 @@
                                           </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">{{ 'แนวเส้นท่อ' }}</label>
+                                                    <label class="control-label">{{ '*แนวเส้นท่อ' }}</label>
                                                     <input type="hidden" name="reservoir[{{ $item->id }}]" id="reservoir-{{ $item->id }}" value="{{ $draft->reservoir[$item->id] or old('reservoir.' . $item->id) }}">
                                                     <input type="hidden" name="reservoir_latitude[{{ $item->id }}]" id="reservoir-latitude-{{ $item->id }}" value="{{ $draft->reservoir_latitude[$item->id] or old('reservoir_latitude.' . $item->id) }}">
                                                     <input type="hidden" name="reservoir_longitude[{{ $item->id }}]" id="reservoir-longitude-{{ $item->id }}" value="{{ $draft->reservoir_longitude[$item->id] or old('reservoir_longitude.' . $item->id) }}">
@@ -194,32 +198,32 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('latitude.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'ละติจูด' }}</label>
+                                                            <label class="control-label">{{ '*ละติจูด' }}</label>
                                                             <input type="text" name="latitude[{{ $item->id }}]" id="latitude-{{ $item->id }}" value="{{ $draft->latitude[$item->id] or old('latitude.' . $item->id) }}" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('longitude.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'ลองจิจูด' }}</label>
+                                                            <label class="control-label">{{ '*ลองจิจูด' }}</label>
                                                             <input type="text" name="longitude[{{ $item->id }}]" id="longitude-{{ $item->id }}" value="{{ $draft->longitude[$item->id] or old('longitude.' . $item->id) }}" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group {{ $errors->has('distance.' . $item->id) ? 'has-error' : ''}}">
-                                                    <label class="control-label">{{ 'ระยะทางจากอ่างเก็บน้ำ(กม.)' }}</label>
+                                                    <label class="control-label">{{ 'ระยะทางจากอ่างเก็บน้ำ (กม.)' }}</label>
                                                     <input type="text" name="distance[{{ $item->id }}]" id="distance-{{ $item->id }}" value="{{ $draft->distance[$item->id] or old('distance.' . $item->id) }}" class="form-control" readonly>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('pipe_size_need.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'ขนาดท่อที่ต้องการ(เมตร)' }}</label>
+                                                            <label class="control-label">{{ 'ขนาดท่อที่ต้องการ (เมตร)' }}</label>
                                                             <input type="text" name="pipe_size_need[{{ $item->id }}]" id="pipe-size-need-{{ $item->id }}" value="{{ $draft->pipe_size_need[$item->id] or old('pipe_size_need.' . $item->id) }}" class="form-control" readonly>
                                                         </div>
                                                     </div>
                                                     {{-- {{ dd($draft) }} --}}
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('pipe_id.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'ขนาดท่อที่เลือกใช้' }}</label>
+                                                            <label class="control-label">{{ '*ขนาดท่อที่เลือกใช้' }}</label>
                                                             <select class="form-control" name="pipe_id[{{ $item->id }}]" id="pipe-id-{{ $item->id }}" onchange="fast_calculate('{{ $item->id }}')">
                                                                 <option value=""></option>
                                                                 @foreach ($pipes as $pipe)
@@ -234,12 +238,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group {{ $errors->has('fast_flow.' . $item->id) ? 'has-error' : ''}}">
-                                                    <label class="control-label">{{ 'ความเร็วในการไหลของน้ำ(ตร.ม./วินาที)' }}</label>
+                                                    <label class="control-label">{{ 'ความเร็วในการไหลของน้ำ (ตร.ม./วินาที)' }}</label>
                                                     <input type="text" name="fast_flow[{{ $item->id }}]" id="fast-flow-{{ $item->id }}" value="{{ $draft->fast_flow[$item->id] or old('fast_flow.' . $item->id) }}" class="form-control" readonly>
                                                     <label>{{ 'ความเร็วที่เหมาะสมคือ 1.00 - 2.50 ตร.ม./วินาที)' }}</label>
                                                 </div>
                                                 <div class="form-group {{ $errors->has('labor_cost.' . $item->id) ? 'has-error' : ''}}">
-                                                    <label class="control-label">{{ 'ค่าแรง : ' }}</label>
+                                                    <label class="control-label">{{ '*ค่าแรง : ' }}</label>
                                                     <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-1" onclick="total_calculate('{{ $item->id }}'); total_all('{{ $item->id }}');" value="1" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 1)) ? "checked" : "" }}>
                                                     <label for="is-cost-1" class="control-label">{{ 'รวม' }}</label>
                                                     <input type="radio" name="labor_cost[{{ $item->id }}]" id="is-cost-0" onclick="total_calculate('{{ $item->id }}'); total_all('{{ $item->id }}');" value="0" {{ ((isset($draft->labor_cost) && $draft->labor_cost[$item->id] == 0)) ? "checked" : "" }}>
@@ -248,13 +252,13 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('pipe_price.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'ราคาท่อ(เมตร)' }}</label>
+                                                            <label class="control-label">{{ 'ราคาท่อ (เมตร)' }}</label>
                                                             <input type="text" name="pipe_price[{{ $item->id }}]" id="pipe-price-{{ $item->id }}" value="{{ $draft->pipe_price[$item->id] or old('pipe_price.' . $item->id) }}" class="form-control" readonly>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group {{ $errors->has('pipe_cost_original.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'ค่าแรง(เมตร)' }}</label>
+                                                            <label class="control-label">{{ 'ค่าแรง (เมตร)' }}</label>
                                                             <input type="text" name="pipe_cost_original[{{ $item->id }}]" id="pipe-cost-original-{{ $item->id }}" value="{{ $draft->pipe_cost_original[$item->id] or old('pipe_cost_original.' . $item->id) }}" class="form-control" readonly>
                                                         </div>
                                                     </div>
@@ -274,7 +278,7 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group {{ $errors->has('total_price.' . $item->id) ? 'has-error' : ''}}">
-                                                            <label class="control-label">{{ 'รวม(บาท)' }}</label>
+                                                            <label class="control-label">{{ 'รวม (บาท)' }}</label>
                                                             <input type="text" name="total_price[{{ $item->id }}]" id="total-price-{{ $item->id }}" value="{{ $draft->total_price[$item->id] or old('total_price.' . $item->id) }}" class="form-control" readonly>
                                                         </div>
                                                     </div>
