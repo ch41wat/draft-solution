@@ -13,6 +13,11 @@
 
 <div class="table-responsive">
     <table id="table-technology" class="table table-bordered table-striped">
+      <div class="box-header">
+        <a href="{{ url('/admin/technology/create') }}" title="Create"><button class="btn btn-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Create</button></a>
+        <a href="{{ url('/admin/equipment-assignment/create') }}" title="Mark Detail"><button class="btn btn-info btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Mark Detail</button></a>
+        <a href="{{ url('/admin/video/create') }}" title="Add Video"><button class="btn btn-warning btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Add Video</button></a>
+      </div>
         <thead>
             <tr>
                 <th>No.</th>
