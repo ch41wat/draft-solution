@@ -52,7 +52,7 @@
                                 <td>{{ date('d M Y', strtotime($draft->created_at)) }}</td>
                                 <td>{{ date('d M Y', strtotime($draft->updated_at)) }}</td>
                                 <td>{{ date('d M Y', strtotime($draft->updated_at)) }}</td>
-                                <td>{{ $draft->customer->company_name }}</td>
+                                <td>{{ $draft->customer['customer_name_' . LaravelLocalization::getCurrentLocale()] }}</td>
                                 <td>{{ $draft->user->name }}</td>
                                 <td>{{ $draft->cork_water }}</td>
                             </tr>

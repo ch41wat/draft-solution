@@ -20,7 +20,7 @@ body {
 
 .carousel-caption {
     width: 100%;
-    /*background-color: rgba(37, 141, 175, 0.7);*/
+    background-color: rgba(0, 0, 0, 0.7);
     padding: 20px;
     left: 0;
     right: 0;

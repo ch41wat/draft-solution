@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use LaravelLocalization;
 
 class CustomerController extends Controller
 {
@@ -126,7 +127,8 @@ class CustomerController extends Controller
 
         if ($request->has('q')) {
             $search = $request->q;
-            $data = Customer::where('customer_name', 'LIKE', "%$search%")->get();
+            $data = Customer::where('customer_name_' . LaravelLocalization::getCurrentLocale(), 'LIKE', "%$search%")
+                ->get();
         }
 
         return response()->json($data);

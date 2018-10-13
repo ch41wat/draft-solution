@@ -13,6 +13,9 @@
 
 <div class="table-responsive">
     <table id="table-technology" class="table table-bordered table-striped">
+      <div class="box-header">
+        <a href="{{ url('/admin/picture/create') }}" title="Create"><button class="btn btn-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Create</button></a>
+      </div>
         <thead>
             <tr>
                 <th>No.</th>

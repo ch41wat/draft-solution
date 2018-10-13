@@ -25,7 +25,10 @@ class Customer extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_name', 'customer_name', 'latitude', 'longitude', 'approve_status'];
+    protected $fillable = [
+        'company_name_th', 'company_name_en', 'customer_name_th', 
+        'customer_name_en', 'latitude', 'longitude', 'approve_status'
+    ];
 
     public function draft()
     {

@@ -44,7 +44,7 @@
                                         @foreach ($technology as $item)
                                         <div class="col-md-4 col-xs-4">
                                             @php $images = explode(',', $item->picture_name); @endphp
-                                            <input type="checkbox" name="technology_select[]" id="technology-select-{{ $item->id }}" onclick="add_technology()" value="{{ $item->id }}" {{ (isset($draft->technology_id) && in_array($item->id, $draft->technology_id)) ? "checked" : "" }}>
+                                            <input type="checkbox" name="technology_select[]" id="technology-select-{{ $item->id }}" onclick="add_technology({{ $item->id }})" value="{{ $item->id }}" {{ (isset($draft->technology_id) && in_array($item->id, $draft->technology_id)) ? "checked" : "" }}>
                                             <label for="technology-select-{{ $item->id }}" class="control-label">{{ $item->name }}</label>
                                             <a href="#" class="thumbnail" data-toggle="modal" data-target="#modal-gallery" data-technology="{{ $item->id }}">
                                                 <img src="{{ asset('storage/uploads/technology/picture/' . $images[0]) }}" style="width: 100%; min-height: 390px;">
@@ -136,7 +136,7 @@
                         for (var i = 0; i < data.length; i++) {
                             var images = data[i]['picture_name'].split(',');
                             content += '<div class="col-md-4 col-xs-4">' +
-                                            '<input type="checkbox" name="technology_select[]" id="technology-select-' + data[i]['id'] + '" onclick="add_technology()" value="' + data[i]['id'] + '">' +
+                                            '<input type="checkbox" name="technology_select[]" id="technology-select-' + data[i]['id'] + '" onclick="add_technology(' + data[i]['id'] + ')" value="' + data[i]['id'] + '">' +
                                             ' <label for="technology-select-' + data[i]['id'] + '" class="control-label">' + data[i]['name'] + '</label>' +
                                             '<a href="#" class="thumbnail" data-toggle="modal" data-target="#modal-gallery" data-technology="' + data[i]['id'] + '">' +
                                                 '<img src="{{ asset('storage/uploads/') }}/' + images[0] + '" style="width: 100%; min-height: 390px;">' +
@@ -144,7 +144,7 @@
                                         '</div>';
                         }
                         $('#box-technology').html(content);
-			check_technology();
+			            check_technology();
                     },
                     cache: true
                 });
@@ -166,7 +166,7 @@
                         for (var i = 0; i < data.length; i++) {
                             var images = data[i]['picture_name'].split(',');
                             content += '<div class="col-md-4 col-xs-4">' +
-                                            '<input type="checkbox" name="technology_select[]" id="technology-select-' + data[i]['id'] + '" onclick="add_technology()" value="' + data[i]['id'] + '">' +
+                                            '<input type="checkbox" name="technology_select[]" id="technology-select-' + data[i]['id'] + '" onclick="add_technology(' + data[i]['id'] + ')" value="' + data[i]['id'] + '">' +
                                             ' <label for="technology-select-' + data[i]['id'] + '" class="control-label">' + data[i]['name'] + '</label>' +
                                             '<a href="#" class="thumbnail" data-toggle="modal" data-target="#modal-gallery" data-technology="' + data[i]['id'] + '">' +
                                                 '<img src="{{ asset('storage/uploads/') }}/' + images[0] + '" style="width: 100%; min-height: 390px;">' +
@@ -174,7 +174,7 @@
                                         '</div>';
                         }
                         $('#box-technology').html(content);
-			check_technology();
+			            check_technology();
                     },
                     cache: true
                 });
@@ -199,13 +199,21 @@
 		$('#box-technology-item').html(technology_html);
 	}
 
-	function add_technology() {
-		var technology = $('input:checkbox[name="technology_select[]"]:checked').map(function(){
-      		return $(this).val();
-    	});
+	function add_technology(id) {
+		var technology = $('input[name="technology_id[]"]').map(function(){
+      		    return $(this).val();
+    	    }), technologies = [];
+            for (var i = 0; i < technology.length; i++) {
+                technologies[i] = parseInt(technology[i]);
+            }
+            if (technologies.indexOf(id) >= 0) {
+                technologies.splice(technologies.indexOf(id), 1);
+            } else {
+                technologies.push(id);
+            }
         if (typeof(Storage) !== undefined) {
-			localStorage.technology = JSON.stringify(technology);
-            if (technology.length == 0) {
+			localStorage.technology = JSON.stringify(technologies);
+            if (technologies.length == 0) {
                 localStorage.removeItem('technology');
             }
 		}

@@ -13,21 +13,28 @@
 
 <div class="table-responsive">
     <table id="table-customer" class="table table-bordered table-striped">
+      <div class="box-header">
+        <a href="{{ url('/admin/customer/create') }}" title="Create"><button class="btn btn-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Create</button></a>
+      </div>
         <thead>
             <tr>
                 <th>No.</th>
-                <th>Company</th>
-                <th>Customer Name</th>
-                <th>Tool</th>
+                <th>Company Th</th>
+                <th>Company En</th>
+                <th>Customer Name Th</th>
+                <th>Customer Name En</th>
+                <th width="130px;">Tool</th>
             </tr>
         </thead>
         <tbody>
             @foreach($customer as $item)
             <tr>
                 <td>{{ $item->id }}</td>
-                <td>{{ $item->company_name }}</td>
-                <td>{{ $item->customer_name }}</td>
-                <td>
+                <td>{{ $item->company_name_th }}</td>
+                <td>{{ $item->company_name_en }}</td>
+                <td>{{ $item->customer_name_th }}</td>
+                <td>{{ $item->customer_name_en }}</td>
+                <td class="text-center">
                     <a href="{{ url('/admin/customer/' . $item->id . '/edit') }}" title="Edit customer"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 
                     <form method="POST" action="{{ url('/admin/customer' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">

@@ -19,6 +19,7 @@ use App\Draft;
 use App\Pipe;
 use App\Technology;
 use App\Picture;
+use LaravelLocalization;
 
 class FrontendController extends Controller
 {
@@ -125,7 +126,7 @@ class FrontendController extends Controller
             })
             ->WhereHas('customer', function ($query) use($company) {
                 // $this->$sale = $sale;
-                $query->where('company_name', 'LIKE', "%$company%");
+                $query->where('company_name_' . LaravelLocalization::getCurrentLocale(), 'LIKE', "%$company%");
             })
             ->latest()->paginate($perPage);
         } else {

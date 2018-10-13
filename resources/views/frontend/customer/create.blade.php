@@ -98,7 +98,7 @@
                     return {
                         results:  $.map(data, function (item) {
                             return {
-                                text: item.customer_name,
+                                text: item['customer_name_{{ LaravelLocalization::getCurrentLocale() }}'],
                                 id: item.id
                             }
                         })

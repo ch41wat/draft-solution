@@ -46,10 +46,9 @@
                                 <div class="carousel-caption d-none d-md-block text-left">
                                     <h3>Welcome to <strong>EastWater</strong></h3>
                                     <p>
-                                        Lorem Ipsum is simply dummy text of the printing and typesettin <br />
+                                        Eastern Water Resources Development and Management Public Company Limited or East Water <br />
                                         <span>
-                                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                                            when an unknown printer took a galley of type and <br /> it to make a type specimen book.
+                                            "Being the leader in total water solution of the country"
                                         </span>
                                     </p>
                                 </div>

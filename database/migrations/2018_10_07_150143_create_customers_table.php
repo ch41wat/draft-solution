@@ -16,11 +16,13 @@ class CreateCustomersTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('company_name')->nullable();
-            $table->string('customer_name')->nullable();
+            $table->string('company_name_th')->nullable();
+            $table->string('company_name_en')->nullable();
+            $table->string('customer_name_th')->nullable();
+            $table->string('customer_name_en')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
-            $table->enum('approve_status', ['0', '1']);
+            $table->enum('approve_status', ['0', '1'])->default('1');
         });
     }
 
