@@ -147,6 +147,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+		Adldap\Laravel\AdldapServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -220,6 +221,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'LaravelLocalization' => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
         'Helpers' => App\Helpers\Helpers::class,
+		'Adldap' => Adldap\Laravel\Facades\Adldap::class
 
     ],
 

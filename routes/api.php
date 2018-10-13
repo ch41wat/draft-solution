@@ -22,7 +22,7 @@ Route::get('/test/{id}', function($id){
 	
 });
 
-Route::get('/test1', 'WelcomeController@index');
+Route::get('/test1/{username}', 'LdapController@test');
 
 Route::get('/chklogin', 'HomeController@checkuser');
 

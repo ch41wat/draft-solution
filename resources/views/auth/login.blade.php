@@ -10,17 +10,18 @@
     <div class="login-box-body">
         <p class="login-box-msg"><strong>Log in</strong> your account</p>
 
-        <form action="{{ route('login') }}" class="form-login" method="post">
+        <form action="/users" class="form-login" method="post">
             @csrf
             <div class="form-group has-feedback">
-                <input type="email" name="email" class="form-control username" placeholder="Username" autocomplete="off">
+                <input type="text" class="form-control" id="name" name="name" value="" placeholder="Username" autocomplete="off">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="password" name="password" class="form-control password" placeholder="Password" autocomplete="off">
+                <input type="password" name="password" id="password" class="form-control password" placeholder="Password" autocomplete="off">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <button type="submit" class="btn btn-primary btn-block btn-flat loginbutton">LOGIN</button>
+			<input type="hidden" name="_token" value="{{ csrf_token() }}">
         </form>
 
     </div>
