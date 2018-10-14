@@ -5,7 +5,7 @@
 </div>
 <div class="form-group {{ $errors->has('detail') ? 'has-error' : ''}}">
     <label for="detail" class="control-label">{{ 'Detail' }}</label>
-    <input class="form-control" name="detail" type="text" id="detail" value="{{ $equipment->detail or ''}}" required>
+    <textarea class="form-control" name="detail" type="text" id="detail" value="{{ $equipment->detail or ''}}" required></textarea>
     {!! $errors->first('detail', '<p class="help-block">:message</p>') !!}
 </div>
 <div class="form-group {{ $errors->has('picture') ? 'has-error' : ''}}">

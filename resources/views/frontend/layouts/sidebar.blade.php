@@ -9,7 +9,7 @@
             <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-            <p>{{Auth::user()->name}}</p>
+            <p>{{(session()->pull('sessionUser'))}}</p>
             <!-- Status -->
             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -20,7 +20,7 @@
             <li class="header">Menu</li>
             <!-- Optionally, you can add icons to the links -->
             <li>
-                <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'customer']) }}">
+                <a href="{{ route('sale' . '-create-form', ['form' => 'customer']) }}">
                     <i class="fa fa-link"></i> <span>Create draft</span>
                 </a>
             </li>

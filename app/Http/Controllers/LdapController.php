@@ -31,16 +31,19 @@ class LdapController extends Controller
 			$created_at = User::where('name', $username)->value('created_at');
 			$sessionUser = session()->push('sessionUser', $username);
 			$sessionEmail = session()->push('sessionEmail', $username);
+			$getuser = session()->get('sessionUser');
+			//print_r($getuser);
+			//exit();
 			$sessionCreate_at = session()->push('sessionCreated_at', $username);
 			if(User::where('name',$username)->value('role')=='admin'){
 				
 				return redirect('/admin');
 			}
 			else if(User::where('name',$username)->value('role')=='sale'){
-				return 'role sale';
+				return redirect('/en/sale/customer');
 			}
 			else if(User::where('name',$username)->value('role')=='saleadmin'){
-				return 'role saleadmin';
+				return '/en/sale/history';
 			}
 			else {
 				return 'Your are not ready allow role from admin';
@@ -57,7 +60,7 @@ class LdapController extends Controller
 	 
 	 
      public function logout(){
-		return redirect('/login');
+		return redirect('/login/');
 	}
      
 }

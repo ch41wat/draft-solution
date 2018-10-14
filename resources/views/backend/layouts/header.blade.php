@@ -23,7 +23,7 @@
                         <!-- The user image in the navbar-->
                         
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs">{{session()->pull('sessionUser')}}</span>
+                        <span class="hidden-xs">{{(session()->get('sessionUser'))}}</span>
                     </a>
                 <ul class="dropdown-menu">
                     <!-- The user image in the menu -->
@@ -31,8 +31,8 @@
                         
 
                         <p>
-                            {{session()->pull('sessionUser')}} - {{session()->pull('sessionEmail')}}
-                            <small>Member since {{session()->pull('sessionCreated_at')}}</small>
+                            {{(session()->get('sessionUser'))}} - {{(session()->get('sessionEmail'))}}
+                            <small>Member since {{(session()->get('sessionCreated_at'))}}</small>
                         </p>
                     </li>
                     <!-- Menu Footer-->

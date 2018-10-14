@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Customer;
+namespace App\Http\Controllers\User;
 
 use App\User;
 use App\Http\Controllers\Controller;
@@ -61,9 +61,9 @@ class UserController extends Controller {
 
         $requestData = $request->all();
 
-        Customer::create($requestData);
+        User::create($requestData);
 
-        return redirect('admin/customer')->with('flash_message', 'Customer added!');
+        return redirect('admin/user')->with('flash_message', 'User added!');
     }
 
     /**
@@ -74,9 +74,9 @@ class UserController extends Controller {
      * @return \Illuminate\View\View
      */
     public function show($id) {
-        $customer = Customer::findOrFail($id);
+        $user = User::findOrFail($id);
 
-        return view('backend.customer.show', compact('customer'));
+        return view('backend.user.show', compact('user'));
     }
 
     /**
@@ -87,9 +87,9 @@ class UserController extends Controller {
      * @return \Illuminate\View\View
      */
     public function edit($id) {
-        $customer = Customer::findOrFail($id);
+        $user = User::findOrFail($id);
 
-        return view('backend.customer.edit', compact('customer'));
+        return view('backend.user.edit', compact('user'));
     }
 
     /**
@@ -104,10 +104,10 @@ class UserController extends Controller {
 
         $requestData = $request->all();
 
-        $customer = Customer::findOrFail($id);
-        $customer->update($requestData);
+        $user = User::findOrFail($id);
+        $user->update($requestData);
 
-        return redirect('admin/customer')->with('flash_message', 'Customer updated!');
+        return redirect('admin/user')->with('flash_message', 'User updated!');
     }
 
     /**
@@ -118,17 +118,17 @@ class UserController extends Controller {
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy($id) {
-        Customer::destroy($id);
+        User::destroy($id);
 
-        return redirect('admin/customer')->with('flash_message', 'Customer deleted!');
+        return redirect('admin/user')->with('flash_message', 'User deleted!');
     }
 
-    public function dataAjaxCustomer(Request $request) {
+    public function dataAjaxUser(Request $request) {
         $data = [];
 
         if ($request->has('q')) {
             $search = $request->q;
-            $data = Customer::where('customer_name', 'LIKE', "%$search%")->get();
+            $data = User::where('name', 'LIKE', "%$search%")->get();
         }
 
         return response()->json($data);

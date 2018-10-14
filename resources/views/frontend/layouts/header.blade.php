@@ -16,10 +16,10 @@
             <ul class="nav navbar-nav">
                 <!-- User Account Menu -->
                 <li>
-                    <a href="{{ route(Auth::user()->role . '-history') }}" class="historyButton">@lang('message.history')</a>
+                    <a href="{{ route('sale' . '-history') }}" class="historyButton">@lang('message.history')</a>
                 </li>
                 <li>
-                    <a href="{{ route(Auth::user()->role . '-create-form', ['form' => 'customer']) }}" class="draftButton">
+                    <a href="{{ route('sale' . '-create-form', ['form' => 'customer']) }}" class="draftButton">
                         @lang('message.draft-solution')
                     </a>
                 </li>
@@ -52,7 +52,7 @@
                         <!-- The user image in the navbar-->
                         <img src="/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs">{{Auth::user()->name}}</span>
+                        <span class="hidden-xs">{{(session()->pull('sessionUser'))}}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->
@@ -60,8 +60,8 @@
                             <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                             <p>
-                            {{Auth::user()->name}} - {{Auth::user()->email}}
-                            <small>Member since {{Auth::user()->created_at}}</small>
+                            {{(session()->pull('sessionUser'))}} - {{(session()->pull('sessionEmail'))}}
+                            <small>Member since {{(session()->pull('sessionCreated_at'))}}</small>
                             </p>
                         </li>
                         <!-- Menu Footer-->
